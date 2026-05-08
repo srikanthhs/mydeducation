@@ -1,138 +1,473 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mayiladuthurai Education Dashboard 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --dark:#1A3A5C;--mid:#2E6DA4;--light:#D6E8F7;
-  --gold:#E8A838;--green:#27AE60;--red:#E74C3C;--purple:#8E44AD;
-  --bg:#F0F4F8;--card:#fff;--text:#2C3E50;--muted:#6B7A8D;
+  --p:#1565C0;--pd:#0D47A1;--pl:#E3F2FD;
+  --g:#2E7D32;--gl:#E8F5E9;--r:#C62828;--rl:#FFEBEE;
+  --a:#E65100;--al:#FFF3E0;--u:#6A1B9A;--ul:#F3E5F5;
+  --t:#00695C;--tl:#E0F2F1;
+  --bg:#F5F7FA;--sf:#fff;--tx:#212121;--t2:#616161;--t3:#9E9E9E;
+  --bd:#E0E0E0;--sh:0 2px 10px rgba(0,0,0,.09);--sw:260px;
 }
-body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-header{background:linear-gradient(135deg,var(--dark) 0%,var(--mid) 100%);color:#fff;padding:28px 32px 20px}
-header h1{font-size:1.7rem;font-weight:700}
-header p{font-size:.9rem;opacity:.85;margin-top:6px}
-.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 14px;font-size:.78rem;font-weight:600}
-main{max-width:1400px;margin:0 auto;padding:28px 24px 48px}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
-.kpi{background:var(--card);border-radius:12px;padding:20px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--mid)}
-.kpi.blue{border-color:var(--mid);color:var(--mid)}.kpi.green{border-color:var(--green);color:var(--green)}
-.kpi.gold{border-color:var(--gold);color:var(--gold)}.kpi.purple{border-color:var(--purple);color:var(--purple)}
-.kpi.red{border-color:var(--red);color:var(--red)}.kpi.teal{border-color:#0E7D8D;color:#0E7D8D}
-.kpi-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
-.kpi-value{font-size:2rem;font-weight:800;margin:6px 0 2px;color:inherit}
-.kpi-sub{font-size:.75rem;color:var(--muted)}
-.section-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:14px;padding-left:10px;border-left:4px solid var(--mid)}
-.chart-grid{display:grid;gap:20px;margin-bottom:24px}
-.chart-grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
-.chart-card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.chart-card h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:16px}
-.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
-.insight-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
-.insight{background:var(--card);border-radius:10px;padding:14px 16px;box-shadow:0 1px 5px rgba(0,0,0,.06);border-left:3px solid var(--mid)}
-.insight.warn{border-color:var(--red)}.insight.good{border-color:var(--green)}.insight.info{border-color:var(--gold)}
-.insight-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
-.insight-text{font-size:.86rem;font-weight:600;color:var(--text);margin-top:4px;line-height:1.4}
-.table-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:20px;margin-bottom:28px}
-.table-card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.table-head{padding:14px 18px;font-size:.85rem;font-weight:700;color:#fff}
-.table-head.top{background:linear-gradient(90deg,#1B5E20,#2E7D32)}.table-head.bot{background:linear-gradient(90deg,#7F0000,#C62828)}
+body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh}
+/* SIDEBAR */
+.sb{width:var(--sw);background:var(--pd);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow:hidden}
+.sb-brand{padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.sb-brand h2{font-size:.97rem;font-weight:700;line-height:1.35}
+.sb-brand p{font-size:.7rem;opacity:.65;margin-top:3px}
+.sb-chip{display:inline-block;background:rgba(255,255,255,.14);border-radius:10px;padding:2px 8px;font-size:.67rem;margin-top:6px}
+nav{flex:1;padding:10px 0;overflow-y:auto}
+.ns{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:rgba(255,255,255,.4);padding:12px 18px 4px}
+.ni{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;color:rgba(255,255,255,.78);font-size:.875rem;font-weight:500;border-left:3px solid transparent;transition:.18s}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.active{background:rgba(255,255,255,.13);color:#fff;border-left-color:#64B5F6}
+.ni .mi{font-size:20px}
+.sb-foot{padding:12px 18px;border-top:1px solid rgba(255,255,255,.1);font-size:.7rem;opacity:.45}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--sf);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.09);position:sticky;top:0;z-index:50}
+.tb-title{font-size:1.05rem;font-weight:700;color:var(--pd)}
+.tb-sub{font-size:.76rem;color:var(--t2)}
+.tb-chips{display:flex;gap:8px}
+.chip{background:var(--pl);color:var(--p);border-radius:20px;padding:4px 12px;font-size:.73rem;font-weight:600}
+sec{flex:1;padding:22px 26px;display:none}
+sec.active{display:block}
+/* KPI */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin-bottom:20px}
+.kc{background:var(--sf);border-radius:12px;padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.ki{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.ki .mi{font-size:21px}
+.kl{font-size:.69rem;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.6px}
+.kv{font-size:1.85rem;font-weight:800;margin:3px 0 2px;line-height:1}
+.ks{font-size:.71rem;color:var(--t3)}
+.kb{position:absolute;bottom:0;left:0;right:0;height:3px}
+.kc.b .ki{background:var(--pl);color:var(--p)}.kc.b .kv{color:var(--p)}.kc.b .kb{background:var(--p)}
+.kc.g .ki{background:var(--gl);color:var(--g)}.kc.g .kv{color:var(--g)}.kc.g .kb{background:var(--g)}
+.kc.r .ki{background:var(--rl);color:var(--r)}.kc.r .kv{color:var(--r)}.kc.r .kb{background:var(--r)}
+.kc.a .ki{background:var(--al);color:var(--a)}.kc.a .kv{color:var(--a)}.kc.a .kb{background:var(--a)}
+.kc.u .ki{background:var(--ul);color:var(--u)}.kc.u .kv{color:var(--u)}.kc.u .kb{background:var(--u)}
+.kc.t .ki{background:var(--tl);color:var(--t)}.kc.t .kv{color:var(--t)}.kc.t .kb{background:var(--t)}
+/* CARDS */
+.card{background:var(--sf);border-radius:12px;padding:18px;box-shadow:var(--sh);margin-bottom:18px}
+.ct{font-size:.78rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.ct .mi{font-size:17px;color:var(--p)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;margin-bottom:18px}
+.cw{position:relative;height:250px}.cw.md{height:310px}.cw.lg{height:370px}
+/* INSIGHTS */
+.ir{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.ins{background:var(--sf);border-radius:9px;padding:12px 14px;box-shadow:var(--sh);border-left:4px solid var(--p)}
+.ins.g{border-color:var(--g)}.ins.r{border-color:var(--r)}.ins.a{border-color:var(--a)}.ins.u{border-color:var(--u)}
+.il{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3)}
+.it{font-size:.83rem;font-weight:500;color:var(--tx);margin-top:4px;line-height:1.4}
+/* TABLE */
+.tb{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sb2{display:flex;align-items:center;gap:7px;background:#F5F7FA;border:1px solid var(--bd);border-radius:8px;padding:7px 11px;flex:1;min-width:200px}
+.sb2 input{border:none;background:none;outline:none;font-family:inherit;font-size:.875rem;width:100%;color:var(--tx)}
+.sb2 .mi{font-size:17px;color:var(--t3)}
+.fsel{background:#F5F7FA;border:1px solid var(--bd);border-radius:8px;padding:7px 11px;font-family:inherit;font-size:.875rem;color:var(--tx);outline:none}
+.tw{overflow-x:auto;border-radius:9px;border:1px solid var(--bd)}
 table{width:100%;border-collapse:collapse;font-size:.82rem}
-thead th{background:#F8FAFC;padding:9px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid #E8EDF2}
-tbody tr{border-bottom:1px solid #F0F4F8}tbody tr:hover{background:#F8FAFC}
-tbody td{padding:9px 14px;vertical-align:middle}
-.rank{font-weight:800;color:var(--mid)}.r1{color:#B8860B}.r2{color:#808080}.r3{color:#CD7F32}
-.school-name{font-weight:600;max-width:240px;font-size:.81rem}
-.pill{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:700;font-size:.8rem}
-.pill-g{background:#E8F5E9;color:#1B5E20}.pill-r{background:#FFEBEE;color:#B71C1C}
-footer{text-align:center;padding:20px;font-size:.78rem;color:var(--muted);border-top:1px solid #E0E7EE}
-@media(max-width:768px){header h1{font-size:1.2rem}main{padding:16px 12px 40px}.chart-grid-2,.table-grid{grid-template-columns:1fr}.chart-wrap{height:220px}.chart-wrap.tall{height:280px}}
+thead th{background:#F8FAFC;padding:10px 13px;text-align:left;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);border-bottom:1px solid var(--bd);white-space:nowrap;cursor:pointer}
+thead th:hover{background:#EEE}
+thead th.sa::after{content:" ↑"}thead th.sd::after{content:" ↓"}
+tbody tr{border-bottom:1px solid #F5F7FA;transition:background .14s}
+tbody tr:hover{background:#F8FAFC}
+tbody td{padding:9px 13px;vertical-align:middle}
+.rb{font-weight:800;font-size:.84rem;min-width:26px;display:inline-block;text-align:center}
+.tc{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.7rem;font-weight:600}
+.sf{background:#E3F2FD;color:#1565C0}.gv{background:#FFF3E0;color:#E65100}
+.fa{background:#E8F5E9;color:#2E7D32}.pa{background:#E0F7FA;color:#006064}
+.mu{background:#FCE4EC;color:#880E4F}.ad{background:#F3E5F5;color:#6A1B9A}.ot{background:#ECEFF1;color:#455A64}
+.ap{display:inline-block;padding:2px 9px;border-radius:11px;font-weight:700;font-size:.78rem}
+.ae{background:#E8F5E9;color:#1B5E20}.ag{background:#E3F2FD;color:#0D47A1}
+.am{background:#FFF8E1;color:#F57F17}.al{background:#FFEBEE;color:#B71C1C}
+.pb{display:flex;align-items:center;gap:7px;min-width:95px}
+.pbr{height:5px;border-radius:3px;background:#E0E0E0;flex:1;overflow:hidden}
+.pbf{height:100%;border-radius:3px}
+.pt{font-size:.76rem;font-weight:700;min-width:36px;text-align:right}
+/* COMPARE */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.cmpd{border-radius:9px;padding:14px;text-align:center}
+.cmpd.f{background:linear-gradient(135deg,#FCE4EC,#F8BBD0)}.cmpd.m{background:linear-gradient(135deg,#E3F2FD,#BBDEFB)}
+.cmv{font-size:1.9rem;font-weight:800;margin:5px 0}
+.cml{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:#F5F7FA}
+::-webkit-scrollbar-thumb{background:#BDBDBD;border-radius:3px}
+.sh{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.sh h2{font-size:1.05rem;font-weight:700}.sh .mi{color:var(--p);font-size:21px}
+.ss{font-size:.8rem;color:var(--t2);margin-top:2px}
+@media(max-width:900px){.sb{transform:translateX(-100%)}.main{margin-left:0}.g2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <h1>&#128202; Mayiladuthurai District &mdash; Education Results Dashboard</h1>
-  <p>March 2026 Public Examination &nbsp;|&nbsp; Tamil Nadu</p>
-  <div class="badge-row">
-    <span class="badge">District: 234</span>
-    <span class="badge">14,362 Students</span>
-    <span class="badge">96 Schools</span>
-    <span class="badge">7 School Types</span>
-    <span class="badge">March 2026</span>
+<div class="sb">
+  <div class="sb-brand">
+    <h2>&#127979; Mayiladuthurai<br>Education Dashboard</h2>
+    <p>March 2026 Exam Results</p>
+    <span class="sb-chip">Tamil Nadu &bull; District 234</span>
   </div>
-</header>
-<main>
-  <div class="kpi-grid" style="margin-top:24px">
-    <div class="kpi blue"><div class="kpi-label">Total Students</div><div class="kpi-value">14,362</div><div class="kpi-sub">Appeared for exam</div></div>
-    <div class="kpi green"><div class="kpi-label">Passed</div><div class="kpi-value">13,523</div><div class="kpi-sub">94.2% pass rate</div></div>
-    <div class="kpi red"><div class="kpi-label">Not Passed</div><div class="kpi-value">839</div><div class="kpi-sub">5.8% of total</div></div>
-    <div class="kpi gold"><div class="kpi-label">Average Marks</div><div class="kpi-value">401.2</div><div class="kpi-sub">Out of 600</div></div>
-    <div class="kpi purple"><div class="kpi-label">Highest Score</div><div class="kpi-value">596</div><div class="kpi-sub">Out of 600</div></div>
-    <div class="kpi teal"><div class="kpi-label">Schools</div><div class="kpi-value">96</div><div class="kpi-sub">Across district</div></div>
+  <nav>
+    <div class="ns">Navigation</div>
+    <div class="ni active" onclick="go('ov',this)"><span class="mi material-icons-round">dashboard</span>Overview</div>
+    <div class="ni" onclick="go('sc',this)"><span class="mi material-icons-round">school</span>School Analysis</div>
+    <div class="ni" onclick="go('co',this)"><span class="mi material-icons-round">groups</span>Community &amp; Gender</div>
+    <div class="ni" onclick="go('st',this)"><span class="mi material-icons-round">menu_book</span>Subject Streams</div>
+    <div class="ni" onclick="go('rk',this)"><span class="mi material-icons-round">leaderboard</span>Full Rankings</div>
+    <div class="ns" style="margin-top:6px">At a Glance</div>
+    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">people</span>14,362 Students</div>
+    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">domain</span>95 Schools</div>
+    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">check_circle</span>94.2% Pass Rate</div>
+    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">bar_chart</span>Avg 401.2 / 600</div>
+  </nav>
+  <div class="sb-foot">Data: March 2026 &bull; 14,362 records</div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="tb-title" id="tb-t">Overview Dashboard</div><div class="tb-sub">Mayiladuthurai District &bull; March 2026 &bull; Tamil Nadu Board</div></div>
+    <div class="tb-chips"><span class="chip">14,362 Students</span><span class="chip">95 Schools</span></div>
   </div>
-  <div class="insight-strip">
-    <div class="insight good"><div class="insight-label">Girls outperform boys</div><div class="insight-text">Female avg 418.3 vs Male avg 382.3 &mdash; gap of +36 marks</div></div>
-    <div class="insight good"><div class="insight-label">Best school type</div><div class="insight-text">Self-Finance Matric schools average 455 marks &mdash; highest of all types</div></div>
-    <div class="insight warn"><div class="insight-label">Municipality schools</div><div class="insight-text">Average only 309 marks &mdash; 146 marks below Self-Finance Matric</div></div>
-    <div class="insight info"><div class="insight-label">Largest community</div><div class="insight-text">MBC: 5,196 students (36.2%), but OC tops avg marks at 474</div></div>
-    <div class="insight warn"><div class="insight-label">SC community gap</div><div class="insight-text">SC average 348.7 &mdash; lowest of all communities, 125 below OC</div></div>
-    <div class="insight good"><div class="insight-label">Top stream</div><div class="insight-text">Commerce (BizMaths) leads with avg 453.9 among major streams</div></div>
-  </div>
-  <div class="chart-grid chart-grid-2">
-    <div class="chart-card"><h3>&#128200; Score Distribution (Marks Range)</h3><div class="chart-wrap"><canvas id="distChart"></canvas></div></div>
-    <div class="chart-card"><h3>&#9878; Gender Comparison &mdash; Count &amp; Avg Marks</h3><div class="chart-wrap"><canvas id="genderChart"></canvas></div></div>
-  </div>
-  <div class="chart-grid chart-grid-2">
-    <div class="chart-card"><h3>&#127979; Avg Marks by School Management Type</h3><div class="chart-wrap tall"><canvas id="mgmtChart"></canvas></div></div>
-    <div class="chart-card"><h3>&#128101; Avg Marks by Student Community</h3><div class="chart-wrap tall"><canvas id="comChart"></canvas></div></div>
-  </div>
-  <div class="chart-grid chart-grid-2">
-    <div class="chart-card"><h3>&#128218; Subject Stream Performance</h3><div class="chart-wrap tall"><canvas id="streamChart"></canvas></div></div>
-    <div class="chart-card"><h3>&#128336; Religion Distribution &amp; Avg Marks</h3><div class="chart-wrap tall"><canvas id="relChart"></canvas></div></div>
-  </div>
-  <p class="section-title">&#127942; School Performance Rankings (Min. 10 Students)</p>
-  <div class="table-grid">
-    <div class="table-card">
-      <div class="table-head top">&#129351; Top 10 Schools by Average Marks</div>
-      <table><thead><tr><th>#</th><th>School Name</th><th>Type</th><th>Students</th><th>Avg</th></tr></thead>
-      <tbody id="top10"></tbody></table>
+
+  <!-- OVERVIEW -->
+  <sec id="s-ov" class="active">
+    <div class="kg" style="margin-top:4px">
+      <div class="kc b"><div class="ki"><span class="mi material-icons-round">people</span></div><div class="kl">Total Students</div><div class="kv">14,362</div><div class="ks">Appeared for exam</div><div class="kb"></div></div>
+      <div class="kc g"><div class="ki"><span class="mi material-icons-round">check_circle</span></div><div class="kl">Passed</div><div class="kv">13,523</div><div class="ks">94.2% pass rate</div><div class="kb"></div></div>
+      <div class="kc r"><div class="ki"><span class="mi material-icons-round">cancel</span></div><div class="kl">Not Passed</div><div class="kv">839</div><div class="ks">5.8% of total</div><div class="kb"></div></div>
+      <div class="kc a"><div class="ki"><span class="mi material-icons-round">bar_chart</span></div><div class="kl">Average Marks</div><div class="kv">401.2</div><div class="ks">Out of 600</div><div class="kb"></div></div>
+      <div class="kc u"><div class="ki"><span class="mi material-icons-round">emoji_events</span></div><div class="kl">Highest Score</div><div class="kv">596</div><div class="ks">Out of 600</div><div class="kb"></div></div>
+      <div class="kc t"><div class="ki"><span class="mi material-icons-round">domain</span></div><div class="kl">Schools</div><div class="kv">95</div><div class="ks">Across district</div><div class="kb"></div></div>
     </div>
-    <div class="table-card">
-      <div class="table-head bot">&#9888; Bottom 10 Schools &mdash; Needs Attention</div>
-      <table><thead><tr><th>#</th><th>School Name</th><th>Type</th><th>Students</th><th>Avg</th></tr></thead>
-      <tbody id="bot10"></tbody></table>
+    <div class="ir">
+      <div class="ins g"><div class="il">&#128200; Gender gap</div><div class="it">Girls avg <b>418.3</b> vs Boys <b>382.3</b> &mdash; girls lead by 36 marks</div></div>
+      <div class="ins b"><div class="il">&#127979; Best school type</div><div class="it">SF Matric schools avg <b>455</b> &mdash; highest of all 7 types</div></div>
+      <div class="ins r"><div class="il">&#9888; Municipality gap</div><div class="it">Municipality avg only <b>309</b> &mdash; 146 marks below SF Matric</div></div>
+      <div class="ins a"><div class="il">&#128101; Community spread</div><div class="it">OC avg <b>474</b> vs SC avg <b>349</b> &mdash; 125-mark gap</div></div>
+      <div class="ins u"><div class="il">&#127942; Top school</div><div class="it">Sharmila Goddess SM Matric leads at <b>518.5 avg</b></div></div>
+      <div class="ins r"><div class="il">&#128680; 10 schools below 300</div><div class="it">Urgent intervention needed for bottom-performing schools</div></div>
     </div>
-  </div>
-</main>
-<footer>Mayiladuthurai District Education Dashboard &nbsp;|&nbsp; March 2026 &nbsp;|&nbsp; Tamil Nadu &nbsp;|&nbsp; 14,362 student records</footer>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Score Distribution</div><div class="cw"><canvas id="c-dist"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round">account_balance</span>Performance by School Management Type</div><div class="cw"><canvas id="c-mgmt"></canvas></div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">wc</span>Gender Comparison &mdash; Count &amp; Avg Marks</div><div class="cw"><canvas id="c-gen"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round">pie_chart</span>Religion Distribution</div><div class="cw"><canvas id="c-rel"></canvas></div></div>
+    </div>
+  </sec>
+
+  <!-- SCHOOL ANALYSIS -->
+  <sec id="s-sc">
+    <div class="sh"><span class="mi material-icons-round">school</span><div><h2>School-wise Analysis</h2><div class="ss">All 95 schools &bull; Sortable &bull; Searchable &bull; Filterable</div></div></div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Top 20 Schools by Avg Marks</div><div class="cw md"><canvas id="c-t20"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round">scatter_plot</span>School Size vs Performance</div><div class="cw md"><canvas id="c-scat"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round">table_chart</span>All Schools Performance Table</div>
+      <div class="tb">
+        <div class="sb2"><span class="mi material-icons-round">search</span><input type="text" id="ss" placeholder="Search school name..." oninput="ft()"/></div>
+        <select class="fsel" id="sty" onchange="ft()">
+          <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
+          <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option>
+          <option>Adi Dravidar</option><option>Others</option>
+        </select>
+        <select class="fsel" id="sbd" onchange="ft()">
+          <option value="">All Bands</option><option value="ex">Excellent (450+)</option>
+          <option value="gd">Good (350-449)</option><option value="lw">Below 350</option>
+        </select>
+        <span id="sc-cnt" style="font-size:.8rem;color:var(--t2);white-space:nowrap"></span>
+      </div>
+      <div class="tw"><table id="sct">
+        <thead><tr>
+          <th onclick="srt(0)">#</th><th onclick="srt(1)">School Name</th><th onclick="srt(2)">Type</th>
+          <th onclick="srt(3)">Students</th><th onclick="srt(4)">Avg Marks</th><th onclick="srt(5)">Pass %</th>
+          <th onclick="srt(6)">Highest</th><th onclick="srt(7)">Lowest</th><th>Band</th>
+        </tr></thead>
+        <tbody id="sc-tb"></tbody>
+      </table></div>
+    </div>
+  </sec>
+
+  <!-- COMMUNITY & GENDER -->
+  <sec id="s-co">
+    <div class="sh"><span class="mi material-icons-round">groups</span><div><h2>Community &amp; Gender Analysis</h2><div class="ss">Detailed breakdown by community, gender and religion</div></div></div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Community</div><div class="cw md"><canvas id="c-com"></canvas></div></div>
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round">wc</span>Gender Deep Dive</div>
+        <div class="cmp">
+          <div class="cmpd f"><div class="cml" style="color:#880E4F">Female</div><div class="cmv" style="color:#AD1457">418.3</div><div style="font-size:.77rem;color:#880E4F">7,436 students &bull; 52.3%</div></div>
+          <div class="cmpd m"><div class="cml" style="color:#0D47A1">Male</div><div class="cmv" style="color:#1565C0">382.3</div><div style="font-size:.77rem;color:#0D47A1">6,767 students &bull; 47.7%</div></div>
+        </div>
+        <div class="cw" style="height:170px"><canvas id="c-gen2"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round">table_chart</span>Community-wise Detailed Stats</div>
+      <div class="tw"><table><thead><tr><th>Community</th><th>Students</th><th>Share</th><th>Avg Marks</th><th>Pass Rate</th><th>Band</th></tr></thead><tbody id="com-tb"></tbody></table></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">donut_large</span>Student Share by Community</div><div class="cw"><canvas id="c-cpie"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round">church</span>Religion &mdash; Count &amp; Avg Marks</div><div class="cw"><canvas id="c-rel2"></canvas></div></div>
+    </div>
+  </sec>
+
+  <!-- STREAMS -->
+  <sec id="s-st">
+    <div class="sh"><span class="mi material-icons-round">menu_book</span><div><h2>Subject Stream Analysis</h2><div class="ss">Performance by subject group / stream</div></div></div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Stream</div><div class="cw md"><canvas id="c-str"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round">pie_chart</span>Student Count by Stream</div><div class="cw md"><canvas id="c-spie"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round">table_chart</span>Stream Performance Details</div>
+      <div class="tw"><table><thead><tr><th>#</th><th>Stream</th><th>Students</th><th>Share</th><th>Avg Marks</th><th>Band</th></tr></thead><tbody id="str-tb"></tbody></table></div>
+    </div>
+  </sec>
+
+  <!-- RANKINGS -->
+  <sec id="s-rk">
+    <div class="sh"><span class="mi material-icons-round">leaderboard</span><div><h2>Full School Rankings</h2><div class="ss">All 95 schools ranked by average marks</div></div></div>
+    <div class="g2">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#1B5E20,#388E3C);color:#fff;padding:13px 16px;font-weight:700">&#129351; Top 10 Schools</div>
+        <div class="tw" style="border:none"><table><thead><tr><th>#</th><th>School</th><th>Type</th><th>Avg</th><th>Pass%</th></tr></thead><tbody id="t10"></tbody></table></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#7F0000,#C62828);color:#fff;padding:13px 16px;font-weight:700">&#9888; Bottom 10 Schools</div>
+        <div class="tw" style="border:none"><table><thead><tr><th>#</th><th>School</th><th>Type</th><th>Avg</th><th>Pass%</th></tr></thead><tbody id="b10"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card"><div class="ct"><span class="mi material-icons-round">warning</span>Bottom 20 Schools &mdash; Needs Urgent Attention</div><div class="cw lg"><canvas id="c-b20"></canvas></div></div>
+  </sec>
+</div>
+
 <script>
-Chart.defaults.font.family="'Segoe UI',Arial,sans-serif";
-Chart.defaults.font.size=12;
-Chart.defaults.color="#6B7A8D";
-const C={blue:"#2E6DA4",gold:"#E8A838",green:"#27AE60",red:"#E74C3C",purple:"#8E44AD",teal:"#0E7D8D",dark:"#1A3A5C",pink:"#E91E8C",orange:"#E65100",cyan:"#006064"};
+const D={"summary": {"total": 14362, "passed": 13523, "avg": 401.2, "max": 596, "schools": 95, "female": 7499, "male": 6863, "avg_f": 418.3, "avg_m": 382.3}, "schools": [{"rank": 1, "code": "234SKZI0063", "name": "SHARMILA GODDESS SM MATRIC HR SEC SCHOOL PORAYAR", "type": "SF Matric", "students": 62, "avg": 518.5, "pass_rate": 100.0, "high": 579, "low": 435}, {"rank": 2, "code": "234SKZI0062", "name": "SARASWATHI MATRIC HR SEC SCHOOL KOLLIDAM", "type": "SF Matric", "students": 212, "avg": 506.6, "pass_rate": 100.0, "high": 569, "low": 326}, {"rank": 3, "code": "234MYDI0054", "name": "JAIHIND MATRICULATION HIGHER SECONDARY SCHOOL, THERAZHUNDUR", "type": "SF Matric", "students": 110, "avg": 500.7, "pass_rate": 100.0, "high": 587, "low": 371}, {"rank": 4, "code": "234MYDI0057", "name": "NISHA MAT HSS THERAZHANDUR", "type": "SF Matric", "students": 48, "avg": 488.0, "pass_rate": 100.0, "high": 585, "low": 321}, {"rank": 5, "code": "234MYDI0063", "name": "SRI KANCHI SANKARA VIDYALAYA MATRICULATION HR SEC SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 116, "avg": 486.5, "pass_rate": 100.0, "high": 576, "low": 358}, {"rank": 6, "code": "234MYDI0059", "name": "SRI RAMAKRISHNA MATRICULATION HR.SEC.SCHOOL, SIVANAGARAM", "type": "SF Matric", "students": 32, "avg": 486.3, "pass_rate": 100.0, "high": 569, "low": 384}, {"rank": 7, "code": "234SKZI0061", "name": "NIVEDHA MATRIC HR SEC SCHOOL PORAYAR", "type": "SF Matric", "students": 200, "avg": 486.0, "pass_rate": 100.0, "high": 576, "low": 331}, {"rank": 8, "code": "234MYDI9107", "name": "MAYILADUTHURAI DISTRICT GOVERNMENT MODEL SCHOOL", "type": "Govt School", "students": 88, "avg": 483.2, "pass_rate": 98.9, "high": 568, "low": 290}, {"rank": 9, "code": "234MYDI0044", "name": "SILVER JUBILEE MATRICULATION HIGHER SECONDARY SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 550, "avg": 477.7, "pass_rate": 100.0, "high": 592, "low": 293}, {"rank": 10, "code": "234SKZI0056", "name": "BEST MATRIC HR SEC SCHOOL SIRKALI", "type": "SF Matric", "students": 602, "avg": 477.2, "pass_rate": 99.7, "high": 595, "low": 249}, {"rank": 11, "code": "234MYDI0038", "name": "GGSM MATRIC HR SEC SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 514, "avg": 473.6, "pass_rate": 100.0, "high": 589, "low": 315}, {"rank": 12, "code": "234SKZI0503", "name": "MOUNT CARMEL MATRICULATION HIGHER SECONDARY SCHOOL ERUKUR", "type": "SF Matric", "students": 16, "avg": 473.6, "pass_rate": 100.0, "high": 572, "low": 365}, {"rank": 13, "code": "234SKZI0064", "name": "VIVEKANANDA MATRIC. HR. SEC. SCHOOL, SIRKALI", "type": "SF Matric", "students": 822, "avg": 472.1, "pass_rate": 100.0, "high": 594, "low": 176}, {"rank": 14, "code": "234SKZI0080", "name": "SRINIVASA MATRIC HR SEC SCHOOL KOLLIDAM", "type": "SF Matric", "students": 162, "avg": 470.1, "pass_rate": 101.2, "high": 581, "low": 35}, {"rank": 15, "code": "234SKZI0083", "name": "BHARATH MATRICULATION HR SEC SCHOOL, PUTHUR", "type": "SF Matric", "students": 30, "avg": 468.9, "pass_rate": 100.0, "high": 559, "low": 398}, {"rank": 16, "code": "234SKZI0084", "name": "ROYAL MATRIC HR. SEC. SCHOOL, SANGIRUPPU.", "type": "SF Matric", "students": 40, "avg": 466.8, "pass_rate": 100.0, "high": 555, "low": 331}, {"rank": 17, "code": "234SKZI0059", "name": "KALAIMAHAL MATRICULATION HIGHER SECONDARY SCHOOL, AKKUR", "type": "SF Matric", "students": 122, "avg": 466.5, "pass_rate": 100.0, "high": 557, "low": 340}, {"rank": 18, "code": "234SKZI9003", "name": "VICTORIAL MATRICULATION HIGHER SECONDARY SCHOOL, THIRUMULLAIVASAL", "type": "SF Matric", "students": 174, "avg": 462.1, "pass_rate": 100.0, "high": 578, "low": 327}, {"rank": 19, "code": "234MYDI0052", "name": "GOOD LUCK MATRICULATION HR.SEC.SCHOOL, SRIKANDAPURAM", "type": "SF Matric", "students": 280, "avg": 458.1, "pass_rate": 100.0, "high": 588, "low": 327}, {"rank": 20, "code": "234SKZI0088", "name": "KALAIMAHAL MATRIC HR SEC SCHOOL ,AYAPPADI", "type": "SF Matric", "students": 34, "avg": 456.7, "pass_rate": 100.0, "high": 578, "low": 258}, {"rank": 21, "code": "234SKZI0057", "name": "S G M SRI MUTHAIAH MATRIC HR SEC SCHOOL VAITHEESWARANKOIL", "type": "SF Matric", "students": 184, "avg": 452.4, "pass_rate": 100.0, "high": 591, "low": 263}, {"rank": 22, "code": "234MYDI0065", "name": "GOOD SAMARITAN MATRIC HR SEC SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 88, "avg": 451.2, "pass_rate": 97.7, "high": 571, "low": 301}, {"rank": 23, "code": "234SKZI0055", "name": "AL-AMAN MATRIC HR SEC SCHOOL SANKARANPANDAL", "type": "SF Matric", "students": 158, "avg": 448.9, "pass_rate": 100.0, "high": 565, "low": 44}, {"rank": 24, "code": "234MYDI0055", "name": "MEKANA INTERNATIONAL MATRIC HR SEC SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 250, "avg": 439.2, "pass_rate": 100.8, "high": 593, "low": 264}, {"rank": 25, "code": "234SKZI0060", "name": "KALAIMAHAL MATRIC HR SEC SCHOOL SEMBANARKOIL", "type": "SF Matric", "students": 180, "avg": 438.3, "pass_rate": 97.8, "high": 590, "low": 77}, {"rank": 26, "code": "234MYDI0036", "name": "AZAD GIRLS MAT HR SEC SCHOOL. MAYILADUTHUIRAI", "type": "SF Matric", "students": 252, "avg": 437.6, "pass_rate": 100.0, "high": 596, "low": 288}, {"rank": 27, "code": "234SKZI0087", "name": "HAJJA SARA AMMAL MATRICULATION HSS, VADAKARAI", "type": "SF Matric", "students": 22, "avg": 435.6, "pass_rate": 100.0, "high": 546, "low": 328}, {"rank": 28, "code": "234MYDI0042", "name": "RAJ MATRIC HR SEC SCHOOL KORANADU", "type": "SF Matric", "students": 260, "avg": 432.4, "pass_rate": 99.2, "high": 565, "low": 268}, {"rank": 29, "code": "234MYDI0058", "name": "RAJ VIDYALAYA MATRIC HR SEC SCHOOL KUTTALAM", "type": "SF Matric", "students": 316, "avg": 432.1, "pass_rate": 100.0, "high": 587, "low": 267}, {"rank": 30, "code": "234MYDI9108", "name": "VIVEKANANDHA MATRICULATION SCHOOL MANALMEDU", "type": "Others", "students": 20, "avg": 432.0, "pass_rate": 100.0, "high": 534, "low": 337}, {"rank": 31, "code": "234SKZI0047", "name": "SHYAMALA GIRLS HR SEC SCHOOL SIRKALI", "type": "Fully Aided", "students": 177, "avg": 428.1, "pass_rate": 100.0, "high": 533, "low": 275}, {"rank": 32, "code": "234SKZI0501", "name": "SREE KRISHNA MATRICULATION HR.SEC.SCHOOL, PORAYAR", "type": "SF Matric", "students": 90, "avg": 427.6, "pass_rate": 100.0, "high": 548, "low": 303}, {"rank": 33, "code": "234MYDI0032", "name": "ST PAUL'S GIRLS' HR SEC SCHOOL MAYILADUTHURAI", "type": "Fully Aided", "students": 496, "avg": 426.4, "pass_rate": 99.8, "high": 574, "low": 285}, {"rank": 34, "code": "234SKZI0077", "name": "NAPAC MATRICULATION HIGHER SECONDARY SCHOOL, SEMBANARKOIL", "type": "SF Matric", "students": 64, "avg": 426.0, "pass_rate": 100.0, "high": 547, "low": 318}, {"rank": 35, "code": "234SKZI0078", "name": "RAMESH MATRICULATION HIGHER SECONDARY SCHOOL, PUDUPATTINAM", "type": "SF Matric", "students": 20, "avg": 424.2, "pass_rate": 100.0, "high": 501, "low": 351}, {"rank": 36, "code": "234MYDI0060", "name": "SRI RAMAKRISHNA VIDYALAYA MATRIC HIGHER SECONDARY SCHOOL MANALMEDU", "type": "SF Matric", "students": 40, "avg": 423.8, "pass_rate": 100.0, "high": 477, "low": 337}, {"rank": 37, "code": "234MYDI0041", "name": "RAJ MATRIC HR SEC SCHOOL MAYILADUTHURAI", "type": "SF Matric", "students": 256, "avg": 423.7, "pass_rate": 100.0, "high": 566, "low": 280}, {"rank": 38, "code": "234SKZI0301", "name": "MEENATCHI VIDYALAYA MATRICULATION HIGHER SECONDARY SCHOOL, PUTHUR", "type": "SF Matric", "students": 42, "avg": 421.1, "pass_rate": 104.8, "high": 570, "low": 264}, {"rank": 39, "code": "234MYDI0037", "name": "DR G S KALYANASUNDARAM MATRICULATION HR SEC SCHOOL PAZHAYAGUDALUR", "type": "SF Matric", "students": 228, "avg": 411.5, "pass_rate": 98.2, "high": 564, "low": 45}, {"rank": 40, "code": "234MYDI0043", "name": "ROTARY CLUB MATRIC HR. SEC. SCHOOL. MAYILADUTHUARAI", "type": "SF Matric", "students": 216, "avg": 411.3, "pass_rate": 100.0, "high": 571, "low": 71}, {"rank": 41, "code": "234SKZI0054", "name": "ST THERESA'S GIRLS HR SEC SCHOOL THARANGAMBADI", "type": "Partly Aided", "students": 265, "avg": 410.2, "pass_rate": 101.1, "high": 549, "low": 242}, {"rank": 42, "code": "234SKZI0053", "name": "ORIENTAL ARABIC HR SEC SCHOOL, AKKUR", "type": "Partly Aided", "students": 53, "avg": 408.2, "pass_rate": 100.0, "high": 553, "low": 237}, {"rank": 43, "code": "234SKZI0082", "name": "THAMARAI MATRIC HR.SEC. SCHOOL, SEMBANARKOVIL", "type": "SF Matric", "students": 162, "avg": 402.9, "pass_rate": 100.0, "high": 580, "low": 49}, {"rank": 44, "code": "234SKZI0021", "name": "GOVT GIRLS HIGHER SECONDARY SCHOOL VAITHEESWARANKOVIL", "type": "Govt School", "students": 77, "avg": 401.7, "pass_rate": 100.0, "high": 528, "low": 84}, {"rank": 45, "code": "234SKZI0045", "name": "S M HINDU HR SEC SCHOOL SIRKALI", "type": "Fully Aided", "students": 242, "avg": 399.1, "pass_rate": 99.6, "high": 541, "low": 58}, {"rank": 46, "code": "234SKZI0058", "name": "KALAIMAHAL MATRICULATION HR SEC SCHOOL,THIRUKKADAIYUR", "type": "SF Matric", "students": 74, "avg": 390.7, "pass_rate": 100.0, "high": 556, "low": 247}, {"rank": 47, "code": "234SKZI0001", "name": "GOVERNMENT HR SEC SCHOOL THULASENTHIRAPURAM", "type": "Govt School", "students": 88, "avg": 389.2, "pass_rate": 97.7, "high": 514, "low": 47}, {"rank": 48, "code": "234SKZI0011", "name": "GOVERNMENT HIGHER SECONDARY SCHOOL ACHALPURAM", "type": "Govt School", "students": 88, "avg": 377.7, "pass_rate": 97.7, "high": 532, "low": 275}, {"rank": 49, "code": "234MYDI0040", "name": "NASRUL MUSLIMEEN MATRIC HR SEC SCHOOL KANGANAMPUTHUR NIDUR", "type": "SF Matric", "students": 98, "avg": 376.6, "pass_rate": 100.0, "high": 586, "low": 248}, {"rank": 50, "code": "234MYDI0035", "name": "ARIVALAYAM MATRICULATION HIGHER. SEC.SCHOOL,MAYILADUTHURAI", "type": "SF Matric", "students": 36, "avg": 372.0, "pass_rate": 94.4, "high": 527, "low": 51}, {"rank": 51, "code": "234MYDI0003", "name": "GOVT G HSS MAYILADUTHURAI", "type": "Govt School", "students": 316, "avg": 371.5, "pass_rate": 96.5, "high": 547, "low": 35}, {"rank": 52, "code": "234MYDI0002", "name": "GOVT GIRLS HR SEC SCHOOL NIDUR", "type": "Govt School", "students": 60, "avg": 368.7, "pass_rate": 100.0, "high": 493, "low": 53}, {"rank": 53, "code": "234SKZI0042", "name": "GOVT ADW HIGHER SECONDARY SCHOOL KARAIMEDU", "type": "Adi Dravidar", "students": 32, "avg": 367.6, "pass_rate": 90.6, "high": 467, "low": 222}, {"rank": 54, "code": "234SKZI0040", "name": "GOVT ADW HR SEC SCHOOL KONDAL", "type": "Adi Dravidar", "students": 41, "avg": 362.6, "pass_rate": 97.6, "high": 520, "low": 272}, {"rank": 55, "code": "234SKZI0041", "name": "GOVT (ADW) HIGHER SECONDARY SCHOOL, MADHANAM", "type": "Adi Dravidar", "students": 18, "avg": 361.3, "pass_rate": 94.4, "high": 427, "low": 258}, {"rank": 56, "code": "234SKZI0007", "name": "GOVERNMENT HIGHER SECONDARY SCHOOL, NANGUR - 609106", "type": "Govt School", "students": 200, "avg": 360.0, "pass_rate": 94.5, "high": 553, "low": 36}, {"rank": 57, "code": "234SKZI0020", "name": "GOVT.HR.SEC.SCHOOL-KONAYAMPATTINAM", "type": "Govt School", "students": 54, "avg": 354.4, "pass_rate": 103.7, "high": 477, "low": 41}, {"rank": 58, "code": "234SKZI0046", "name": "SAMBANDAM HR SEC SCHOOL SEMBANARKOIL", "type": "Fully Aided", "students": 177, "avg": 352.2, "pass_rate": 96.0, "high": 504, "low": 38}, {"rank": 59, "code": "234SKZI0002", "name": "GOVT GIRLS HR SEC SCHOOL SEMBANARKOIL", "type": "Govt School", "students": 175, "avg": 349.1, "pass_rate": 86.9, "high": 557, "low": 35}, {"rank": 60, "code": "234MYDI0008", "name": "GOVT GIRLS HR SEC SCHOOL MANALMEDU", "type": "Govt School", "students": 139, "avg": 348.2, "pass_rate": 98.6, "high": 533, "low": 35}, {"rank": 61, "code": "234MYDI0062", "name": "KALAIMAHAL MATRIC. HR. SEC. SCHOOL, MAYILADUTHURAI", "type": "SF Matric", "students": 32, "avg": 344.9, "pass_rate": 81.2, "high": 487, "low": 244}, {"rank": 62, "code": "234MYDI0005", "name": "GOVT HR SEC SCHOOL, KOMAL", "type": "Govt School", "students": 152, "avg": 340.4, "pass_rate": 84.9, "high": 535, "low": 35}, {"rank": 63, "code": "234MYDI0016", "name": "GOVERNMENT HR SEC SCHOOL ANANDATHANDAVAPURAM", "type": "Govt School", "students": 52, "avg": 339.9, "pass_rate": 96.2, "high": 496, "low": 36}, {"rank": 64, "code": "234SKZI0051", "name": "VENKATESA HR SEC SCHOOL AYANGUDIPALLAM", "type": "Fully Aided", "students": 118, "avg": 338.4, "pass_rate": 93.2, "high": 476, "low": 44}, {"rank": 65, "code": "234SKZI0012", "name": "MUNICIPAL HR SEC SCHOOL SIRKALI-609110", "type": "Municipality", "students": 97, "avg": 337.4, "pass_rate": 94.8, "high": 468, "low": 214}, {"rank": 66, "code": "234SKZI0044", "name": "RAMAKRISHNA AIDED HR SEC SCHOOL, KOTHANDAPURAM", "type": "Fully Aided", "students": 97, "avg": 337.3, "pass_rate": 94.8, "high": 461, "low": 44}, {"rank": 67, "code": "234SKZI0008", "name": "GOVT MODEL HR SEC SCHOOL THIRUMULLAIVASAL", "type": "Govt School", "students": 225, "avg": 336.9, "pass_rate": 89.3, "high": 535, "low": 36}, {"rank": 68, "code": "234MYDI0030", "name": "DBTR NATIONAL HR SEC SCHOOL MAYILADUTHURAI", "type": "Fully Aided", "students": 363, "avg": 335.6, "pass_rate": 89.8, "high": 553, "low": 22}, {"rank": 69, "code": "234SKZI0038", "name": "THIYAGI VALLIYAMMAI GOVT HIGHER SECONDARY SCHOOL THILLAIYADI", "type": "Govt School", "students": 63, "avg": 334.1, "pass_rate": 100.0, "high": 484, "low": 47}, {"rank": 70, "code": "234SKZI0048", "name": "SRINIVASA AIDED HSS MELAIYUR", "type": "Fully Aided", "students": 361, "avg": 331.9, "pass_rate": 91.4, "high": 514, "low": 47}, {"rank": 71, "code": "234MYDI0027", "name": "GOVERNMENT GIRLS HR SEC SCHOOL KUTTALAM", "type": "Govt School", "students": 243, "avg": 330.7, "pass_rate": 89.7, "high": 562, "low": 35}, {"rank": 72, "code": "234SKZI0009", "name": "GOVERNMENT HIGHER SECONDARY SCHOOL, PUDUPATTINAM", "type": "Govt School", "students": 123, "avg": 327.7, "pass_rate": 79.7, "high": 489, "low": 35}, {"rank": 73, "code": "234MYDI0031", "name": "SRI GGS HR SEC SCHOOL DHARUMAPURAM", "type": "Partly Aided", "students": 106, "avg": 324.9, "pass_rate": 94.3, "high": 494, "low": 44}, {"rank": 74, "code": "234SKZI0052", "name": "HAMEEDIYA HR SEC SCHOOL THIRUKKALACHERY", "type": "Partly Aided", "students": 102, "avg": 324.3, "pass_rate": 87.3, "high": 514, "low": 34}, {"rank": 75, "code": "234MYDI0026", "name": "GOVERNMENT HR SEC SCHOOL KORUKKAI", "type": "Govt School", "students": 24, "avg": 321.1, "pass_rate": 95.8, "high": 400, "low": 251}, {"rank": 76, "code": "234MYDI0014", "name": "KITTAPPA MUNICIPAL HR SEC SCHOOL KORANAD MAYILADUTHURAI-609003", "type": "Municipality", "students": 184, "avg": 320.7, "pass_rate": 84.2, "high": 525, "low": 37}, {"rank": 77, "code": "234MYDI0006", "name": "GOVT HR SEC SCHOOL, VEZHAMURITHANPETTAI", "type": "Govt School", "students": 47, "avg": 319.0, "pass_rate": 83.0, "high": 468, "low": 81}, {"rank": 78, "code": "234MYDI0012", "name": "KAMBAR GOVT HR SEC SCHOOL, THERIZHANDUR", "type": "Govt School", "students": 30, "avg": 318.8, "pass_rate": 83.3, "high": 467, "low": 58}, {"rank": 79, "code": "234MYDI0009", "name": "GOVT HR SEC SCHOOL, THIRUVAVADUTHURAI", "type": "Govt School", "students": 81, "avg": 318.5, "pass_rate": 75.3, "high": 525, "low": 35}, {"rank": 80, "code": "234SKZI0005", "name": "GOVT HR SEC SCHOOL AKKUR", "type": "Govt School", "students": 150, "avg": 318.4, "pass_rate": 90.7, "high": 506, "low": 37}, {"rank": 81, "code": "234MYDI0001", "name": "GOVERNMENT HIGHER SECONDARY SCHOOL THIRUMANGALAM", "type": "Govt School", "students": 89, "avg": 314.5, "pass_rate": 82.0, "high": 488, "low": 24}, {"rank": 82, "code": "234MYDI0010", "name": "GOVERNMENT HR SEC SCHOOL SRIKANDAPURAM", "type": "Govt School", "students": 224, "avg": 313.5, "pass_rate": 89.7, "high": 543, "low": 35}, {"rank": 83, "code": "234SKZI0003", "name": "GOVERNMENT HR SEC SCHOOL THIRUKADAIYUR", "type": "Govt School", "students": 73, "avg": 308.7, "pass_rate": 84.9, "high": 490, "low": 36}, {"rank": 84, "code": "234SKZI0050", "name": "THAVASUMUTHU NADAR GOVT. AIDED HR. SEC. SCHOOL, PORAYAR", "type": "Fully Aided", "students": 107, "avg": 307.9, "pass_rate": 70.1, "high": 499, "low": 17}, {"rank": 85, "code": "234SKZI0039", "name": "SSD(B) HR SEC SCHOOL THIRUVENGADU", "type": "Fully Aided", "students": 23, "avg": 300.6, "pass_rate": 78.3, "high": 397, "low": 229}, {"rank": 86, "code": "234SKZI0006", "name": "GOVT HR SEC SCHOOL VAITHEESWARANKOIL", "type": "Govt School", "students": 66, "avg": 299.7, "pass_rate": 75.8, "high": 467, "low": 31}, {"rank": 87, "code": "234SKZI0010", "name": "GOVT HR SEC SCHOOL SANKARANPANDAL", "type": "Govt School", "students": 163, "avg": 297.7, "pass_rate": 88.3, "high": 457, "low": 35}, {"rank": 88, "code": "234SKZI0004", "name": "GOVT HR SEC SCHOOL KEELAPERUMPALLAM", "type": "Govt School", "students": 50, "avg": 289.5, "pass_rate": 90.0, "high": 470, "low": 42}, {"rank": 89, "code": "234MYDI0013", "name": "T.G.N MPL. HR. SEC. SCHOOL, MAYILADUTHURAI", "type": "Municipality", "students": 224, "avg": 287.6, "pass_rate": 80.4, "high": 469, "low": 21}, {"rank": 90, "code": "234SKZI0049", "name": "T.E.L.C. BISHOP JOHNSON MEMORIAL HIGHER SECONDARY SCHOOL, THARANGAMBADI", "type": "Partly Aided", "students": 10, "avg": 286.1, "pass_rate": 90.0, "high": 407, "low": 63}, {"rank": 91, "code": "234SKZI0043", "name": "LMC AIDED HR SEC SCHOOL SIRKALI", "type": "Fully Aided", "students": 115, "avg": 282.3, "pass_rate": 80.0, "high": 468, "low": 28}, {"rank": 92, "code": "234MYDI0011", "name": "GOVERNMENT MODEL HR SEC SCHOOL KUTTALAM", "type": "Govt School", "students": 197, "avg": 270.1, "pass_rate": 80.2, "high": 459, "low": 26}, {"rank": 93, "code": "234MYDI0007", "name": "GOVT BOYS HR SEC SCHOOL MANALMEDU", "type": "Govt School", "students": 158, "avg": 260.0, "pass_rate": 63.9, "high": 454, "low": 35}, {"rank": 94, "code": "234MYDI0004", "name": "GHSS KILIYANUR", "type": "Govt School", "students": 75, "avg": 254.8, "pass_rate": 68.0, "high": 435, "low": 35}, {"rank": 95, "code": "234MYDI0033", "name": "ANNAI VELANKANNI MATHA HSS PERAVUR", "type": "Partly Aided", "students": 11, "avg": 218.3, "pass_rate": 36.4, "high": 372, "low": 17}], "management": [{"name": "SF Matric", "students": 7194, "avg": 455.0, "pass_rate": 99.8}, {"name": "Others", "students": 20, "avg": 432.0, "pass_rate": 100.0}, {"name": "Partly Aided", "students": 547, "avg": 371.3, "pass_rate": 95.6}, {"name": "Fully Aided", "students": 2276, "avg": 365.9, "pass_rate": 93.4}, {"name": "Adi Dravidar", "students": 91, "avg": 364.1, "pass_rate": 94.5}, {"name": "Govt School", "students": 3570, "avg": 333.6, "pass_rate": 88.6}, {"name": "Municipality", "students": 505, "avg": 309.2, "pass_rate": 84.6}], "community": [{"name": "OC", "students": 115, "avg": 474.1, "pass_rate": 97.4}, {"name": "DNC", "students": 47, "avg": 441.9, "pass_rate": 95.7}, {"name": "SCD", "students": 4, "avg": 431.5, "pass_rate": 100.0}, {"name": "BC", "students": 3312, "avg": 430.2, "pass_rate": 97.6}, {"name": "BCM", "students": 1586, "avg": 429.5, "pass_rate": 97.9}, {"name": "MBC", "students": 5142, "avg": 412.1, "pass_rate": 96.6}, {"name": "ST", "students": 29, "avg": 380.8, "pass_rate": 93.1}, {"name": "SCA", "students": 40, "avg": 374.3, "pass_rate": 100.0}, {"name": "SC", "students": 3928, "avg": 348.7, "pass_rate": 90.2}], "gender": [{"name": "Female", "students": 7436, "avg": 418.3}, {"name": "Male", "students": 6767, "avg": 382.3}], "streams": [{"name": "Commerce (BizMaths)", "students": 254, "avg": 453.9}, {"name": "Science (Biology)", "students": 3745, "avg": 437.8}, {"name": "Science (Bio-Maths)", "students": 4712, "avg": 429.4}, {"name": "Arts", "students": 92, "avg": 396.4}, {"name": "Commerce (Comp Apps)", "students": 2200, "avg": 388.0}, {"name": "Science (CS)", "students": 342, "avg": 375.2}, {"name": "Arts/Vocational", "students": 969, "avg": 343.1}, {"name": "Supplementary", "students": 655, "avg": 309.2}, {"name": "Vocational", "students": 264, "avg": 309.0}, {"name": "Commerce (General)", "students": 958, "avg": 294.6}], "buckets": [{"range": "0-100", "count": 294}, {"range": "101-200", "count": 75}, {"range": "201-300", "count": 1534}, {"range": "301-400", "count": 4847}, {"range": "401-500", "count": 5078}, {"range": "501-600", "count": 2375}], "religion": [{"name": "Hindu", "students": 12175, "avg": 397.9}, {"name": "Muslim", "students": 1586, "avg": 429.5}, {"name": "Christian", "students": 435, "avg": 389.0}, {"name": "Others", "students": 7, "avg": 455.0}]};
+const S=D.schools,M=D.management,COM=D.community,GEN=D.gender,STR=D.streams,BKT=D.buckets,REL=D.religion;
+const CL=["#1565C0","#E65100","#2E7D32","#6A1B9A","#00695C","#C62828","#0277BD","#AD1457","#37474F","#F9A825"];
+Chart.defaults.font.family="Roboto,sans-serif";Chart.defaults.font.size=12;Chart.defaults.color="#616161";
+Chart.defaults.plugins.legend.labels.usePointStyle=true;
 
-new Chart(document.getElementById("distChart"),{type:"bar",data:{labels:["0-100","101-200","201-300","301-400","401-500","501-600"],datasets:[{label:"Students",data:[294,75,1534,4847,5078,2375],backgroundColor:[C.red,C.red,C.gold,C.blue,C.green,C.purple],borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.parsed.y.toLocaleString()} students (${(c.parsed.y/14362*100).toFixed(1)}%)`}}},scales:{y:{grid:{color:"#F0F4F8"},ticks:{callback:v=>v.toLocaleString()}},x:{grid:{display:false}}}}});
+function go(id,el){
+  document.querySelectorAll("sec").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".ni").forEach(n=>n.classList.remove("active"));
+  document.getElementById("s-"+id).classList.add("active");
+  el.classList.add("active");
+  const T={ov:"Overview Dashboard",sc:"School Analysis",co:"Community & Gender",st:"Subject Streams",rk:"Full Rankings"};
+  document.getElementById("tb-t").textContent=T[id]||id;
+  if(id==="sc"&&!window._sc){iSC();window._sc=1}
+  if(id==="co"&&!window._co){iCO();window._co=1}
+  if(id==="st"&&!window._st){iST();window._st=1}
+  if(id==="rk"&&!window._rk){iRK();window._rk=1}
+}
+function ac(v){return v>=450?"ae":v>=350?"ag":v>=300?"am":"al"}
+function band(v){return v>=450?"Excellent":v>=350?"Good":v>=300?"Average":"Needs Help"}
+function bc(v){return v>=450?"#2E7D32":v>=350?"#1565C0":v>=300?"#F57F17":"#C62828"}
+const tm={"SF Matric":"sf","Govt School":"gv","Fully Aided":"fa","Partly Aided":"pa","Municipality":"mu","Adi Dravidar":"ad","Others":"ot"};
+function tc(t){return `<span class="tc ${tm[t]||"ot"}">${t}</span>`}
 
-new Chart(document.getElementById("genderChart"),{type:"bar",data:{labels:["Female","Male"],datasets:[{label:"Student Count",data:[7499,6863],backgroundColor:["#E91E8C99","#2E6DA499"],borderRadius:6,yAxisID:"y"},{label:"Avg Marks",data:[418.3,382.3],type:"line",borderColor:[C.pink,C.blue],backgroundColor:"transparent",borderWidth:3,pointRadius:7,pointBackgroundColor:[C.pink,C.blue],tension:.3,yAxisID:"y1"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{grid:{color:"#F0F4F8"},title:{display:true,text:"No. of Students"}},y1:{position:"right",grid:{display:false},title:{display:true,text:"Avg Marks"},min:350,max:450},x:{grid:{display:false}}}}});
+// OVERVIEW
+new Chart(document.getElementById("c-dist"),{type:"bar",data:{
+  labels:BKT.map(b=>b.range),
+  datasets:[{label:"Students",data:BKT.map(b=>b.count),
+    backgroundColor:["#EF9A9A","#EF9A9A","#FFE082","#90CAF9","#A5D6A7","#CE93D8"],
+    borderColor:["#C62828","#C62828","#F57F17","#1565C0","#2E7D32","#6A1B9A"],
+    borderWidth:2,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>`${c.parsed.y.toLocaleString()} students (${(c.parsed.y/14362*100).toFixed(1)}%)`}}},
+    scales:{y:{grid:{color:"#F5F7FA"},ticks:{callback:v=>v.toLocaleString()}},x:{grid:{display:false}}}}});
 
-new Chart(document.getElementById("mgmtChart"),{type:"bar",data:{labels:["Self-Finance Matric","Others","Partly Aided","Fully Aided","Adi Dravidar","Govt School","Municipality"],datasets:[{label:"Avg Marks",data:[455.0,432.0,371.3,365.9,364.1,333.6,309.2],backgroundColor:[C.green,C.teal,C.gold,C.blue,C.purple,C.orange,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:200,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById("c-mgmt"),{type:"bar",data:{
+  labels:M.map(m=>m.name),
+  datasets:[{label:"Avg Marks",data:M.map(m=>m.avg),
+    backgroundColor:CL.slice(0,M.length),borderRadius:5,borderSkipped:false}]},
+  options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | Pass: ${M.find(m=>m.name===c.label)?.pass_rate}%`}}},
+    scales:{x:{min:200,max:500,grid:{color:"#F5F7FA"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false}}}}});
 
-new Chart(document.getElementById("comChart"),{type:"bar",data:{labels:["OC","DNC","SCD","BC","BCM","MBC","ST","SCA","SC"],datasets:[{label:"Avg Marks",data:[474.1,441.9,431.5,430.2,429.5,412.1,380.8,374.3,348.7],backgroundColor:[C.purple,C.teal,C.green,C.blue,C.gold,C.orange,C.pink,C.cyan,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:300,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById("c-gen"),{type:"bar",data:{
+  labels:["Female","Male"],
+  datasets:[
+    {label:"Students",data:[7436,6767],backgroundColor:["#F48FB1","#90CAF9"],borderRadius:6,yAxisID:"y"},
+    {label:"Avg Marks",data:[418.3,382.3],type:"line",borderColor:["#E91E8C","#1565C0"],
+      backgroundColor:"transparent",borderWidth:3,pointRadius:7,
+      pointBackgroundColor:["#E91E8C","#1565C0"],tension:.3,yAxisID:"y1"}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},
+    scales:{y:{grid:{color:"#F5F7FA"},title:{display:true,text:"No. of Students"}},
+      y1:{position:"right",grid:{display:false},title:{display:true,text:"Avg Marks"},min:350,max:450},
+      x:{grid:{display:false}}}}});
 
-new Chart(document.getElementById("streamChart"),{type:"bar",data:{labels:["Commerce (BizMaths)","Science (Biology)","Science (Bio-Maths)","Arts","Commerce (Comp Apps)","Science (CS)","Arts/Vocational","Commerce (General)"],datasets:[{label:"Avg Marks",data:[453.9,437.8,429.4,396.4,388.0,375.2,343.1,294.6],backgroundColor:[C.purple,C.green,C.blue,C.gold,C.teal,C.orange,C.pink,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:200,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+new Chart(document.getElementById("c-rel"),{type:"doughnut",data:{
+  labels:REL.map(r=>`${r.name} (${r.students.toLocaleString()})`),
+  datasets:[{data:REL.map(r=>r.students),
+    backgroundColor:["#1565C0","#FF6F00","#2E7D32","#9E9E9E"],borderWidth:3,borderColor:"#fff",hoverOffset:8}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"60%",
+    plugins:{legend:{position:"bottom",labels:{padding:12}},
+      tooltip:{callbacks:{label:c=>{const r=REL[c.dataIndex];return ` ${r.students.toLocaleString()} | Avg: ${r.avg}`}}}}}});
 
-new Chart(document.getElementById("relChart"),{type:"doughnut",data:{labels:["Hindu (12,324)","Muslim (1,591)","Christian (440)","Others (7)"],datasets:[{data:[12324,1591,440,7],backgroundColor:[C.blue,C.gold,C.green,C.purple],borderWidth:3,borderColor:"#fff",hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:"58%",plugins:{legend:{position:"bottom",labels:{padding:16}},tooltip:{callbacks:{label:c=>{const a={Hindu:397.9,Muslim:429.5,Christian:389.0,Others:455.0};const k=c.label.split(" ")[0];return ` ${c.parsed.toLocaleString()} students | Avg: ${a[k]??"-"}`;}}}}});
+// SCHOOL
+function iSC(){
+  const t20=S.slice(0,20);
+  new Chart(document.getElementById("c-t20"),{type:"bar",data:{
+    labels:t20.map(s=>s.name.length>32?s.name.substring(0,32)+"...":s.name),
+    datasets:[{label:"Avg Marks",data:t20.map(s=>s.avg),
+      backgroundColor:t20.map(s=>s.avg>=480?"#1B5E20":s.avg>=450?"#2E7D32":"#66BB6A"),
+      borderRadius:4,borderSkipped:false}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${t20[c.dataIndex].students} students | ${t20[c.dataIndex].type}`}}},
+      scales:{x:{min:400,max:540,grid:{color:"#F5F7FA"}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
 
-const T=[{r:1,n:"Sharmila Goddess SM Matric HR Sec School, Porayar",t:"SF Matric",s:62,a:518.5},{r:2,n:"Saraswathi Matric HR Sec School, Kollidam",t:"SF Matric",s:212,a:506.6},{r:3,n:"Jaihind Matriculation HSS, Therazhundur",t:"SF Matric",s:110,a:500.7},{r:4,n:"Nisha MAT HSS, Therazhandur",t:"SF Matric",s:48,a:488.0},{r:5,n:"Sri Kanchi Sankara Vidyalaya Matric",t:"SF Matric",s:116,a:486.5},{r:6,n:"Sri Ramakrishna Matric HR Sec, Sivanagaram",t:"SF Matric",s:32,a:486.3},{r:7,n:"Nivedha Matric HR Sec School, Porayar",t:"SF Matric",s:200,a:486.0},{r:8,n:"Mayiladuthurai District Govt Model School",t:"Govt",s:88,a:483.2},{r:9,n:"Silver Jubilee Matriculation HSS, Mayiladuthurai",t:"SF Matric",s:550,a:477.7},{r:10,n:"Best Matric HR Sec School, Sirkali",t:"SF Matric",s:602,a:477.2}];
-const B=[{r:1,n:"Annai Velankanni Matha HSS, Peravur",t:"Aided",s:11,a:218.3},{r:2,n:"GHSS Kiliyanur",t:"Govt",s:75,a:254.8},{r:3,n:"Govt Boys HR Sec School, Manalmedu",t:"Govt",s:158,a:260.0},{r:4,n:"Government Model HR Sec School, Kuttalam",t:"Govt",s:197,a:270.1},{r:5,n:"LMC Aided HR Sec School, Sirkali",t:"Aided",s:115,a:282.3},{r:6,n:"TELC Bishop Johnson Memorial HSS, Tharangambadi",t:"Aided",s:10,a:286.1},{r:7,n:"TGN MPL HR Sec School, Mayiladuthurai",t:"Muni.",s:224,a:287.6},{r:8,n:"Govt HR Sec School, Keelaperumpallam",t:"Govt",s:50,a:289.5},{r:9,n:"Govt HR Sec School, Sankaranpandal",t:"Govt",s:163,a:297.7},{r:10,n:"Govt HR Sec School, Vaitheeswarankoil",t:"Govt",s:66,a:299.7}];
-const rc=r=>r===1?"rank r1":r===2?"rank r2":r===3?"rank r3":"rank";
-document.getElementById("top10").innerHTML=T.map(d=>`<tr><td><b class="${rc(d.r)}">${d.r}</b></td><td class="school-name">${d.n}</td><td style="font-size:.74rem;color:var(--muted)">${d.t}</td><td style="text-align:center">${d.s}</td><td style="text-align:center"><span class="pill pill-g">${d.a}</span></td></tr>`).join("");
-document.getElementById("bot10").innerHTML=B.map(d=>`<tr><td><b class="rank">${d.r}</b></td><td class="school-name">${d.n}</td><td style="font-size:.74rem;color:var(--muted)">${d.t}</td><td style="text-align:center">${d.s}</td><td style="text-align:center"><span class="pill pill-r">${d.a}</span></td></tr>`).join("");
+  const tcols={"SF Matric":"#1565C0","Govt School":"#E65100","Fully Aided":"#2E7D32","Partly Aided":"#00695C","Municipality":"#C62828","Adi Dravidar":"#6A1B9A","Others":"#607D8B"};
+  new Chart(document.getElementById("c-scat"),{type:"scatter",data:{
+    datasets:Object.entries(tcols).map(([t,cl])=>({
+      label:t,data:S.filter(s=>s.type===t).map(s=>({x:s.students,y:s.avg,n:s.name})),
+      backgroundColor:cl+"CC",pointRadius:6,pointHoverRadius:9}))},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{font:{size:10},padding:8}},
+        tooltip:{callbacks:{label:c=>[c.raw.n,`Students: ${c.raw.x} | Avg: ${c.raw.y}`]}}},
+      scales:{x:{title:{display:true,text:"No. of Students"},grid:{color:"#F5F7FA"}},
+        y:{title:{display:true,text:"Average Marks"},grid:{color:"#F5F7FA"}}}}});
+  rST(S);
+}
+
+let _sc=-1,_sd=1,_fd=null;
+function srt(c){
+  if(_sc===c)_sd*=-1;else{_sc=c;_sd=1;}
+  document.querySelectorAll("#sct thead th").forEach((th,i)=>{th.classList.remove("sa","sd");if(i===c)th.classList.add(_sd===1?"sa":"sd");});
+  const d=_fd||S;
+  const k=["rank","name","type","students","avg","pass_rate","high","low"][c];
+  if(!k)return;
+  rST([...d].sort((a,b)=>(a[k]>b[k]?1:-1)*_sd),false);
+}
+function ft(){
+  const q=document.getElementById("ss").value.toLowerCase();
+  const ty=document.getElementById("sty").value;
+  const bd=document.getElementById("sbd").value;
+  _fd=S.filter(s=>{
+    if(q&&!s.name.toLowerCase().includes(q))return false;
+    if(ty&&s.type!==ty)return false;
+    if(bd==="ex"&&s.avg<450)return false;
+    if(bd==="gd"&&(s.avg<350||s.avg>=450))return false;
+    if(bd==="lw"&&s.avg>=350)return false;
+    return true;
+  });
+  rST(_fd);
+}
+function rST(d,uc=true){
+  if(uc)document.getElementById("sc-cnt").textContent=`${d.length} of ${S.length} schools`;
+  const mc=["#B8860B","#808080","#CD7F32"];
+  document.getElementById("sc-tb").innerHTML=d.map((s,i)=>`<tr>
+    <td><span class="rb" style="color:${i<3?mc[i]:"#9E9E9E"}">${s.rank}</span></td>
+    <td style="font-weight:500;max-width:270px;font-size:.81rem">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td style="text-align:center;font-weight:600">${s.students}</td>
+    <td style="text-align:center"><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
+    <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(s.pass_rate,100)}%;background:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}"></div></div><span class="pt" style="color:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}">${s.pass_rate}%</span></div></td>
+    <td style="text-align:center;color:#2E7D32;font-weight:700">${s.high}</td>
+    <td style="text-align:center;color:#C62828;font-weight:700">${s.low}</td>
+    <td><span style="font-size:.73rem;font-weight:700;color:${bc(s.avg)}">${band(s.avg)}</span></td>
+  </tr>`).join("");
+}
+
+// COMMUNITY
+function iCO(){
+  new Chart(document.getElementById("c-com"),{type:"bar",data:{
+    labels:COM.map(c=>c.name),
+    datasets:[{label:"Avg Marks",data:COM.map(c=>c.avg),backgroundColor:CL.slice(0,COM.length),borderRadius:5,borderSkipped:false}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${COM[c.dataIndex].students.toLocaleString()} students`}}},
+      scales:{x:{min:300,max:500,grid:{color:"#F5F7FA"}},y:{grid:{display:false}}}}});
+  new Chart(document.getElementById("c-gen2"),{type:"bar",data:{
+    labels:["Female","Male"],
+    datasets:[{label:"Avg Marks",data:[418.3,382.3],backgroundColor:["#E91E8C","#1565C0"],borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{min:350,max:440,grid:{color:"#F5F7FA"}},x:{grid:{display:false}}}}});
+  document.getElementById("com-tb").innerHTML=COM.map((c,i)=>`<tr>
+    <td style="font-weight:700;color:${CL[i]}">${c.name}</td>
+    <td style="font-weight:600">${c.students.toLocaleString()}</td>
+    <td>${(c.students/14362*100).toFixed(1)}%</td>
+    <td><span class="ap ${ac(c.avg)}">${c.avg}</span></td>
+    <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(c.pass_rate,100)}%;background:#2E7D32"></div></div><span class="pt">${c.pass_rate}%</span></div></td>
+    <td><span style="font-size:.73rem;font-weight:700;color:${bc(c.avg)}">${band(c.avg)}</span></td>
+  </tr>`).join("");
+  new Chart(document.getElementById("c-cpie"),{type:"doughnut",data:{
+    labels:COM.map(c=>c.name),datasets:[{data:COM.map(c=>c.students),backgroundColor:CL.slice(0,COM.length),borderWidth:2,borderColor:"#fff",hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"55%",
+      plugins:{legend:{position:"bottom",labels:{padding:10,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`${COM[c.dataIndex].students.toLocaleString()} (${(COM[c.dataIndex].students/14362*100).toFixed(1)}%)`}}}}});
+  new Chart(document.getElementById("c-rel2"),{type:"bar",data:{
+    labels:REL.map(r=>r.name),
+    datasets:[
+      {label:"Students",data:REL.map(r=>r.students),backgroundColor:["#1565C0","#FF6F00","#2E7D32","#9E9E9E"],borderRadius:5,yAxisID:"y"},
+      {label:"Avg Marks",data:REL.map(r=>r.avg),type:"line",borderColor:"#6A1B9A",backgroundColor:"transparent",borderWidth:2.5,pointRadius:5,pointBackgroundColor:"#6A1B9A",yAxisID:"y1"}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},
+      scales:{y:{grid:{color:"#F5F7FA"},title:{display:true,text:"Students"}},
+        y1:{position:"right",grid:{display:false},title:{display:true,text:"Avg Marks"},min:350,max:470},
+        x:{grid:{display:false}}}}});
+}
+
+// STREAMS
+function iST(){
+  new Chart(document.getElementById("c-str"),{type:"bar",data:{
+    labels:STR.map(s=>s.name),datasets:[{label:"Avg Marks",data:STR.map(s=>s.avg),backgroundColor:CL.slice(0,STR.length),borderRadius:5,borderSkipped:false}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${STR[c.dataIndex].students.toLocaleString()} students`}}},
+      scales:{x:{min:200,max:500,grid:{color:"#F5F7FA"}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+  new Chart(document.getElementById("c-spie"),{type:"pie",data:{
+    labels:STR.map(s=>s.name),datasets:[{data:STR.map(s=>s.students),backgroundColor:CL.slice(0,STR.length),borderWidth:2,borderColor:"#fff"}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{padding:8,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>`${STR[c.dataIndex].students.toLocaleString()} (${(STR[c.dataIndex].students/14362*100).toFixed(1)}%)`}}}}});
+  document.getElementById("str-tb").innerHTML=STR.map((s,i)=>`<tr>
+    <td style="font-weight:700;color:${CL[i]}">${i+1}</td>
+    <td style="font-weight:500">${s.name}</td>
+    <td style="font-weight:600">${s.students.toLocaleString()}</td>
+    <td>${(s.students/14362*100).toFixed(1)}%</td>
+    <td><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
+    <td><span style="font-size:.73rem;font-weight:700;color:${bc(s.avg)}">${band(s.avg)}</span></td>
+  </tr>`).join("");
+}
+
+// RANKINGS
+function iRK(){
+  const t10=S.slice(0,10),b10=[...S].sort((a,b)=>a.avg-b.avg).slice(0,10);
+  const mc=["#B8860B","#808080","#CD7F32"];
+  document.getElementById("t10").innerHTML=t10.map((s,i)=>`<tr>
+    <td><span class="rb" style="color:${i<3?mc[i]:"#9E9E9E"}">${i+1}</span></td>
+    <td style="font-weight:${i<3?700:500};font-size:.8rem;max-width:220px">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td><span class="ap ae">${s.avg}</span></td>
+    <td style="color:#2E7D32;font-weight:700">${s.pass_rate}%</td>
+  </tr>`).join("");
+  document.getElementById("b10").innerHTML=b10.map(s=>`<tr>
+    <td><span class="rb" style="color:#C62828">${s.rank}</span></td>
+    <td style="font-size:.8rem;max-width:220px">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td><span class="ap al">${s.avg}</span></td>
+    <td style="color:${s.pass_rate>=70?"#FF6F00":"#C62828"};font-weight:700">${s.pass_rate}%</td>
+  </tr>`).join("");
+  const b20=[...S].sort((a,b)=>a.avg-b.avg).slice(0,20);
+  new Chart(document.getElementById("c-b20"),{type:"bar",data:{
+    labels:b20.map(s=>s.name.length>38?s.name.substring(0,38)+"...":s.name),
+    datasets:[{label:"Avg Marks",data:b20.map(s=>s.avg),
+      backgroundColor:b20.map(s=>s.avg<260?"#B71C1C":s.avg<300?"#C62828":"#EF5350"),
+      borderRadius:4,borderSkipped:false}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${b20[c.dataIndex].type} | Pass: ${b20[c.dataIndex].pass_rate}%`}}},
+      scales:{x:{min:150,max:400,grid:{color:"#F5F7FA"},title:{display:true,text:"Average Marks (out of 600)"}},
+        y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+}
+setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc-cnt").textContent=`${S.length} of ${S.length} schools`;},200);
 </script>
 </body>
 </html>
