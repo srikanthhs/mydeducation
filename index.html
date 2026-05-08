@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mayiladuthurai Education Dashboard 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --dark:#1A3A5C;--mid:#2E6DA4;--light:#D6E8F7;
+  --gold:#E8A838;--green:#27AE60;--red:#E74C3C;--purple:#8E44AD;
+  --bg:#F0F4F8;--card:#fff;--text:#2C3E50;--muted:#6B7A8D;
+}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:linear-gradient(135deg,var(--dark) 0%,var(--mid) 100%);color:#fff;padding:28px 32px 20px}
+header h1{font-size:1.7rem;font-weight:700}
+header p{font-size:.9rem;opacity:.85;margin-top:6px}
+.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 14px;font-size:.78rem;font-weight:600}
+main{max-width:1400px;margin:0 auto;padding:28px 24px 48px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
+.kpi{background:var(--card);border-radius:12px;padding:20px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--mid)}
+.kpi.blue{border-color:var(--mid);color:var(--mid)}.kpi.green{border-color:var(--green);color:var(--green)}
+.kpi.gold{border-color:var(--gold);color:var(--gold)}.kpi.purple{border-color:var(--purple);color:var(--purple)}
+.kpi.red{border-color:var(--red);color:var(--red)}.kpi.teal{border-color:#0E7D8D;color:#0E7D8D}
+.kpi-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+.kpi-value{font-size:2rem;font-weight:800;margin:6px 0 2px;color:inherit}
+.kpi-sub{font-size:.75rem;color:var(--muted)}
+.section-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:14px;padding-left:10px;border-left:4px solid var(--mid)}
+.chart-grid{display:grid;gap:20px;margin-bottom:24px}
+.chart-grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+.chart-card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.chart-card h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:16px}
+.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+.insight-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.insight{background:var(--card);border-radius:10px;padding:14px 16px;box-shadow:0 1px 5px rgba(0,0,0,.06);border-left:3px solid var(--mid)}
+.insight.warn{border-color:var(--red)}.insight.good{border-color:var(--green)}.insight.info{border-color:var(--gold)}
+.insight-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.insight-text{font-size:.86rem;font-weight:600;color:var(--text);margin-top:4px;line-height:1.4}
+.table-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:20px;margin-bottom:28px}
+.table-card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.table-head{padding:14px 18px;font-size:.85rem;font-weight:700;color:#fff}
+.table-head.top{background:linear-gradient(90deg,#1B5E20,#2E7D32)}.table-head.bot{background:linear-gradient(90deg,#7F0000,#C62828)}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{background:#F8FAFC;padding:9px 14px;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid #E8EDF2}
+tbody tr{border-bottom:1px solid #F0F4F8}tbody tr:hover{background:#F8FAFC}
+tbody td{padding:9px 14px;vertical-align:middle}
+.rank{font-weight:800;color:var(--mid)}.r1{color:#B8860B}.r2{color:#808080}.r3{color:#CD7F32}
+.school-name{font-weight:600;max-width:240px;font-size:.81rem}
+.pill{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:700;font-size:.8rem}
+.pill-g{background:#E8F5E9;color:#1B5E20}.pill-r{background:#FFEBEE;color:#B71C1C}
+footer{text-align:center;padding:20px;font-size:.78rem;color:var(--muted);border-top:1px solid #E0E7EE}
+@media(max-width:768px){header h1{font-size:1.2rem}main{padding:16px 12px 40px}.chart-grid-2,.table-grid{grid-template-columns:1fr}.chart-wrap{height:220px}.chart-wrap.tall{height:280px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>&#128202; Mayiladuthurai District &mdash; Education Results Dashboard</h1>
+  <p>March 2026 Public Examination &nbsp;|&nbsp; Tamil Nadu</p>
+  <div class="badge-row">
+    <span class="badge">District: 234</span>
+    <span class="badge">14,362 Students</span>
+    <span class="badge">96 Schools</span>
+    <span class="badge">7 School Types</span>
+    <span class="badge">March 2026</span>
+  </div>
+</header>
+<main>
+  <div class="kpi-grid" style="margin-top:24px">
+    <div class="kpi blue"><div class="kpi-label">Total Students</div><div class="kpi-value">14,362</div><div class="kpi-sub">Appeared for exam</div></div>
+    <div class="kpi green"><div class="kpi-label">Passed</div><div class="kpi-value">13,523</div><div class="kpi-sub">94.2% pass rate</div></div>
+    <div class="kpi red"><div class="kpi-label">Not Passed</div><div class="kpi-value">839</div><div class="kpi-sub">5.8% of total</div></div>
+    <div class="kpi gold"><div class="kpi-label">Average Marks</div><div class="kpi-value">401.2</div><div class="kpi-sub">Out of 600</div></div>
+    <div class="kpi purple"><div class="kpi-label">Highest Score</div><div class="kpi-value">596</div><div class="kpi-sub">Out of 600</div></div>
+    <div class="kpi teal"><div class="kpi-label">Schools</div><div class="kpi-value">96</div><div class="kpi-sub">Across district</div></div>
+  </div>
+  <div class="insight-strip">
+    <div class="insight good"><div class="insight-label">Girls outperform boys</div><div class="insight-text">Female avg 418.3 vs Male avg 382.3 &mdash; gap of +36 marks</div></div>
+    <div class="insight good"><div class="insight-label">Best school type</div><div class="insight-text">Self-Finance Matric schools average 455 marks &mdash; highest of all types</div></div>
+    <div class="insight warn"><div class="insight-label">Municipality schools</div><div class="insight-text">Average only 309 marks &mdash; 146 marks below Self-Finance Matric</div></div>
+    <div class="insight info"><div class="insight-label">Largest community</div><div class="insight-text">MBC: 5,196 students (36.2%), but OC tops avg marks at 474</div></div>
+    <div class="insight warn"><div class="insight-label">SC community gap</div><div class="insight-text">SC average 348.7 &mdash; lowest of all communities, 125 below OC</div></div>
+    <div class="insight good"><div class="insight-label">Top stream</div><div class="insight-text">Commerce (BizMaths) leads with avg 453.9 among major streams</div></div>
+  </div>
+  <div class="chart-grid chart-grid-2">
+    <div class="chart-card"><h3>&#128200; Score Distribution (Marks Range)</h3><div class="chart-wrap"><canvas id="distChart"></canvas></div></div>
+    <div class="chart-card"><h3>&#9878; Gender Comparison &mdash; Count &amp; Avg Marks</h3><div class="chart-wrap"><canvas id="genderChart"></canvas></div></div>
+  </div>
+  <div class="chart-grid chart-grid-2">
+    <div class="chart-card"><h3>&#127979; Avg Marks by School Management Type</h3><div class="chart-wrap tall"><canvas id="mgmtChart"></canvas></div></div>
+    <div class="chart-card"><h3>&#128101; Avg Marks by Student Community</h3><div class="chart-wrap tall"><canvas id="comChart"></canvas></div></div>
+  </div>
+  <div class="chart-grid chart-grid-2">
+    <div class="chart-card"><h3>&#128218; Subject Stream Performance</h3><div class="chart-wrap tall"><canvas id="streamChart"></canvas></div></div>
+    <div class="chart-card"><h3>&#128336; Religion Distribution &amp; Avg Marks</h3><div class="chart-wrap tall"><canvas id="relChart"></canvas></div></div>
+  </div>
+  <p class="section-title">&#127942; School Performance Rankings (Min. 10 Students)</p>
+  <div class="table-grid">
+    <div class="table-card">
+      <div class="table-head top">&#129351; Top 10 Schools by Average Marks</div>
+      <table><thead><tr><th>#</th><th>School Name</th><th>Type</th><th>Students</th><th>Avg</th></tr></thead>
+      <tbody id="top10"></tbody></table>
+    </div>
+    <div class="table-card">
+      <div class="table-head bot">&#9888; Bottom 10 Schools &mdash; Needs Attention</div>
+      <table><thead><tr><th>#</th><th>School Name</th><th>Type</th><th>Students</th><th>Avg</th></tr></thead>
+      <tbody id="bot10"></tbody></table>
+    </div>
+  </div>
+</main>
+<footer>Mayiladuthurai District Education Dashboard &nbsp;|&nbsp; March 2026 &nbsp;|&nbsp; Tamil Nadu &nbsp;|&nbsp; 14,362 student records</footer>
+<script>
+Chart.defaults.font.family="'Segoe UI',Arial,sans-serif";
+Chart.defaults.font.size=12;
+Chart.defaults.color="#6B7A8D";
+const C={blue:"#2E6DA4",gold:"#E8A838",green:"#27AE60",red:"#E74C3C",purple:"#8E44AD",teal:"#0E7D8D",dark:"#1A3A5C",pink:"#E91E8C",orange:"#E65100",cyan:"#006064"};
+
+new Chart(document.getElementById("distChart"),{type:"bar",data:{labels:["0-100","101-200","201-300","301-400","401-500","501-600"],datasets:[{label:"Students",data:[294,75,1534,4847,5078,2375],backgroundColor:[C.red,C.red,C.gold,C.blue,C.green,C.purple],borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.parsed.y.toLocaleString()} students (${(c.parsed.y/14362*100).toFixed(1)}%)`}}},scales:{y:{grid:{color:"#F0F4F8"},ticks:{callback:v=>v.toLocaleString()}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById("genderChart"),{type:"bar",data:{labels:["Female","Male"],datasets:[{label:"Student Count",data:[7499,6863],backgroundColor:["#E91E8C99","#2E6DA499"],borderRadius:6,yAxisID:"y"},{label:"Avg Marks",data:[418.3,382.3],type:"line",borderColor:[C.pink,C.blue],backgroundColor:"transparent",borderWidth:3,pointRadius:7,pointBackgroundColor:[C.pink,C.blue],tension:.3,yAxisID:"y1"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{grid:{color:"#F0F4F8"},title:{display:true,text:"No. of Students"}},y1:{position:"right",grid:{display:false},title:{display:true,text:"Avg Marks"},min:350,max:450},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById("mgmtChart"),{type:"bar",data:{labels:["Self-Finance Matric","Others","Partly Aided","Fully Aided","Adi Dravidar","Govt School","Municipality"],datasets:[{label:"Avg Marks",data:[455.0,432.0,371.3,365.9,364.1,333.6,309.2],backgroundColor:[C.green,C.teal,C.gold,C.blue,C.purple,C.orange,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:200,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById("comChart"),{type:"bar",data:{labels:["OC","DNC","SCD","BC","BCM","MBC","ST","SCA","SC"],datasets:[{label:"Avg Marks",data:[474.1,441.9,431.5,430.2,429.5,412.1,380.8,374.3,348.7],backgroundColor:[C.purple,C.teal,C.green,C.blue,C.gold,C.orange,C.pink,C.cyan,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:300,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById("streamChart"),{type:"bar",data:{labels:["Commerce (BizMaths)","Science (Biology)","Science (Bio-Maths)","Arts","Commerce (Comp Apps)","Science (CS)","Arts/Vocational","Commerce (General)"],datasets:[{label:"Avg Marks",data:[453.9,437.8,429.4,396.4,388.0,375.2,343.1,294.6],backgroundColor:[C.purple,C.green,C.blue,C.gold,C.teal,C.orange,C.pink,C.red],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:200,max:500,grid:{color:"#F0F4F8"},title:{display:true,text:"Average Marks"}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+
+new Chart(document.getElementById("relChart"),{type:"doughnut",data:{labels:["Hindu (12,324)","Muslim (1,591)","Christian (440)","Others (7)"],datasets:[{data:[12324,1591,440,7],backgroundColor:[C.blue,C.gold,C.green,C.purple],borderWidth:3,borderColor:"#fff",hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:"58%",plugins:{legend:{position:"bottom",labels:{padding:16}},tooltip:{callbacks:{label:c=>{const a={Hindu:397.9,Muslim:429.5,Christian:389.0,Others:455.0};const k=c.label.split(" ")[0];return ` ${c.parsed.toLocaleString()} students | Avg: ${a[k]??"-"}`;}}}}});
+
+const T=[{r:1,n:"Sharmila Goddess SM Matric HR Sec School, Porayar",t:"SF Matric",s:62,a:518.5},{r:2,n:"Saraswathi Matric HR Sec School, Kollidam",t:"SF Matric",s:212,a:506.6},{r:3,n:"Jaihind Matriculation HSS, Therazhundur",t:"SF Matric",s:110,a:500.7},{r:4,n:"Nisha MAT HSS, Therazhandur",t:"SF Matric",s:48,a:488.0},{r:5,n:"Sri Kanchi Sankara Vidyalaya Matric",t:"SF Matric",s:116,a:486.5},{r:6,n:"Sri Ramakrishna Matric HR Sec, Sivanagaram",t:"SF Matric",s:32,a:486.3},{r:7,n:"Nivedha Matric HR Sec School, Porayar",t:"SF Matric",s:200,a:486.0},{r:8,n:"Mayiladuthurai District Govt Model School",t:"Govt",s:88,a:483.2},{r:9,n:"Silver Jubilee Matriculation HSS, Mayiladuthurai",t:"SF Matric",s:550,a:477.7},{r:10,n:"Best Matric HR Sec School, Sirkali",t:"SF Matric",s:602,a:477.2}];
+const B=[{r:1,n:"Annai Velankanni Matha HSS, Peravur",t:"Aided",s:11,a:218.3},{r:2,n:"GHSS Kiliyanur",t:"Govt",s:75,a:254.8},{r:3,n:"Govt Boys HR Sec School, Manalmedu",t:"Govt",s:158,a:260.0},{r:4,n:"Government Model HR Sec School, Kuttalam",t:"Govt",s:197,a:270.1},{r:5,n:"LMC Aided HR Sec School, Sirkali",t:"Aided",s:115,a:282.3},{r:6,n:"TELC Bishop Johnson Memorial HSS, Tharangambadi",t:"Aided",s:10,a:286.1},{r:7,n:"TGN MPL HR Sec School, Mayiladuthurai",t:"Muni.",s:224,a:287.6},{r:8,n:"Govt HR Sec School, Keelaperumpallam",t:"Govt",s:50,a:289.5},{r:9,n:"Govt HR Sec School, Sankaranpandal",t:"Govt",s:163,a:297.7},{r:10,n:"Govt HR Sec School, Vaitheeswarankoil",t:"Govt",s:66,a:299.7}];
+const rc=r=>r===1?"rank r1":r===2?"rank r2":r===3?"rank r3":"rank";
+document.getElementById("top10").innerHTML=T.map(d=>`<tr><td><b class="${rc(d.r)}">${d.r}</b></td><td class="school-name">${d.n}</td><td style="font-size:.74rem;color:var(--muted)">${d.t}</td><td style="text-align:center">${d.s}</td><td style="text-align:center"><span class="pill pill-g">${d.a}</span></td></tr>`).join("");
+document.getElementById("bot10").innerHTML=B.map(d=>`<tr><td><b class="rank">${d.r}</b></td><td class="school-name">${d.n}</td><td style="font-size:.74rem;color:var(--muted)">${d.t}</td><td style="text-align:center">${d.s}</td><td style="text-align:center"><span class="pill pill-r">${d.a}</span></td></tr>`).join("");
+</script>
+</body>
+</html>
