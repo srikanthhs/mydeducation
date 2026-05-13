@@ -689,9 +689,9 @@ MJ.forEach(s=>{
 
 function sTab(id,el){
   document.querySelectorAll(".stabp").forEach(p=>p.classList.remove("sp-on"));
-  document.querySelectorAll(".stab").forEach(b=>b.classList.remove("sp-on"));
+  document.querySelectorAll(".stab").forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.add("sp-on");
-  el.classList.add("sp-on");
+  el.classList.add("active");
   if(id==="st2"&&!window._mxBuilt){bMX();window._mxBuilt=1;}
 }
 
@@ -913,7 +913,7 @@ function dlPDF(){
   const data=_tcd||TC;
   const subj=document.getElementById("tc-subj").value||"All Subjects";
   const ty=document.getElementById("tc-ty").value||"All Types";
-  const rows=data.map((t,i)=>`<tr style="${i<3?"background:#FFFDE7":"i%2===0?"background:#FAFAFA":"""}">
+  const rows=data.map((t,i)=>`<tr style="${i<3?"background:#FFFDE7":i%2===0?"background:#FAFAFA":""}">
     <td style="text-align:center;font-weight:700">${i+1}</td>
     <td style="font-size:.78rem">${t.school}</td>
     <td>${t.type}</td>
