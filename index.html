@@ -107,65 +107,60 @@ tbody td{padding:9px 13px;vertical-align:middle}
 /* SUBJECT ANALYSIS TABS */
 .stabs{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:18px}
 .stab{border:none;background:none;padding:11px 22px;font-family:Roboto,sans-serif;font-size:.875rem;font-weight:500;color:var(--t2);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;display:flex;align-items:center;gap:6px}
-.stab:hover{color:var(--p);background:#F3F6FF;border-radius:6px 6px 0 0}
+.stab:hover{color:var(--p)}
 .stab.active{color:var(--p);border-bottom-color:var(--p);font-weight:700}
-.stabp{display:none}.stabp.active{display:block}
+.stabp{display:none!important}.stabp.sp-on{display:block!important}
 /* Subject stats table */
 .sb-table{border-collapse:collapse;width:100%;font-size:.82rem}
-.sb-table th{background:#F5F7FA;padding:10px 14px;text-align:left;border-bottom:2px solid #E0E0E0;font-weight:700;color:#424242;white-space:nowrap;user-select:none}
+.sb-table th{background:#F5F7FA;padding:10px 14px;text-align:left;border-bottom:2px solid #E0E0E0;font-weight:700;color:#424242;white-space:nowrap}
 .sb-table td{padding:9px 14px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
 .sb-table tr:hover td{background:#F8F9FF}
 .sbar{display:flex;align-items:center;gap:10px}
 .sbar-bg{flex:1;background:#EEEEEE;border-radius:99px;height:8px;overflow:hidden;min-width:80px}
 .sbar-fill{height:100%;border-radius:99px}
 .sbar-val{font-weight:700;min-width:38px;text-align:right;font-size:.82rem}
-/* Matrix filter bar */
-.mx-filter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:13px 16px;background:#F8FAFE;border-bottom:1px solid #E8EAF6;border-radius:0}
-.mx-filter input,.mx-filter select{border:1.5px solid #CFD8DC;border-radius:8px;padding:7px 12px;font-family:Roboto,sans-serif;font-size:.82rem;outline:none;background:#fff;transition:.15s}
-.mx-filter input:focus,.mx-filter select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
+/* Matrix wrapper */
+.mx-outer{border-radius:12px;border:1px solid #E0E0E0;overflow:hidden;background:#fff}
+.mx-filter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:#F8FAFE;border-bottom:1px solid #E8EAF6}
+.mx-filter input,.mx-filter select{border:1.5px solid #CFD8DC;border-radius:8px;padding:7px 12px;font-family:Roboto,sans-serif;font-size:.82rem;outline:none;background:#fff}
+.mx-filter input:focus,.mx-filter select:focus{border-color:var(--p)}
 .mx-filter input{flex:1;min-width:180px}
-.mx-legend{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;font-size:.72rem;color:#757575}
-.mx-leg{display:flex;align-items:center;gap:4px;white-space:nowrap}
-.mx-leg-sq{width:13px;height:13px;border-radius:3px;display:inline-block}
-/* Matrix table */
-.mx-wrap{overflow:auto;max-height:70vh;border-radius:0}
-.mx{border-collapse:collapse;min-width:100%;width:max-content;font-size:.8rem}
-.mx thead tr{position:sticky;top:0;z-index:20}
-/* Fixed left columns (sticky) */
-.mx th.f1,.mx td.f1{position:sticky;left:0;z-index:15}
-.mx th.f2,.mx td.f2{position:sticky;left:40px;z-index:15}
-.mx th.f3,.mx td.f3{position:sticky;left:250px;z-index:15}
-/* Header cells */
-.mx th{background:#1A237E;color:#fff;border-right:1px solid rgba(255,255,255,.12);border-bottom:none;font-weight:600;padding:0;white-space:nowrap;vertical-align:bottom}
-.mx th.f1{width:40px;min-width:40px;text-align:center;padding:10px 4px;font-size:.75rem;background:#0D1B6E}
-.mx th.f2{min-width:210px;max-width:210px;text-align:left;padding:10px 12px;background:#1565C0;border-right:1px solid rgba(255,255,255,.2)}
-.mx th.f3{width:100px;min-width:100px;text-align:center;padding:10px 6px;background:#1976D2;border-right:2px solid rgba(255,255,255,.3)}
-/* Rotated subject column headers */
-.mx th.mxc{width:70px;min-width:70px;cursor:pointer;height:96px;vertical-align:bottom;padding:0;text-align:center}
-.mx th.mxc:hover{background:#283593}
-.mx th.mxc.asc,.mx th.mxc.desc{background:#283593}
-.mxh{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;padding:0 4px 8px;gap:2px}
-.mxh-abbr{font-size:.76rem;font-weight:700;writing-mode:vertical-lr;transform:rotate(180deg);white-space:nowrap;line-height:1.1;max-height:60px}
-.mxh-n{font-size:.62rem;opacity:.55;font-weight:400}
-.mxh-arr{font-size:.68rem;opacity:.4;line-height:1}
-.mx th.mxc.asc .mxh-arr{opacity:1;color:#90CAF9}
-.mx th.mxc.desc .mxh-arr{opacity:1;color:#EF9A9A}
-/* Data cells */
-.mx td{padding:0;border-bottom:1px solid #ECEFF1;white-space:nowrap;text-align:center}
-.mx td.f1{background:#F8FAFE;color:#9E9E9E;font-weight:700;font-size:.75rem;text-align:center;border-right:1px solid #E8EAF6}
-.mx td.f2{background:#fff;text-align:left;border-right:1px solid #E8EAF6;padding:0 12px;font-size:.78rem;max-width:210px;overflow:hidden;text-overflow:ellipsis}
-.mx td.f3{background:#fff;text-align:center;border-right:2px solid #C5CAE9;padding:0 6px}
-.mx-cell{display:flex;align-items:center;justify-content:center;height:36px;font-weight:700;font-size:.82rem;transition:filter .1s}
-.mx-null{color:#CFD8DC;font-size:.85rem;line-height:36px}
-.mx tr:hover td{filter:brightness(.95)}
+.mx-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.72rem;color:#757575;margin-left:auto}
+.mx-leg{display:flex;align-items:center;gap:3px;white-space:nowrap}
+.mx-leg-sq{width:12px;height:12px;border-radius:3px;display:inline-block}
+/* Matrix scroll container — THIS is the scroll parent, no overflow:hidden above it */
+.mx-wrap{overflow:auto;max-height:68vh}
+/* Table */
+.mx{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:.8rem}
+/* Sticky top header */
+.mx thead th{position:sticky;top:0;z-index:12;background:#1A237E;color:#fff;border-right:1px solid rgba(255,255,255,.15);border-bottom:2px solid #0D1B6E;white-space:nowrap;font-weight:600;padding:9px 10px;text-align:center;cursor:pointer}
+.mx thead th:hover{background:#283593}
+.mx thead th.asc{background:#1B5E20}
+.mx thead th.desc{background:#7B1FA2}
+/* Sticky left column — school name */
+.mx thead th.sc-col{position:sticky;left:0;z-index:20;background:#0D47A1;text-align:left;padding:9px 14px;min-width:30px;cursor:default}
+.mx thead th.sn-col{position:sticky;left:30px;z-index:20;background:#1565C0;text-align:left;padding:9px 14px;min-width:200px;cursor:pointer}
+.mx thead th.st-col{position:sticky;left:230px;z-index:20;background:#1976D2;text-align:center;padding:9px 8px;min-width:96px;cursor:default;border-right:3px solid rgba(255,255,255,.35)}
+.mx tbody td{padding:0;border-bottom:1px solid #F0F0F0;border-right:1px solid #F5F5F5;white-space:nowrap;text-align:center;vertical-align:middle}
+/* Sticky body cells */
+.mx tbody td.sc-col{position:sticky;left:0;z-index:8;background:#F8FAFE;border-right:1px solid #E8EAF6;color:#9E9E9E;font-weight:700;font-size:.73rem;text-align:center;padding:0 4px;min-width:30px;width:30px}
+.mx tbody td.sn-col{position:sticky;left:30px;z-index:8;background:#fff;border-right:1px solid #E3E8F5;text-align:left;padding:0 12px;font-size:.79rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;min-width:200px}
+.mx tbody td.st-col{position:sticky;left:230px;z-index:8;background:#fff;border-right:3px solid #C5CAE9;text-align:center;padding:0 6px;min-width:96px}
+/* Heat cells */
+.mx-cell{display:block;padding:8px 10px;font-weight:700;font-size:.81rem;min-width:62px;text-align:center}
+.mx-null{display:block;padding:8px 6px;color:#DEDEDE;font-size:.85rem;text-align:center}
+.mx tbody tr:hover td{filter:brightness(.93)}
+.mx tbody tr:hover td.sc-col{background:#EEF2FF!important}
+.mx tbody tr:hover td.sn-col{background:#F0F4FF!important}
+.mx tbody tr:hover td.st-col{background:#F0F4FF!important}
 /* District avg row */
-.mx tr.da td{background:#FFFDE7!important;border-bottom:2px solid #FFD54F!important}
-.mx tr.da td.f1{background:#FFF9C4!important;color:#E65100!important;font-size:.72rem}
-.mx tr.da td.f2{background:#FFF9C4!important;font-weight:700!important;color:#BF360C!important;font-size:.8rem}
-.mx tr.da td.f3{background:#FFF9C4!important}
-.mx tr.da:hover td{filter:brightness(.97)}
-.mx-info{font-size:.71rem;color:#9E9E9E;padding:8px 16px;background:#FAFAFA;border-top:1px solid #F0F0F0;border-radius:0 0 12px 12px}
-/* filter row (legacy, used in other sections) */
+.mx tbody tr.da-row td{background:#FFFDE7!important;border-bottom:2px solid #FFD54F!important;font-weight:700}
+.mx tbody tr.da-row td.sc-col{background:#FFF9C4!important;color:#E65100!important}
+.mx tbody tr.da-row td.sn-col{background:#FFF9C4!important;color:#BF360C!important}
+.mx tbody tr.da-row td.st-col{background:#FFF9C4!important}
+.mx tbody tr.da-row:hover td{filter:brightness(.96)}
+.mx-info{font-size:.71rem;color:#9E9E9E;padding:8px 14px;background:#FAFAFA;border-top:1px solid #F0F0F0}
+/* filter row (other sections) */
 .filter-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
 .filter-row input,.filter-row select{border:1px solid var(--bd);border-radius:8px;padding:7px 12px;font-family:Roboto,sans-serif;font-size:.82rem;outline:none}
 .filter-row input:focus,.filter-row select:focus{border-color:var(--p)}
@@ -305,12 +300,12 @@ tbody td{padding:9px 13px;vertical-align:middle}
     <div class="sh"><span class="mi material-icons-round">science</span><div><h2>Subject-wise Analysis</h2><div class="ss">Subject performance overview and school-wise subject marks matrix</div></div></div>
 
     <div class="stabs">
-      <button class="stab active" onclick="sTab('st1',this)"><span class="mi material-icons-round" style="font-size:16px">bar_chart</span>Subject Statistics</button>
+      <button class="stab active sp-on" onclick="sTab('st1',this)"><span class="mi material-icons-round" style="font-size:16px">bar_chart</span>Subject Statistics</button>
       <button class="stab" onclick="sTab('st2',this)"><span class="mi material-icons-round" style="font-size:16px">grid_on</span>School &times; Subject Matrix</button>
     </div>
 
     <!-- TAB 1: Subject Statistics -->
-    <div id="st1" class="stabp active">
+    <div id="st1" class="stabp sp-on">
       <div class="card" style="margin-bottom:16px">
         <div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Subject (out of 100)</div>
         <div class="cw md"><canvas id="c-subj"></canvas></div>
@@ -328,7 +323,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
 
     <!-- TAB 2: School × Subject Matrix -->
     <div id="st2" class="stabp">
-      <div class="card" style="padding:0;overflow:hidden;border-radius:12px">
+      <div class="mx-outer">
         <div class="mx-filter">
           <input id="mx-s" placeholder="&#128269; Search school name..." oninput="fMX()"/>
           <select id="mx-ty" onchange="fMX()">
@@ -338,12 +333,12 @@ tbody td{padding:9px 13px;vertical-align:middle}
           </select>
           <span style="font-size:.82rem;font-weight:700;color:var(--p)" id="mx-cnt"></span>
           <div class="mx-legend">
-            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(120,58%,86%)"></span>&#8805;80</span>
-            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(90,55%,86%)"></span>65&ndash;79</span>
-            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(45,80%,86%)"></span>50&ndash;64</span>
-            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(0,65%,90%)"></span>&lt;50</span>
-            <span class="mx-leg" style="color:#BDBDBD">&mdash;&nbsp;not offered</span>
-            <span class="mx-leg" style="background:#FFFDE7;padding:2px 6px;border-radius:4px;color:#E65100;font-weight:700">&#9733;&nbsp;District avg</span>
+            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(120,55%,82%)"></span>&#8805;80</span>
+            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(88,50%,84%)"></span>65&ndash;79</span>
+            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(45,80%,84%)"></span>50&ndash;64</span>
+            <span class="mx-leg"><span class="mx-leg-sq" style="background:hsl(0,65%,88%)"></span>&lt;50</span>
+            <span class="mx-leg" style="color:#BDBDBD">&mdash; not offered</span>
+            <span class="mx-leg" style="background:#FFFDE7;padding:2px 7px;border-radius:4px;color:#E65100;font-weight:700">&#9733; District avg</span>
           </div>
         </div>
         <div class="mx-wrap">
@@ -352,7 +347,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
             <tbody id="mx-tb"></tbody>
           </table>
         </div>
-        <div class="mx-info">Click any column header to sort &nbsp;&bull;&nbsp; &#9660;&#9650; indicates sort direction &nbsp;&bull;&nbsp; Values = average marks out of 100 &nbsp;&bull;&nbsp; &#9733; row = district average &nbsp;&bull;&nbsp; &mdash; = fewer than 3 students</div>
+        <div class="mx-info">&#8593;&#8595; Click subject header to sort &nbsp;&bull;&nbsp; School name column also sortable &nbsp;&bull;&nbsp; Values = average marks out of 100 &nbsp;&bull;&nbsp; &#9733; = district average &nbsp;&bull;&nbsp; &mdash; = fewer than 3 students at that school</div>
       </div>
     </div>
   </sec>
@@ -565,19 +560,17 @@ function iST(){
 
 // SUBJECT ANALYSIS
 const ABBR={"Language":"Lang","English":"English","Physics":"Physics","Chemistry":"Chem",
-  "Mathematics":"Maths","Computer Science":"Comp Sci","Biology":"Biology",
+  "Mathematics":"Maths","Computer Science":"CS","Biology":"Biology",
   "Economics":"Eco","Accountancy":"Acctcy","Commerce":"Commerce",
   "Computer Applications":"Comp App","Business Mathematics":"Bus Math"};
 
 function heat(v){
   if(v==null)return null;
   const h=Math.min(120,Math.round(v*1.2));
-  return {bg:`hsl(${h}deg,58%,88%)`,tx:`hsl(${h}deg,68%,24%)`};
+  return {bg:`hsl(${h}deg,55%,86%)`,tx:`hsl(${h}deg,70%,24%)`};
 }
 
-// Pre-compute district averages and school counts per subject
-const DIST_AVG={};
-const SUBJ_N={};
+const DIST_AVG={},SUBJ_N={};
 MJ.forEach(s=>{
   const vals=SS.filter(sc=>sc[s]!=null).map(sc=>sc[s]);
   DIST_AVG[s]=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)*10/vals.length)/10:null;
@@ -585,29 +578,30 @@ MJ.forEach(s=>{
 });
 
 function sTab(id,el){
-  document.querySelectorAll(".stabp").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".stab").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  el.classList.add("active");
+  document.querySelectorAll(".stabp").forEach(p=>p.classList.remove("sp-on"));
+  document.querySelectorAll(".stab").forEach(b=>b.classList.remove("sp-on"));
+  document.getElementById(id).classList.add("sp-on");
+  el.classList.add("sp-on");
+  if(id==="st2"&&!window._mxBuilt){bMX();window._mxBuilt=1;}
 }
 
-let _mxd=null,_mxsc=999,_mxsd=1,_sbInit=false;
+let _mxd=null,_sbInit=false;
 function iSB(){
   if(_sbInit)return;_sbInit=true;
-  // --- Chart ---
+  // Chart
   const top=SUBJ.filter(s=>s.students>=200).slice(0,12);
   new Chart(document.getElementById("c-subj"),{type:"bar",data:{
     labels:top.map(s=>s.name),
     datasets:[{label:"Avg",data:top.map(s=>s.avg),
-      backgroundColor:top.map(s=>{const h=Math.min(120,Math.round(s.avg*1.2));return `hsl(${h}deg,60%,50%)`}),
+      backgroundColor:top.map(s=>{const h=Math.min(120,Math.round(s.avg*1.2));return`hsl(${h}deg,60%,50%)`}),
       borderRadius:5,borderSkipped:false}]},
     options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x}/100  |  ${top[c.dataIndex].students.toLocaleString()} students  |  High: ${top[c.dataIndex].high}  Low: ${top[c.dataIndex].low}`}}},
+        tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x}/100 | ${top[c.dataIndex].students.toLocaleString()} students | High: ${top[c.dataIndex].high}  Low: ${top[c.dataIndex].low}`}}},
       scales:{x:{min:40,max:100,grid:{color:"#F5F7FA"},title:{display:true,text:"Average Marks (out of 100)"}},
         y:{grid:{display:false},ticks:{font:{size:11}}}}}});
 
-  // --- Subject stats table ---
+  // Subject stats table
   document.getElementById("subj-tb").innerHTML=SUBJ.map((s,i)=>{
     const h=Math.min(120,Math.round(s.avg*1.2));
     const clr=`hsl(${h}deg,68%,28%)`;const bgc=`hsl(${h}deg,60%,50%)`;
@@ -621,44 +615,49 @@ function iSB(){
       <td style="text-align:center;color:#B71C1C;font-weight:700">${s.low}</td>
       <td style="text-align:center;color:#6A1B9A;font-weight:600">&plusmn;${s.std}</td>
     </tr>`;}).join("");
+}
 
-  // --- Matrix header ---
-  document.getElementById("mx-head").innerHTML=
-    `<th class="f1 mxc" onclick="mxSort(-2)" id="mxh-2"><span class="mxh"><span class="mxh-abbr" style="writing-mode:horizontal-tb;transform:none;font-size:.72rem">#</span><span class="mxh-arr" id="arr-2">&#8597;</span></span></th>`
-    +`<th class="f2 mxc" onclick="mxSort(-1)" id="mxh-1" style="height:auto;padding:10px 12px;text-align:left;vertical-align:middle;cursor:pointer;background:#1565C0"><span style="font-size:.83rem;font-weight:700">School Name</span> <span style="opacity:.5;font-size:.7rem" id="arr-1">&#8597;</span></th>`
-    +`<th class="f3 mxc" onclick="mxSort(-3)" id="mxh-3" style="height:auto;padding:10px 6px;vertical-align:middle;cursor:pointer;background:#1976D2"><span style="font-size:.78rem;font-weight:700">Type</span> <span style="opacity:.5;font-size:.7rem" id="arr-3">&#8597;</span></th>`
-    +MJ.map((s,i)=>`<th class="mxc" onclick="mxSort(${i})" id="mxh${i}" title="${s} (${SUBJ_N[s]} schools)"><span class="mxh"><span class="mxh-abbr">${ABBR[s]||s}</span><span class="mxh-n">${SUBJ_N[s]} sch</span><span class="mxh-arr" id="arr${i}">&#8597;</span></span></th>`).join("");
-
+// Build matrix — called lazily when tab 2 is first opened
+let _mxsc=null,_mxsd=1;
+function bMX(){
+  // Header
+  const head=document.getElementById("mx-head");
+  head.innerHTML=
+    `<th class="sc-col" title="Row number">#</th>`
+    +`<th class="sn-col" onclick="mxSort('name')" id="mxth-name">School Name <span id="mxa-name">&#8597;</span></th>`
+    +`<th class="st-col">Type</th>`
+    +MJ.map(s=>`<th onclick="mxSort('${s}')" id="mxth-${s.replace(/ /g,'_')}" title="${s} — ${SUBJ_N[s]} schools offer this subject">${ABBR[s]||s}<br><span style="font-size:.65rem;opacity:.55;font-weight:400">${SUBJ_N[s]} sch</span> <span id="mxa-${s.replace(/ /g,'_')}">&#8597;</span></th>`).join("");
   _mxd=SS;
   document.getElementById("mx-cnt").textContent=`${SS.length} schools`;
   rMX(SS);
 }
 
-let _mxsc2=999,_mxsd2=1;
-function mxSort(col){
-  // Clear previous arrow
-  const prev=document.getElementById(col>=0?`arr${_mxsc2}`:`arr-${Math.abs(_mxsc2)}`);
-  if(prev){prev.textContent="↕";const th=prev.closest("th");if(th){th.classList.remove("asc","desc");}}
-  if(_mxsc2===col)_mxsd2*=-1;else{_mxsc2=col;_mxsd2=1;}
-  const arrId=col>=0?`arr${col}`:`arr-${Math.abs(col)}`;
-  const arrEl=document.getElementById(arrId);
-  const thEl=arrEl?.closest("th");
-  if(arrEl){arrEl.textContent=_mxsd2===1?"▲":"▼";}
-  if(thEl){thEl.classList.toggle("asc",_mxsd2===1);thEl.classList.toggle("desc",_mxsd2===-1);}
-  const d=_mxd||SS;
-  let sorted;
-  if(col===-1)sorted=[...d].sort((a,b)=>(a.name>b.name?1:-1)*_mxsd2);
-  else if(col===-2)sorted=[...d].sort((a,b)=>(a.students-b.students)*_mxsd2);
-  else if(col===-3)sorted=[...d].sort((a,b)=>(a.type>b.type?1:-1)*_mxsd2);
-  else{const k=MJ[col];sorted=[...d].sort((a,b)=>{const av=a[k]??-1,bv=b[k]??-1;return(av-bv)*_mxsd2;});}
-  rMX(sorted);
+function mxSort(key){
+  // Reset previous header
+  if(_mxsc){
+    const pid=`mxth-${_mxsc.replace(/ /g,'_')}`;
+    const pa=document.getElementById(`mxa-${_mxsc.replace(/ /g,'_')}`);
+    const pth=document.getElementById(pid);
+    if(pa)pa.innerHTML="&#8597;";
+    if(pth){pth.classList.remove("asc","desc");}
+  }
+  if(_mxsc===key)_mxsd*=-1;else{_mxsc=key;_mxsd=1;}
+  const aid=`mxa-${key.replace(/ /g,'_')}`;
+  const tid=`mxth-${key.replace(/ /g,'_')}`;
+  const ae=document.getElementById(aid),te=document.getElementById(tid);
+  if(ae)ae.textContent=_mxsd===1?"▲":"▼";
+  if(te){te.classList.toggle("asc",_mxsd===1);te.classList.toggle("desc",_mxsd===-1);}
+  const d=[...(_mxd||SS)];
+  if(key==="name")d.sort((a,b)=>(a.name>b.name?1:-1)*_mxsd);
+  else d.sort((a,b)=>{const av=a[key]??-1,bv=b[key]??-1;return(av-bv)*_mxsd;});
+  rMX(d);
 }
 
 function fMX(){
   const q=document.getElementById("mx-s").value.toLowerCase();
   const ty=document.getElementById("mx-ty").value;
   _mxd=SS.filter(s=>{
-    if(q&&!s.name.toLowerCase().includes(q)&&!s.code.toLowerCase().includes(q))return false;
+    if(q&&!s.name.toLowerCase().includes(q))return false;
     if(ty&&s.type!==ty)return false;
     return true;
   });
@@ -666,22 +665,24 @@ function fMX(){
   rMX(_mxd);
 }
 
-function rMX(d){
-  const rows=d||SS;
-  // District avg row
-  const daRow=`<tr class="da">
-    <td class="f1">&#9733;</td>
-    <td class="f2" style="font-weight:700;color:#BF360C;font-size:.79rem">District Average</td>
-    <td class="f3"></td>
-    ${MJ.map(s=>{const v=DIST_AVG[s];const hc=heat(v);return v!=null?`<td><div class="mx-cell" style="background:${hc.bg};color:${hc.tx}">${v}</div></td>`:`<td><div class="mx-null">—</div></td>`;}).join("")}
+function rMX(rows){
+  const da=`<tr class="da-row">
+    <td class="sc-col">&#9733;</td>
+    <td class="sn-col" style="font-weight:700;color:#BF360C">District Average</td>
+    <td class="st-col"></td>
+    ${MJ.map(s=>{const v=DIST_AVG[s],hc=heat(v);
+      return `<td>${v!=null?`<span class="mx-cell" style="background:${hc.bg};color:${hc.tx}">${v}</span>`:`<span class="mx-null">—</span>`}</td>`;
+    }).join("")}
   </tr>`;
-  const dataRows=rows.map((s,ri)=>`<tr>
-    <td class="f1">${ri+1}</td>
-    <td class="f2" title="${s.name}">${s.name.length>34?s.name.substring(0,34)+"…":s.name}</td>
-    <td class="f3">${tc(s.type)}</td>
-    ${MJ.map(subj=>{const v=s[subj];const hc=heat(v);return v!=null?`<td><div class="mx-cell" style="background:${hc.bg};color:${hc.tx}">${v}</div></td>`:`<td><div class="mx-null">—</div></td>`;}).join("")}
+  const body=(rows||SS).map((s,i)=>`<tr>
+    <td class="sc-col">${i+1}</td>
+    <td class="sn-col" title="${s.name}">${s.name.length>35?s.name.substring(0,35)+"…":s.name}</td>
+    <td class="st-col">${tc(s.type)}</td>
+    ${MJ.map(subj=>{const v=s[subj],hc=heat(v);
+      return `<td>${v!=null?`<span class="mx-cell" style="background:${hc.bg};color:${hc.tx}">${v}</span>`:`<span class="mx-null">—</span>`}</td>`;
+    }).join("")}
   </tr>`).join("");
-  document.getElementById("mx-tb").innerHTML=daRow+dataRows;
+  document.getElementById("mx-tb").innerHTML=da+body;
 }
 
 // RANKINGS
