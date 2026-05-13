@@ -19,20 +19,39 @@
 }
 body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh}
 /* SIDEBAR */
-.sb{width:var(--sw);background:var(--pd);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow:hidden}
-.sb-brand{padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
-.sb-brand h2{font-size:.97rem;font-weight:700;line-height:1.35}
-.sb-brand p{font-size:.7rem;opacity:.65;margin-top:3px}
-.sb-chip{display:inline-block;background:rgba(255,255,255,.14);border-radius:10px;padding:2px 8px;font-size:.67rem;margin-top:6px}
-nav{flex:1;padding:10px 0;overflow-y:auto}
-.ns{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:rgba(255,255,255,.4);padding:12px 18px 4px}
-.ni{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;color:rgba(255,255,255,.78);font-size:.875rem;font-weight:500;border-left:3px solid transparent;transition:.18s}
+.sb{width:var(--sw);background:var(--pd);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow:hidden;transition:width .24s cubic-bezier(.4,0,.2,1)}
+.sb-brand{padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;min-height:64px;transition:padding .24s}
+.sb-brand h2{font-size:.97rem;font-weight:700;line-height:1.35;transition:opacity .15s}
+.sb-brand p{font-size:.7rem;opacity:.65;margin-top:3px;transition:opacity .15s}
+.sb-chip{display:inline-block;background:rgba(255,255,255,.14);border-radius:10px;padding:2px 8px;font-size:.67rem;margin-top:6px;transition:opacity .15s}
+.sb-tog{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.13);border:none;border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:background .18s,transform .24s;flex-shrink:0}
+.sb-tog:hover{background:rgba(255,255,255,.25)}
+.sb-tog .mi{font-size:19px;display:block;transition:transform .24s}
+nav{flex:1;padding:10px 0;overflow-y:auto;overflow-x:hidden}
+.ns{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:rgba(255,255,255,.4);padding:12px 18px 4px;white-space:nowrap;transition:opacity .15s}
+.ni{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;color:rgba(255,255,255,.78);font-size:.875rem;font-weight:500;border-left:3px solid transparent;transition:.18s;white-space:nowrap}
 .ni:hover{background:rgba(255,255,255,.08);color:#fff}
 .ni.active{background:rgba(255,255,255,.13);color:#fff;border-left-color:#64B5F6}
-.ni .mi{font-size:20px}
-.sb-foot{padding:12px 18px;border-top:1px solid rgba(255,255,255,.1);font-size:.7rem;opacity:.45}
+.ni .mi{font-size:20px;flex-shrink:0}
+.ni-lbl{transition:opacity .15s}
+.sb-foot{padding:12px 18px;border-top:1px solid rgba(255,255,255,.1);font-size:.7rem;opacity:.45;white-space:nowrap;transition:opacity .15s}
+/* Collapsed sidebar */
+.sb.sb-c{width:64px}
+.sb.sb-c .sb-brand{padding:10px 0;align-items:center}
+.sb.sb-c .sb-brand h2,.sb.sb-c .sb-brand p,.sb.sb-c .sb-chip{opacity:0;pointer-events:none;height:0;margin:0;overflow:hidden}
+.sb.sb-c .sb-tog{position:static;margin-top:4px}
+.sb.sb-c .sb-tog .mi{transform:rotate(180deg)}
+.sb.sb-c .ns{opacity:0;height:0;padding:0;overflow:hidden}
+.sb.sb-c .ni{padding:12px 0;justify-content:center;gap:0;border-left-color:transparent!important}
+.sb.sb-c .ni.active{border-left-color:transparent!important;background:rgba(255,255,255,.13)}
+.sb.sb-c .ni-lbl{opacity:0;width:0;overflow:hidden}
+.sb.sb-c .ni-at{display:none}
+.sb.sb-c .sb-foot{opacity:0;height:0;padding:0;overflow:hidden}
+/* Tooltip on collapsed icons */
+.sb.sb-c .ni[title]:hover::after{content:attr(title);position:fixed;left:70px;background:#212121;color:#fff;padding:5px 10px;border-radius:6px;font-size:.78rem;font-weight:500;white-space:nowrap;z-index:200;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 /* MAIN */
-.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left .24s cubic-bezier(.4,0,.2,1)}
+.main.sb-c{margin-left:64px}
 .topbar{background:var(--sf);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.09);position:sticky;top:0;z-index:50}
 .tb-title{font-size:1.05rem;font-weight:700;color:var(--pd)}
 .tb-sub{font-size:.76rem;color:var(--t2)}
@@ -210,35 +229,44 @@ tbody td{padding:9px 13px;vertical-align:middle}
   .tc-tbl tbody tr.top3 td{background:#FFFDE7!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .print-hdr{display:block!important}
 }
-@media(max-width:900px){.sb{transform:translateX(-100%)}.main{margin-left:0}.g2{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .sb{transform:translateX(-100%);width:var(--sw)!important}
+  .sb.sb-open{transform:translateX(0)}
+  .main{margin-left:0!important}
+  .g2{grid-template-columns:1fr}
+  .sb-tog{display:none}
+}
 </style>
 </head>
 <body>
-<div class="sb">
+<div class="sb" id="sb">
   <div class="sb-brand">
     <h2>&#127979; Mayiladuthurai<br>Education Dashboard</h2>
     <p>March 2026 Exam Results</p>
     <span class="sb-chip">Tamil Nadu &bull; District 234</span>
+    <button class="sb-tog" onclick="toggleSB()" title="Toggle sidebar">
+      <span class="mi material-icons-round">chevron_left</span>
+    </button>
   </div>
   <nav>
     <div class="ns">Navigation</div>
-    <div class="ni active" onclick="go('ov',this)"><span class="mi material-icons-round">dashboard</span>Overview</div>
-    <div class="ni" onclick="go('sc',this)"><span class="mi material-icons-round">school</span>School Analysis</div>
-    <div class="ni" onclick="go('co',this)"><span class="mi material-icons-round">groups</span>Community &amp; Gender</div>
-    <div class="ni" onclick="go('st',this)"><span class="mi material-icons-round">menu_book</span>Subject Streams</div>
-    <div class="ni" onclick="go('sb',this)"><span class="mi material-icons-round">science</span>Subject Analysis</div>
-    <div class="ni" onclick="go('tc',this)"><span class="mi material-icons-round">person</span>Teacher Analysis</div>
-    <div class="ni" onclick="go('rk',this)"><span class="mi material-icons-round">leaderboard</span>Full Rankings</div>
+    <div class="ni active" onclick="go('ov',this)" title="Overview"><span class="mi material-icons-round">dashboard</span><span class="ni-lbl">Overview</span></div>
+    <div class="ni" onclick="go('sc',this)" title="School Analysis"><span class="mi material-icons-round">school</span><span class="ni-lbl">School Analysis</span></div>
+    <div class="ni" onclick="go('co',this)" title="Community &amp; Gender"><span class="mi material-icons-round">groups</span><span class="ni-lbl">Community &amp; Gender</span></div>
+    <div class="ni" onclick="go('st',this)" title="Subject Streams"><span class="mi material-icons-round">menu_book</span><span class="ni-lbl">Subject Streams</span></div>
+    <div class="ni" onclick="go('sb',this)" title="Subject Analysis"><span class="mi material-icons-round">science</span><span class="ni-lbl">Subject Analysis</span></div>
+    <div class="ni" onclick="go('tc',this)" title="Teacher Analysis"><span class="mi material-icons-round">person</span><span class="ni-lbl">Teacher Analysis</span></div>
+    <div class="ni" onclick="go('rk',this)" title="Full Rankings"><span class="mi material-icons-round">leaderboard</span><span class="ni-lbl">Full Rankings</span></div>
     <div class="ns" style="margin-top:6px">At a Glance</div>
-    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">people</span>14,361 Registered</div>
-    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">domain</span>95 Schools</div>
-    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">check_circle</span>94.2% Pass Rate</div>
-    <div class="ni" style="cursor:default;opacity:.65"><span class="mi material-icons-round">bar_chart</span>Avg 401.2 / 600</div>
+    <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">people</span><span class="ni-lbl">14,361 Registered</span></div>
+    <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">domain</span><span class="ni-lbl">95 Schools</span></div>
+    <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">check_circle</span><span class="ni-lbl">94.2% Pass Rate</span></div>
+    <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">bar_chart</span><span class="ni-lbl">Avg 401.2 / 600</span></div>
   </nav>
   <div class="sb-foot">Data: March 2026 &bull; 14,202 appeared</div>
 </div>
 
-<div class="main">
+<div class="main" id="main">
   <div class="topbar">
     <div><div class="tb-title" id="tb-t">Overview Dashboard</div><div class="tb-sub">Mayiladuthurai District &bull; March 2026 &bull; Tamil Nadu Board</div></div>
     <div class="tb-chips"><span class="chip">14,361 Registered &bull; 14,202 Appeared</span><span class="chip">95 Schools</span></div>
@@ -509,6 +537,20 @@ const TC=D.teachers,TS=D.teacher_subjects;
 const CL=["#1565C0","#E65100","#2E7D32","#6A1B9A","#00695C","#C62828","#0277BD","#AD1457","#37474F","#F9A825"];
 Chart.defaults.font.family="Roboto,sans-serif";Chart.defaults.font.size=12;Chart.defaults.color="#616161";
 Chart.defaults.plugins.legend.labels.usePointStyle=true;
+
+// SIDEBAR TOGGLE
+function toggleSB(){
+  const sb=document.getElementById("sb"),mn=document.getElementById("main");
+  const c=sb.classList.toggle("sb-c");
+  mn.classList.toggle("sb-c",c);
+  localStorage.setItem("sbC",c?"1":"0");
+}
+(function(){
+  if(localStorage.getItem("sbC")==="1"){
+    document.getElementById("sb").classList.add("sb-c");
+    document.getElementById("main").classList.add("sb-c");
+  }
+})();
 
 function go(id,el){
   document.querySelectorAll("sec").forEach(s=>s.classList.remove("active"));
