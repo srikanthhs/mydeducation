@@ -340,10 +340,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
       <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Community</div><div class="cw md"><canvas id="c-com"></canvas></div></div>
       <div class="card">
         <div class="ct"><span class="mi material-icons-round">wc</span>Gender Deep Dive</div>
-        <div class="cmp">
-          <div class="cmpd f"><div class="cml" style="color:#880E4F">Female</div><div class="cmv" style="color:#AD1457">418.3</div><div style="font-size:.77rem;color:#880E4F">7,498 registered &bull; 52.2%</div></div>
-          <div class="cmpd m"><div class="cml" style="color:#0D47A1">Male</div><div class="cmv" style="color:#1565C0">382.3</div><div style="font-size:.77rem;color:#0D47A1">6,863 registered &bull; 47.8%</div></div>
-        </div>
+        <div class="cmp" id="gen-cmp"></div>
         <div class="cw" style="height:170px"><canvas id="c-gen2"></canvas></div>
       </div>
     </div>
@@ -580,7 +577,7 @@ new Chart(document.getElementById("c-dist"),{type:"bar",data:{
     borderColor:["#C62828","#C62828","#F57F17","#1565C0","#2E7D32","#6A1B9A"],
     borderWidth:2,borderRadius:6,borderSkipped:false}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
-    tooltip:{callbacks:{label:c=>`${c.parsed.y.toLocaleString()} students (${(c.parsed.y/14362*100).toFixed(1)}%)`}}},
+    tooltip:{callbacks:{label:c=>`${c.parsed.y.toLocaleString()} students (${(c.parsed.y/D.summary.total*100).toFixed(1)}%)`}}},
     scales:{y:{grid:{color:"#F5F7FA"},ticks:{callback:v=>v.toLocaleString()}},x:{grid:{display:false}}}}});
 
 new Chart(document.getElementById("c-mgmt"),{type:"bar",data:{
@@ -594,8 +591,8 @@ new Chart(document.getElementById("c-mgmt"),{type:"bar",data:{
 new Chart(document.getElementById("c-gen"),{type:"bar",data:{
   labels:["Female","Male"],
   datasets:[
-    {label:"Students",data:[7436,6767],backgroundColor:["#F48FB1","#90CAF9"],borderRadius:6,yAxisID:"y"},
-    {label:"Avg Marks",data:[418.3,382.3],type:"line",borderColor:["#E91E8C","#1565C0"],
+    {label:"Students",data:GEN.map(g=>g.students),backgroundColor:["#F48FB1","#90CAF9"],borderRadius:6,yAxisID:"y"},
+    {label:"Avg Marks",data:GEN.map(g=>g.avg),type:"line",borderColor:["#E91E8C","#1565C0"],
       backgroundColor:"transparent",borderWidth:3,pointRadius:7,
       pointBackgroundColor:["#E91E8C","#1565C0"],tension:.3,yAxisID:"y1"}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},
@@ -643,7 +640,7 @@ function srt(c){
   const d=_fd||S;
   const k=["rank","name","type","students","avg","pass_rate","high","low"][c];
   if(!k)return;
-  rST([...d].sort((a,b)=>(a[k]>b[k]?1:-1)*_sd),false);
+  rST([...d].sort((a,b)=>{const av=a[k],bv=b[k];return(av>bv?1:av<bv?-1:0)*_sd;}),false);
 }
 function ft(){
   const q=document.getElementById("ss").value.toLowerCase();
@@ -683,15 +680,23 @@ function iCO(){
     options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${COM[c.dataIndex].students.toLocaleString()} students`}}},
       scales:{x:{min:300,max:500,grid:{color:"#F5F7FA"}},y:{grid:{display:false}}}}});
+  const T=D.summary.total;
+  const gClr=[{bg:"#880E4F",fg:"#AD1457",card:"f"},{bg:"#0D47A1",fg:"#1565C0",card:"m"}];
+  document.getElementById("gen-cmp").innerHTML=GEN.map((g,i)=>`
+    <div class="cmpd ${gClr[i].card}">
+      <div class="cml" style="color:${gClr[i].bg}">${g.name}</div>
+      <div class="cmv" style="color:${gClr[i].fg}">${g.avg}</div>
+      <div style="font-size:.77rem;color:${gClr[i].bg}">${g.students.toLocaleString()} registered &bull; ${(g.students/T*100).toFixed(1)}%</div>
+    </div>`).join("");
   new Chart(document.getElementById("c-gen2"),{type:"bar",data:{
-    labels:["Female","Male"],
-    datasets:[{label:"Avg Marks",data:[418.3,382.3],backgroundColor:["#E91E8C","#1565C0"],borderRadius:6}]},
+    labels:GEN.map(g=>g.name),
+    datasets:[{label:"Avg Marks",data:GEN.map(g=>g.avg),backgroundColor:["#E91E8C","#1565C0"],borderRadius:6}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
       scales:{y:{min:350,max:440,grid:{color:"#F5F7FA"}},x:{grid:{display:false}}}}});
   document.getElementById("com-tb").innerHTML=COM.map((c,i)=>`<tr>
     <td style="font-weight:700;color:${CL[i]}">${c.name}</td>
     <td style="font-weight:600">${c.students.toLocaleString()}</td>
-    <td>${(c.students/14362*100).toFixed(1)}%</td>
+    <td>${(c.students/D.summary.total*100).toFixed(1)}%</td>
     <td><span class="ap ${ac(c.avg)}">${c.avg}</span></td>
     <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(c.pass_rate,100)}%;background:#2E7D32"></div></div><span class="pt">${c.pass_rate}%</span></div></td>
     <td><span style="font-size:.73rem;font-weight:700;color:${bc(c.avg)}">${band(c.avg)}</span></td>
@@ -700,7 +705,7 @@ function iCO(){
     labels:COM.map(c=>c.name),datasets:[{data:COM.map(c=>c.students),backgroundColor:CL.slice(0,COM.length),borderWidth:2,borderColor:"#fff",hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:"55%",
       plugins:{legend:{position:"bottom",labels:{padding:10,font:{size:11}}},
-        tooltip:{callbacks:{label:c=>`${COM[c.dataIndex].students.toLocaleString()} (${(COM[c.dataIndex].students/14362*100).toFixed(1)}%)`}}}}});
+        tooltip:{callbacks:{label:c=>`${COM[c.dataIndex].students.toLocaleString()} (${(COM[c.dataIndex].students/D.summary.total*100).toFixed(1)}%)`}}}}});
   new Chart(document.getElementById("c-rel2"),{type:"bar",data:{
     labels:REL.map(r=>r.name),
     datasets:[
@@ -723,12 +728,12 @@ function iST(){
     labels:STR.map(s=>s.name),datasets:[{data:STR.map(s=>s.students),backgroundColor:CL.slice(0,STR.length),borderWidth:2,borderColor:"#fff"}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:"bottom",labels:{padding:8,font:{size:10}}},
-        tooltip:{callbacks:{label:c=>`${STR[c.dataIndex].students.toLocaleString()} (${(STR[c.dataIndex].students/14362*100).toFixed(1)}%)`}}}}});
+        tooltip:{callbacks:{label:c=>`${STR[c.dataIndex].students.toLocaleString()} (${(STR[c.dataIndex].students/D.summary.total*100).toFixed(1)}%)`}}}}});
   document.getElementById("str-tb").innerHTML=STR.map((s,i)=>`<tr>
     <td style="font-weight:700;color:${CL[i]}">${i+1}</td>
     <td style="font-weight:500">${s.name}</td>
     <td style="font-weight:600">${s.students.toLocaleString()}</td>
-    <td>${(s.students/14362*100).toFixed(1)}%</td>
+    <td>${(s.students/D.summary.total*100).toFixed(1)}%</td>
     <td><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
     <td><span style="font-size:.73rem;font-weight:700;color:${bc(s.avg)}">${band(s.avg)}</span></td>
   </tr>`).join("");
