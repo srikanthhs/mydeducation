@@ -480,24 +480,22 @@ tbody td{padding:9px 13px;vertical-align:middle}
 
   <!-- RANKINGS -->
   <sec id="s-rk">
-    <div class="sh"><span class="mi material-icons-round">leaderboard</span><div><h2>Full School Rankings</h2><div class="ss">All 167 schools ranked by average marks (out of 500) &bull; &#129351; = Top 3 &bull; Click headers to sort</div></div></div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:13px 18px;font-weight:700;font-size:.9rem">&#127941; Complete School Rankings &mdash; All 167 Schools</div>
-      <div class="tw"><table id="rkt">
-        <thead><tr>
-          <th onclick="rkSort(0)">#</th>
-          <th onclick="rkSort(1)" style="min-width:320px">School Name</th>
-          <th onclick="rkSort(2)">Type</th>
-          <th onclick="rkSort(3)" style="text-align:center">Students</th>
-          <th onclick="rkSort(4)" style="text-align:center">Failures</th>
-          <th onclick="rkSort(5)" style="text-align:center">Avg Marks</th>
-          <th onclick="rkSort(6)">Pass %</th>
-          <th onclick="rkSort(7)" style="text-align:center">Highest</th>
-          <th onclick="rkSort(8)" style="text-align:center">Lowest</th>
-          <th>Band</th>
-        </tr></thead>
-        <tbody id="rk-tb"></tbody>
-      </table></div>
+    <div class="sh"><span class="mi material-icons-round">leaderboard</span><div><h2>Full School Rankings</h2><div class="ss">All 167 schools &bull; Top performers (left) &bull; Bottom performers (right)</div></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#1B5E20,#388E3C);color:#fff;padding:11px 16px;font-weight:700;font-size:.88rem">&#129351; Top Performers &mdash; All 167 Schools</div>
+        <div style="overflow:auto;max-height:68vh"><table>
+          <thead><tr><th>#</th><th style="min-width:200px">School</th><th>Type</th><th style="text-align:center">Avg</th><th>Pass %</th><th>Band</th></tr></thead>
+          <tbody id="t-all"></tbody>
+        </table></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#7F0000,#C62828);color:#fff;padding:11px 16px;font-weight:700;font-size:.88rem">&#9660; Bottom Performers &mdash; All 167 Schools</div>
+        <div style="overflow:auto;max-height:68vh"><table>
+          <thead><tr><th>#</th><th style="min-width:200px">School</th><th>Type</th><th style="text-align:center">Avg</th><th>Pass %</th><th>Band</th></tr></thead>
+          <tbody id="b-all"></tbody>
+        </table></div>
+      </div>
     </div>
     <div class="card"><div class="ct"><span class="mi material-icons-round">warning</span>Bottom 20 Schools &mdash; Needs Urgent Attention</div><div class="cw lg"><canvas id="c-b20"></canvas></div></div>
   </sec>
@@ -995,10 +993,29 @@ function dlPDF(){
 }
 
 // RANKINGS
-let _rksc=-1,_rksd=1;
 function iRK(){
-  rRK(S);
-  const b20=[...S].sort((a,b)=>a.avg-b.avg).slice(0,20);
+  const mc=["#B8860B","#808080","#CD7F32"];
+  const top=[...S].sort((a,b)=>b.avg-a.avg);
+  const bot=[...S].sort((a,b)=>a.avg-b.avg);
+  const rowTop=(s,i)=>`<tr style="${i<3?"background:#F1F8E9":""}">
+    <td><span class="rb" style="color:${i<3?mc[i]:"#9E9E9E"}">${i+1}</span></td>
+    <td style="font-weight:${i<3?700:500};font-size:.8rem;white-space:normal;max-width:230px">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td style="text-align:center"><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
+    <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(s.pass_rate,100)}%;background:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}"></div></div><span class="pt" style="color:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}">${s.pass_rate}%</span></div></td>
+    <td><span style="font-size:.73rem;font-weight:700;color:#2E7D32">${band(s.avg)}</span></td>
+  </tr>`;
+  const rowBot=(s,i)=>`<tr style="${i<3?"background:#FFF3E0":""}">
+    <td><span class="rb" style="color:${i<3?"#C62828":"#9E9E9E"}">${i+1}</span></td>
+    <td style="font-weight:${i<3?700:500};font-size:.8rem;white-space:normal;max-width:230px">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td style="text-align:center"><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
+    <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(s.pass_rate,100)}%;background:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}"></div></div><span class="pt" style="color:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}">${s.pass_rate}%</span></div></td>
+    <td><span style="font-size:.73rem;font-weight:700;color:${bc(s.avg)}">${band(s.avg)}</span></td>
+  </tr>`;
+  document.getElementById("t-all").innerHTML=top.map((s,i)=>rowTop(s,i)).join("");
+  document.getElementById("b-all").innerHTML=bot.map((s,i)=>rowBot(s,i)).join("");
+  const b20=bot.slice(0,20);
   new Chart(document.getElementById("c-b20"),{type:"bar",data:{
     labels:b20.map(s=>s.name.length>38?s.name.substring(0,38)+"...":s.name),
     datasets:[{label:"Avg Marks",data:b20.map(s=>s.avg),
@@ -1008,29 +1025,6 @@ function iRK(){
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.x} | ${b20[c.dataIndex].type} | Pass: ${b20[c.dataIndex].pass_rate}%`}}},
       scales:{x:{min:100,max:350,grid:{color:"#F5F7FA"},title:{display:true,text:"Average Marks (out of 500)"}},
         y:{grid:{display:false},ticks:{font:{size:10}}}}}});
-}
-function rkSort(c){
-  if(_rksc===c)_rksd*=-1;else{_rksc=c;_rksd=1;}
-  document.querySelectorAll("#rkt thead th").forEach((th,i)=>{th.classList.remove("sa","sd");if(i===c)th.classList.add(_rksd===1?"sa":"sd");});
-  const keys=["rank","name","type","students","failed","avg","pass_rate","high","low"];
-  const k=keys[c];if(!k)return;
-  const d=[...S].sort((a,b)=>{const av=a[k],bv=b[k];return(av>bv?1:av<bv?-1:0)*_rksd;});
-  rRK(d);
-}
-function rRK(d){
-  const mc=["#B8860B","#808080","#CD7F32"];
-  document.getElementById("rk-tb").innerHTML=d.map((s,i)=>`<tr style="${i<3?"background:#FFFDE7":""}">
-    <td><span class="rb" style="color:${i<3?mc[i]:"#9E9E9E"}">${s.rank}</span></td>
-    <td style="font-weight:${i<3?700:500};min-width:320px;font-size:.81rem;white-space:normal">${s.name}</td>
-    <td>${tc(s.type)}</td>
-    <td style="text-align:center;font-weight:600">${s.students}</td>
-    <td style="text-align:center;font-weight:700;color:${s.failed>0?"#C62828":"#9E9E9E"}">${s.failed>0?s.failed:"&#8212;"}</td>
-    <td style="text-align:center"><span class="ap ${ac(s.avg)}">${s.avg}</span></td>
-    <td><div class="pb"><div class="pbr"><div class="pbf" style="width:${Math.min(s.pass_rate,100)}%;background:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}"></div></div><span class="pt" style="color:${s.pass_rate>=90?"#2E7D32":s.pass_rate>=70?"#FF6F00":"#C62828"}">${s.pass_rate}%</span></div></td>
-    <td style="text-align:center;color:#2E7D32;font-weight:700">${s.high}</td>
-    <td style="text-align:center;color:#C62828;font-weight:700">${s.low}</td>
-    <td><span style="font-size:.73rem;font-weight:700;color:${bc(s.avg)}">${band(s.avg)}</span></td>
-  </tr>`).join("");
 }
 
 setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc-cnt").textContent=`${S.length} of ${S.length} schools`;},200);
