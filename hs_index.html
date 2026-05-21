@@ -1071,7 +1071,7 @@ function dlPDF(){
     <th>Students</th><th>Failures</th><th>Avg/100</th><th>Pass%</th>
     <th>High</th><th>Low</th><th>StdDev</th><th>SubjRank</th><th>Band</th>
   </tr></thead><tbody>${rows}</tbody></table>
-  <script>window.onload=()=>{window.print();}<\/script>
+  <script>window.onload=()=>{window.print();}<${'/'}script>
   </body></html>`;
   const w=window.open("","_blank","width=1100,height=700");
   w.document.write(html);w.document.close();
@@ -1258,12 +1258,9 @@ Be specific with numbers from the data. Format clearly with bullet points.`;
       .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
       .replace(/^(\d+)\. \*\*(.+?)\*\*(.*)$/gm,"<p style='margin:10px 0 2px'><strong style='color:#6A1B9A'>$1. $2</strong>$3</p>")
       .replace(/^- (.+)$/gm,"<li style='margin:3px 0'>$1</li>")
-      .replace(/(<li[^>]*>.*<\/li>
-?)+/g,"<ul style='margin:6px 0 6px 18px'>$&</ul>")
-      .replace(/
-{2,}/g,"</p><p style='margin:6px 0'>")
-      .replace(/
-/g,"<br>");
+      .replace(/(<li[^>]*>.*<\/li>\n?)+/g,"<ul style='margin:6px 0 6px 18px'>$&</ul>")
+      .replace(/\n{2,}/g,"</p><p style='margin:6px 0'>")
+      .replace(/\n/g,"<br>");
   }catch(e){
     out.innerHTML=`<span style="color:#C62828;font-weight:700">Error: ${e.message}</span><br><span style="font-size:.8rem;color:#666">Check that your API key is valid and has sufficient credits.</span>`;
   }finally{
@@ -1579,7 +1576,7 @@ function dlRPT(){
     Report generated: ${new Date().toLocaleString("en-IN")} &bull;
     For official use only
   </div>
-  <script>window.onload=()=>{window.print();}<\/script>
+  <script>window.onload=()=>{window.print();}<${'/'}script>
   </body></html>`;
   const w=window.open("","_blank","width=1100,height=800");
   w.document.write(html);w.document.close();
