@@ -259,6 +259,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
     <div class="ni" onclick="go('tc',this)" title="Teacher Analysis"><span class="mi material-icons-round">person</span><span class="ni-lbl">Teacher Analysis</span></div>
     <div class="ni" onclick="go('rk',this)" title="Full Rankings"><span class="mi material-icons-round">leaderboard</span><span class="ni-lbl">Full Rankings</span></div>
     <div class="ni" onclick="go('rp',this)" title="Reports"><span class="mi material-icons-round">summarize</span><span class="ni-lbl">Reports</span></div>
+    <div class="ni" onclick="go('fa',this)" title="Failure Analysis"><span class="mi material-icons-round">warning</span><span class="ni-lbl">Failure Analysis</span></div>
     <div class="ns" style="margin-top:6px">At a Glance</div>
     <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">people</span><span class="ni-lbl">14,361 Registered</span></div>
     <div class="ni ni-at" style="cursor:default;opacity:.65"><span class="mi material-icons-round">domain</span><span class="ni-lbl">95 Schools</span></div>
@@ -577,6 +578,52 @@ tbody td{padding:9px 13px;vertical-align:middle}
       </table></div>
     </div>
   </sec>
+
+  <!-- FAILURE ANALYSIS -->
+  <sec id="s-fa">
+    <div class="sh"><span class="mi material-icons-round" style="color:#C62828">warning</span><div><h2>Failure Analysis</h2><div class="ss">Deep-dive into failure patterns by subject, stream, school, community &amp; gender — with AI-powered insights</div></div></div>
+    <div class="kg" id="fa-kpi" style="margin-top:4px"></div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#C62828">account_balance</span>Failure Rate by Management Type</div><div class="cw md"><canvas id="c-fa-mgmt"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#E65100">science</span>Failure Rate by Subject</div><div class="cw lg"><canvas id="c-fa-subj"></canvas></div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#6A1B9A">groups</span>Failure Count &amp; Rate by Community (Top 10)</div><div class="cw md"><canvas id="c-fa-com"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#AD1457">wc</span>Failure Comparison by Gender</div><div class="cw md"><canvas id="c-fa-gen"></canvas></div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#00695C">menu_book</span>Failure Rate by Stream</div><div class="cw md"><canvas id="c-fa-str"></canvas></div></div>
+      <div class="card"><div class="ct"><span class="mi material-icons-round" style="color:#1565C0">church</span>Failure Count by Religion</div><div class="cw md"><canvas id="c-fa-rel"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round" style="color:#C62828">school</span>High-Risk Schools &mdash; Most Failures (Top 25)</div>
+      <div class="tw" style="max-height:44vh;overflow:auto"><table>
+        <thead><tr><th>#</th><th style="min-width:260px">School Name</th><th>Type</th><th style="text-align:center">Appeared</th><th style="text-align:center">Failed</th><th style="text-align:center">Failure %</th><th style="text-align:center">Avg / 600</th></tr></thead>
+        <tbody id="fa-tbl"></tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round" style="color:#E65100">person</span>Subject-School Failure Hotspots &mdash; Top 20 Combinations</div>
+      <div class="tw" style="max-height:40vh;overflow:auto"><table>
+        <thead><tr><th>#</th><th style="min-width:240px">School Name</th><th>Type</th><th>Subject</th><th style="text-align:center">Students</th><th style="text-align:center">Failures</th><th style="text-align:center">Failure %</th><th style="text-align:center">Avg / 100</th></tr></thead>
+        <tbody id="fa-tc-tbl"></tbody>
+      </table></div>
+    </div>
+    <!-- AI Analysis -->
+    <div class="card" style="border:2px solid #7C4DFF;background:linear-gradient(135deg,#F3E5F5,#EDE7F6)">
+      <div class="ct" style="color:#6A1B9A"><span class="mi material-icons-round" style="color:#7C4DFF;font-size:20px">auto_awesome</span>AI-Powered Failure Analysis <span style="background:#7C4DFF;color:#fff;border-radius:10px;padding:2px 9px;font-size:.67rem;margin-left:6px">Claude AI</span></div>
+      <div style="font-size:.8rem;color:#555;margin-bottom:12px">Enter your Anthropic API key to generate a comprehensive AI analysis of failure patterns, risk factors, and actionable recommendations.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+        <input id="fa-key" type="password" placeholder="sk-ant-api03-..." style="flex:1;min-width:280px;padding:9px 13px;border:1px solid #CE93D8;border-radius:8px;font-family:inherit;font-size:.85rem;outline:none;background:#fff;color:#212121"/>
+        <button id="fa-btn" onclick="faAI()" style="padding:9px 20px;background:#7C4DFF;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px">
+          <span class="mi material-icons-round" style="font-size:18px">auto_awesome</span>Generate AI Analysis
+        </button>
+        <span id="fa-spin" style="display:none;font-size:.8rem;color:#7C4DFF"></span>
+      </div>
+      <div style="font-size:.73rem;color:#888;margin-bottom:14px">🔒 Your API key is stored only in your browser (localStorage) and sent directly to Anthropic — never to any third party.</div>
+      <div id="fa-out" style="background:#fff;border-radius:8px;padding:14px 18px;border:1px solid #CE93D8;min-height:80px;font-size:.85rem;line-height:1.65;color:#212121;display:none"></div>
+    </div>
+  </sec>
 </div>
 
 <script>
@@ -607,7 +654,7 @@ function go(id,el){
   document.querySelectorAll(".ni").forEach(n=>n.classList.remove("active"));
   document.getElementById("s-"+id).classList.add("active");
   el.classList.add("active");
-  const T={ov:"Overview Dashboard",sc:"School Analysis",co:"Community & Gender",st:"Subject Streams",sb:"Subject Analysis",tc:"Teacher Analysis",rk:"Full Rankings",rp:"Reports & Export"};
+  const T={ov:"Overview Dashboard",sc:"School Analysis",co:"Community & Gender",st:"Subject Streams",sb:"Subject Analysis",tc:"Teacher Analysis",rk:"Full Rankings",rp:"Reports & Export",fa:"Failure Analysis"};
   document.getElementById("tb-t").textContent=T[id]||id;
   if(id==="sc"&&!window._sc){iSC();window._sc=1}
   if(id==="co"&&!window._co){iCO();window._co=1}
@@ -616,6 +663,7 @@ function go(id,el){
   if(id==="tc"&&!window._tc){iTC();window._tc=1}
   if(id==="rk"&&!window._rk){iRK();window._rk=1}
   if(id==="rp"&&!window._rp){iRP();window._rp=1}
+  if(id==="fa"&&!window._fa){iFA();window._fa=1}
 }
 function ac(v){return v>=450?"ae":v>=350?"ag":v>=300?"am":"al"}
 function band(v){return v>=450?"Excellent":v>=350?"Good":v>=300?"Average":"Needs Help"}
@@ -1150,6 +1198,186 @@ function iRK(){
         y:{grid:{display:false},ticks:{font:{size:10}}}}}});
 }
 setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc-cnt").textContent=`${S.length} of ${S.length} schools`;},200);
+
+// FAILURE ANALYSIS
+function iFA(){
+  const sm=D.summary;
+  const totalFail=sm.appeared-sm.passed;
+  const failRate=+(totalFail/sm.appeared*100).toFixed(1);
+  // Compute failures
+  const mgmtFail=M.map(m=>({name:m.name,students:m.students,failed:Math.round(m.students*(1-m.pass_rate/100)),rate:+(100-m.pass_rate).toFixed(1)})).sort((a,b)=>b.rate-a.rate);
+  const subjFail=TC.reduce((acc,t)=>{const k=t.subject;if(!acc[k])acc[k]={name:k,students:0,failed:0};acc[k].students+=t.students;acc[k].failed+=t.failed;return acc},{});
+  const subjArr=Object.values(subjFail).map(s=>({...s,rate:+(s.failed/s.students*100).toFixed(1)})).sort((a,b)=>b.rate-a.rate);
+  const comFail=COM.map(c=>({name:c.name,students:c.students,failed:Math.round(c.students*(1-c.pass_rate/100)),rate:+(100-c.pass_rate).toFixed(1)})).sort((a,b)=>b.failed-a.failed).slice(0,10);
+  const genFail=GEN.map(g=>({name:g.name,students:g.students,failed:g.passed?g.students-g.passed:0,rate:g.passed?+((1-g.passed/g.students)*100).toFixed(1):0}));
+  const strFail=STR.map(s=>({name:s.name,students:s.students,failed:Math.round(s.students*(1-(s.pass_rate||100)/100)),rate:+(100-(s.pass_rate||100)).toFixed(1)})).sort((a,b)=>b.rate-a.rate);
+  const relFail=REL.map(r=>({name:r.name,students:r.students,failed:Math.round(r.students*(1-(r.pass_rate||100)/100))})).sort((a,b)=>b.failed-a.failed);
+  const highRisk=[...S].filter(s=>s.failed>0).sort((a,b)=>b.failed-a.failed).slice(0,25);
+  const tcFail=[...TC].filter(t=>t.failed>0).sort((a,b)=>b.failed-a.failed).slice(0,20);
+  const worstSubj=subjArr[0]||{name:"—",rate:0,failed:0};
+  const worstMgmt=mgmtFail[0]||{name:"—",rate:0,failed:0};
+  // KPIs
+  document.getElementById("fa-kpi").innerHTML=`
+    <div class="kc r"><div class="ki"><span class="mi material-icons-round">group_remove</span></div><div class="kl">Total Failed</div><div class="kv">${totalFail.toLocaleString()}</div><div class="ks">of ${sm.appeared.toLocaleString()} appeared</div><div class="kb"></div></div>
+    <div class="kc r"><div class="ki"><span class="mi material-icons-round">percent</span></div><div class="kl">Failure Rate</div><div class="kv">${failRate}%</div><div class="ks">District-wide</div><div class="kb"></div></div>
+    <div class="kc a"><div class="ki" style="background:var(--al)"><span class="mi material-icons-round" style="color:var(--a)">science</span></div><div class="kl">Hardest Subject</div><div class="kv" style="font-size:1.05rem;color:var(--a)">${worstSubj.name}</div><div class="ks">${worstSubj.rate}% failure · ${worstSubj.failed} students</div><div class="kb" style="background:var(--a)"></div></div>
+    <div class="kc r"><div class="ki"><span class="mi material-icons-round">account_balance</span></div><div class="kl">Most At-Risk Type</div><div class="kv" style="font-size:1rem">${worstMgmt.name}</div><div class="ks">${worstMgmt.rate}% failure · ${worstMgmt.failed} students</div><div class="kb"></div></div>`;
+  // Chart: Failure Rate by Management
+  new Chart(document.getElementById("c-fa-mgmt"),{type:"bar",data:{
+    labels:mgmtFail.map(m=>m.name),
+    datasets:[{label:"Failure Rate (%)",data:mgmtFail.map(m=>m.rate),backgroundColor:mgmtFail.map(m=>m.rate>15?"#EF9A9A":m.rate>8?"#FFCC80":"#A5D6A7"),borderColor:mgmtFail.map(m=>m.rate>15?"#C62828":m.rate>8?"#E65100":"#2E7D32"),borderWidth:1.5,borderRadius:4}]
+  },options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:"Failure Rate (%)"},min:0}}}});
+  // Chart: Failure Rate by Subject
+  new Chart(document.getElementById("c-fa-subj"),{type:"bar",data:{
+    labels:subjArr.map(s=>s.name),
+    datasets:[{label:"Failure Rate (%)",data:subjArr.map(s=>s.rate),backgroundColor:subjArr.map(s=>s.rate>20?"#EF9A9A":s.rate>10?"#FFCC80":"#A5D6A7"),borderColor:subjArr.map(s=>s.rate>20?"#C62828":s.rate>10?"#E65100":"#2E7D32"),borderWidth:1.5,borderRadius:4}]
+  },options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:"Failure Rate (%)"},min:0}}}});
+  // Chart: Failure by Community
+  new Chart(document.getElementById("c-fa-com"),{type:"bar",data:{
+    labels:comFail.map(c=>c.name),
+    datasets:[
+      {label:"Failed",data:comFail.map(c=>c.failed),backgroundColor:"rgba(198,40,40,.55)",borderRadius:4},
+      {label:"Failure Rate %",data:comFail.map(c=>c.rate),type:"line",yAxisID:"y2",borderColor:"#E65100",backgroundColor:"rgba(230,81,0,.12)",pointRadius:4,tension:.3}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{title:{display:true,text:"Failed Count"},beginAtZero:true},y2:{position:"right",title:{display:true,text:"Failure Rate (%)"},grid:{display:false},beginAtZero:true}}}});
+  // Chart: Gender
+  const gF=genFail.find(g=>g.name==="Female")||{failed:0,rate:0};
+  const gM=genFail.find(g=>g.name==="Male")||{failed:0,rate:0};
+  new Chart(document.getElementById("c-fa-gen"),{type:"bar",data:{
+    labels:["Female","Male"],
+    datasets:[
+      {label:"Failed Students",data:[gF.failed,gM.failed],backgroundColor:["rgba(173,20,87,.55)","rgba(21,101,192,.55)"],borderColor:["#AD1457","#1565C0"],borderWidth:1.5,borderRadius:6},
+      {label:"Failure Rate %",data:[gF.rate,gM.rate],type:"line",yAxisID:"y2",borderColor:"#6A1B9A",backgroundColor:"rgba(106,27,154,.1)",pointRadius:5,tension:.3}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{title:{display:true,text:"Failed Count"},beginAtZero:true},y2:{position:"right",title:{display:true,text:"Failure Rate (%)"},grid:{display:false},beginAtZero:true}}}});
+  // Chart: Failure by Stream
+  new Chart(document.getElementById("c-fa-str"),{type:"bar",data:{
+    labels:strFail.map(s=>s.name),
+    datasets:[
+      {label:"Failed",data:strFail.map(s=>s.failed),backgroundColor:"rgba(0,105,92,.5)",borderColor:"#00695C",borderWidth:1.5,borderRadius:4},
+      {label:"Failure Rate %",data:strFail.map(s=>s.rate),type:"line",yAxisID:"y2",borderColor:"#E65100",backgroundColor:"rgba(230,81,0,.1)",pointRadius:4,tension:.3}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{title:{display:true,text:"Failed Count"},beginAtZero:true},y2:{position:"right",title:{display:true,text:"Failure Rate (%)"},grid:{display:false},beginAtZero:true}}}});
+  // Chart: Failure by Religion
+  new Chart(document.getElementById("c-fa-rel"),{type:"doughnut",data:{
+    labels:relFail.map(r=>r.name),
+    datasets:[{data:relFail.map(r=>r.failed),backgroundColor:["#EF9A9A","#90CAF9","#A5D6A7","#CE93D8"],borderWidth:2,borderColor:"#fff"}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right"}}}});
+  // High-risk schools table
+  document.getElementById("fa-tbl").innerHTML=highRisk.map((s,i)=>`<tr>
+    <td style="text-align:center;font-weight:700;color:#C62828">${i+1}</td>
+    <td style="font-size:.82rem">${s.name}</td>
+    <td>${tc(s.type)}</td>
+    <td style="text-align:center">${s.appeared}</td>
+    <td style="text-align:center;color:#C62828;font-weight:800">${s.failed}</td>
+    <td style="text-align:center;font-weight:700;color:${(100-s.pass_rate)>20?"#C62828":(100-s.pass_rate)>10?"#E65100":"#F57F17"}">${(100-s.pass_rate).toFixed(1)}%</td>
+    <td style="text-align:center">${s.avg}</td>
+  </tr>`).join("");
+  // Subject-school hotspot table
+  document.getElementById("fa-tc-tbl").innerHTML=tcFail.map((t,i)=>`<tr>
+    <td style="text-align:center;font-weight:700;color:#C62828">${i+1}</td>
+    <td style="font-size:.82rem">${t.school}</td>
+    <td>${tc(t.type)}</td>
+    <td><span style="background:#FFF3E0;color:#E65100;border-radius:4px;padding:2px 8px;font-size:.75rem;font-weight:700">${t.subject}</span></td>
+    <td style="text-align:center">${t.students}</td>
+    <td style="text-align:center;color:#C62828;font-weight:800">${t.failed}</td>
+    <td style="text-align:center;font-weight:700;color:${(100-t.pass_rate)>30?"#C62828":(100-t.pass_rate)>15?"#E65100":"#F57F17"}">${(100-t.pass_rate).toFixed(1)}%</td>
+    <td style="text-align:center">${t.avg}</td>
+  </tr>`).join("");
+  // Pre-fill saved API key
+  const saved=localStorage.getItem("fa_api_key");
+  if(saved)document.getElementById("fa-key").value=saved;
+}
+
+async function faAI(){
+  const key=document.getElementById("fa-key").value.trim();
+  if(!key){alert("Please enter your Anthropic API key (sk-ant-...)");return}
+  localStorage.setItem("fa_api_key",key);
+  const btn=document.getElementById("fa-btn");
+  const out=document.getElementById("fa-out");
+  const spin=document.getElementById("fa-spin");
+  btn.disabled=true;spin.style.display="inline";out.style.display="block";out.innerHTML="<em style='color:#7C4DFF'>⏳ Claude is analysing the failure data…</em>";
+  const sm=D.summary;
+  const totalFail=sm.appeared-sm.passed;
+  const subjFail=TC.reduce((acc,t)=>{const k=t.subject;if(!acc[k])acc[k]={name:k,students:0,failed:0};acc[k].students+=t.students;acc[k].failed+=t.failed;return acc},{});
+  const subjArr=Object.values(subjFail).map(s=>({...s,rate:(s.failed/s.students*100).toFixed(1)+"%"})).sort((a,b)=>parseFloat(b.rate)-parseFloat(a.rate));
+  const mgmtCtx=M.map(m=>`${m.name}: ${m.students} students, ${Math.round(m.students*(1-m.pass_rate/100))} failed (${(100-m.pass_rate).toFixed(1)}% failure)`).join("\n");
+  const subjCtx=subjArr.slice(0,12).map(s=>`${s.name}: ${s.students} students, ${s.failed} failed (${s.rate})`).join("\n");
+  const comCtx=COM.slice(0,10).map(c=>`${c.name}: ${c.students} students, ${(100-c.pass_rate).toFixed(1)}% failure`).join("\n");
+  const strCtx=STR.map(s=>`${s.name}: ${s.students} students, avg ${s.avg}/600`).join("\n");
+  const genCtx=GEN.map(g=>`${g.name}: ${g.students} students, avg ${g.avg}/600${g.passed?", "+((1-g.passed/g.students)*100).toFixed(1)+"% failure":""}`).join("\n");
+  const topFail=[...S].filter(s=>s.failed>0).sort((a,b)=>b.failed-a.failed).slice(0,10).map(s=>`${s.name} (${s.type}): ${s.failed} failures/${s.appeared} appeared = ${(100-s.pass_rate).toFixed(1)}% failure, avg ${s.avg}/600`).join("\n");
+  const prompt=`You are an expert education analyst for Tamil Nadu government schools.
+
+EXAM: HSC (Class XII) March 2026 | Mayiladuthurai District (234) | Tamil Nadu State Board
+TOTAL MARKS: 600 (6 subjects × 100) | PASSING: 35 marks per subject
+
+DISTRICT SUMMARY:
+- Registered: ${sm.total.toLocaleString()} | Appeared: ${sm.appeared.toLocaleString()} | Absent: ${sm.total-sm.appeared}
+- Passed: ${sm.passed.toLocaleString()} | Failed: ${totalFail.toLocaleString()}
+- Pass Rate: ${(sm.passed/sm.total*100).toFixed(1)}% | Failure Rate: ${(totalFail/sm.appeared*100).toFixed(1)}%
+- District Avg Score: ${sm.avg}/600 | Highest: ${sm.max}/600
+- Female: ${sm.female.toLocaleString()} (avg ${sm.avg_f}) | Male: ${sm.male.toLocaleString()} (avg ${sm.avg_m})
+- Total Schools: ${sm.schools}
+
+SUBJECT-WISE FAILURE (from school×subject records):
+${subjCtx}
+
+MANAGEMENT-TYPE FAILURE:
+${mgmtCtx}
+
+STREAM-WISE DATA:
+${strCtx}
+
+COMMUNITY-WISE FAILURE:
+${comCtx}
+
+GENDER DATA:
+${genCtx}
+
+TOP 10 SCHOOLS BY FAILURE COUNT:
+${topFail}
+
+Provide a comprehensive failure analysis with these headings:
+1. Executive Summary
+2. Subject-wise Risk Analysis (which subjects are causing the most failures and why)
+3. Stream-wise Concerns (which academic streams show higher failure risk)
+4. Institutional Risk Factors (management types and school-level concerns)
+5. Demographic Vulnerability (communities and gender disparities)
+6. Schools Needing Urgent Intervention (top 5 with specific concerns)
+7. Root Cause Hypotheses
+8. Actionable Recommendations for the District Education Office
+9. Positive Indicators
+
+Be specific with numbers from the data. Format clearly with bullet points.`;
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-allow-browser":"true"},
+      body:JSON.stringify({model:"claude-3-5-haiku-20241022",max_tokens:2500,messages:[{role:"user",content:prompt}]})
+    });
+    const d=await res.json();
+    if(d.error)throw new Error(d.error.message);
+    const txt=d.content[0].text;
+    out.innerHTML=txt
+      .replace(/^#{3} (.+)$/gm,"<h4 style='color:#6A1B9A;margin:12px 0 4px'>$1</h4>")
+      .replace(/^#{2} (.+)$/gm,"<h3 style='color:#4527A0;margin:14px 0 5px;border-bottom:1px solid #CE93D8;padding-bottom:3px'>$1</h3>")
+      .replace(/^# (.+)$/gm,"<h2 style='color:#311B92;margin:14px 0 6px'>$1</h2>")
+      .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+      .replace(/^(\d+)\. \*\*(.+?)\*\*(.*)$/gm,"<p style='margin:10px 0 2px'><strong style='color:#6A1B9A'>$1. $2</strong>$3</p>")
+      .replace(/^- (.+)$/gm,"<li style='margin:3px 0'>$1</li>")
+      .replace(/(<li[^>]*>.*<\/li>
+?)+/g,"<ul style='margin:6px 0 6px 18px'>$&</ul>")
+      .replace(/
+{2,}/g,"</p><p style='margin:6px 0'>")
+      .replace(/
+/g,"<br>");
+  }catch(e){
+    out.innerHTML=`<span style="color:#C62828;font-weight:700">Error: ${e.message}</span><br><span style="font-size:.8rem;color:#666">Check that your API key is valid and has sufficient credits.</span>`;
+  }finally{
+    btn.disabled=false;spin.style.display="none";
+  }
+}
 
 // REPORTS
 function iRP(){
