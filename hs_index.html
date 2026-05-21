@@ -1073,11 +1073,14 @@ setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc
 // REPORTS
 function iRP(){
   const chips=[
+    {icon:"insights",label:"Key Findings",detail:"Auto-generated insights & highlights"},
     {icon:"people",label:"Summary Statistics",detail:`${D.summary.total.toLocaleString()} students · ${D.summary.schools} schools`},
-    {icon:"school",label:"Schools",detail:`${S.length} schools with full performance data`},
+    {icon:"bar_chart",label:"Score Distribution",detail:"Score band breakdown with cumulative %"},
+    {icon:"school",label:"All Schools",detail:`${S.length} schools — full ranked list`},
+    {icon:"emoji_events",label:"Top / Bottom 10",detail:"Best & lowest performing schools"},
     {icon:"account_balance",label:"Management",detail:`${M.length} management types`},
     {icon:"groups",label:"Community",detail:`${COM.length} communities`},
-    {icon:"wc",label:"Gender",detail:"Male / Female breakdown"},
+    {icon:"wc",label:"Gender",detail:"Detailed male / female comparison"},
     {icon:"church",label:"Religion",detail:`${REL.length} religion categories`},
     {icon:"science",label:"Subjects",detail:`${SUBJ.length} core SSLC subjects`},
     {icon:"person",label:"Subject Performance",detail:`${TC.length.toLocaleString()} school × subject records`},
@@ -1105,105 +1108,279 @@ function iRP(){
 function dlXLSX(){
   const wb=XLSX.utils.book_new();
   const sm=D.summary;
-  // Sheet 1: Summary
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  const pr=+(sm.passed/sm.total*100).toFixed(1);
+  const fail=sm.appeared-sm.passed;
+  const ab=sm.total-sm.appeared;
+  const topSubj=[...SUBJ].sort((a,b)=>b.avg-a.avg)[0]||{};
+  const lowSubj=[...SUBJ].sort((a,b)=>a.avg-b.avg)[0]||{};
+  const bestMgmt=[...M].sort((a,b)=>b.avg-a.avg)[0]||{};
+  const hi90=S.filter(s=>s.pass_rate>=90).length;
+  const lo50=S.filter(s=>s.pass_rate<50).length;
+  // Sheet 1: Key Findings
+  const ws1=XLSX.utils.aoa_to_sheet([
+    ["Mayiladuthurai District — SSLC (Class X) March 2026"],[""],
+    ["KEY FINDINGS & INSIGHTS"],[""],
+    ["Metric","Value"],
+    ["Total Students Registered",sm.total],
+    ["Students Appeared",sm.appeared],
+    ["Students Absent",ab],
+    ["Students Passed",sm.passed],
+    ["Students Failed",fail],
+    ["Overall Pass Rate (%)",+pr],
+    ["Average Marks (out of 500)",sm.avg],
+    ["Highest Score Achieved",sm.max],
+    ["Total Schools",sm.schools],[""],
+    ["GENDER COMPARISON",""],
+    ["Female Students",sm.female],
+    ["Female Average Marks",sm.avg_f],
+    ["Male Students",sm.male],
+    ["Male Average Marks",sm.avg_m],
+    ["Gender Gap (marks)",+Math.abs(sm.avg_f-sm.avg_m).toFixed(1)],[""],
+    ["PERFORMANCE HIGHLIGHTS",""],
+    ["Top School by Avg",S[0]?.name],
+    ["Top School Average",S[0]?.avg],
+    ["Top School Pass Rate (%)",S[0]?.pass_rate],
+    ["Lowest School by Avg",S[S.length-1]?.name],
+    ["Lowest School Average",S[S.length-1]?.avg],
+    ["Lowest School Pass Rate (%)",S[S.length-1]?.pass_rate],
+    ["Strongest Subject (by avg)",topSubj.name],
+    ["Strongest Subject Avg / 100",topSubj.avg],
+    ["Strongest Subject Pass Rate (%)",topSubj.pass_rate],
+    ["Weakest Subject (by avg)",lowSubj.name],
+    ["Weakest Subject Avg / 100",lowSubj.avg],
+    ["Weakest Subject Pass Rate (%)",lowSubj.pass_rate],
+    ["Best Management Type",bestMgmt.name],
+    ["Best Management Avg",bestMgmt.avg],
+    ["Schools with 90%+ Pass Rate",hi90],
+    ["Schools with <50% Pass Rate",lo50],
+  ]);
+  ws1["!cols"]=[{wch:35},{wch:22}];
+  XLSX.utils.book_append_sheet(wb,ws1,"Key Findings");
+  // Sheet 2: Summary
+  const ws2=XLSX.utils.aoa_to_sheet([
     ["Mayiladuthurai District — SSLC (Class X) March 2026"],[""],
     ["Metric","Value"],
-    ["Total Registered",sm.total],["Appeared",sm.appeared],["Absent",sm.absent],
-    ["Passed",sm.passed],["Failed",sm.appeared-sm.passed],
-    ["Pass Rate (%)",+(sm.passed/sm.total*100).toFixed(1)],
+    ["Total Registered",sm.total],["Appeared",sm.appeared],["Absent",ab],
+    ["Passed",sm.passed],["Failed",fail],
+    ["Pass Rate (%)",+pr],
     ["Average Marks",sm.avg],["Highest Score",sm.max],["Out of",500],
     ["Schools",sm.schools],["Female Students",sm.female],["Male Students",sm.male],
     ["Female Avg Marks",sm.avg_f],["Male Avg Marks",sm.avg_m],
-  ]),"Summary");
-  // Sheet 2: Schools
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws2["!cols"]=[{wch:28},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws2,"Summary");
+  // Sheet 3: Score Distribution
+  let cum=0;
+  const ws3=XLSX.utils.aoa_to_sheet([
+    ["Score Distribution — SSLC (Out of 500)"],[""],
+    ["Score Range","Students","% of Appeared","Cumulative %"],
+    ...BKT.map(b=>{cum+=b.count;return[b.range,b.count,+(b.count/sm.appeared*100).toFixed(1),+(cum/sm.appeared*100).toFixed(1)]})
+  ]);
+  ws3["!cols"]=[{wch:15},{wch:12},{wch:16},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws3,"Score Distribution");
+  // Sheet 4: Schools
+  const ws4=XLSX.utils.aoa_to_sheet([
     ["Rank","School Code","School Name","Type","Registered","Appeared","Failed","Avg Marks","Pass Rate (%)","Highest","Lowest"],
     ...S.map(s=>[s.rank,s.code,s.name,s.type,s.students,s.appeared,s.failed,s.avg,s.pass_rate,s.high,s.low])
-  ]),"Schools");
-  // Sheet 3: Management
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws4["!cols"]=[{wch:6},{wch:12},{wch:46},{wch:17},{wch:12},{wch:10},{wch:8},{wch:11},{wch:14},{wch:10},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws4,"Schools");
+  // Sheet 5: Management
+  const ws5=XLSX.utils.aoa_to_sheet([
     ["Management Type","Students","Avg Marks","Pass Rate (%)"],
     ...M.map(m=>[m.name,m.students,m.avg,m.pass_rate])
-  ]),"Management");
-  // Sheet 4: Community
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws5["!cols"]=[{wch:26},{wch:12},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws5,"Management");
+  // Sheet 6: Community
+  const ws6=XLSX.utils.aoa_to_sheet([
     ["Community","Students","Avg Marks","Pass Rate (%)"],
     ...COM.map(c=>[c.name,c.students,c.avg,c.pass_rate])
-  ]),"Community");
-  // Sheet 5: Gender
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
-    ["Gender","Students","Avg Marks"],
-    ...GEN.map(g=>[g.name,g.students,g.avg])
-  ]),"Gender");
-  // Sheet 6: Religion
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws6["!cols"]=[{wch:20},{wch:12},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws6,"Community");
+  // Sheet 7: Gender
+  const ws7=XLSX.utils.aoa_to_sheet([
+    ["Gender","Students","Avg Marks","Passed","Pass Rate (%)"],
+    ...GEN.map(g=>[g.name,g.students,g.avg,g.passed||"",g.passed?+(g.passed/g.students*100).toFixed(1):""])
+  ]);
+  ws7["!cols"]=[{wch:12},{wch:12},{wch:12},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws7,"Gender");
+  // Sheet 8: Religion
+  const ws8=XLSX.utils.aoa_to_sheet([
     ["Religion","Students","Avg Marks"],
     ...REL.map(r=>[r.name,r.students,r.avg])
-  ]),"Religion");
-  // Sheet 7: Subjects
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws8["!cols"]=[{wch:16},{wch:12},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws8,"Religion");
+  // Sheet 9: Subjects
+  const ws9=XLSX.utils.aoa_to_sheet([
     ["Subject","Students","Avg Marks","Highest","Lowest","Pass Rate (%)"],
     ...SUBJ.map(s=>[s.name,s.students,s.avg,s.high,s.low,s.pass_rate||""])
-  ]),"Subjects");
-  // Sheet 8: Subject Performance
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+  ]);
+  ws9["!cols"]=[{wch:18},{wch:12},{wch:12},{wch:10},{wch:10},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws9,"Subjects");
+  // Sheet 10: Subject Performance
+  const ws10=XLSX.utils.aoa_to_sheet([
     ["Rank","School Code","School Name","Type","Subject","Students","Failures","Avg/100","Pass Rate (%)","Highest","Lowest","Std Dev","Subject Rank","Subject Total"],
     ...TC.map(t=>[t.rank,t.code,t.school,t.type,t.subject,t.students,t.failed,t.avg,t.pass_rate,t.high,t.low,t.std,t.subj_rank,t.subj_total])
-  ]),"Subject Performance");
+  ]);
+  ws10["!cols"]=[{wch:6},{wch:12},{wch:44},{wch:17},{wch:17},{wch:10},{wch:10},{wch:10},{wch:14},{wch:10},{wch:10},{wch:10},{wch:13},{wch:15}];
+  XLSX.utils.book_append_sheet(wb,ws10,"Subject Performance");
   XLSX.writeFile(wb,"Mayiladuthurai_SSLC_2026.xlsx");
 }
 
 function dlRPT(){
   const sm=D.summary;
   const pr=+(sm.passed/sm.total*100).toFixed(1);
-  const tbl=(hdr,rows)=>`<table><thead><tr>${hdr.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map((r,i)=>`<tr style="${i%2===0?"":"background:#FAFAFA"}">${r.map(c=>`<td>${c??""}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  const fail=sm.appeared-sm.passed;
+  const ab=sm.total-sm.appeared;
+  const gF=GEN.find(g=>g.name==="Female")||{};
+  const gM=GEN.find(g=>g.name==="Male")||{};
+  const top10=S.slice(0,10);
+  const bot10=[...S].reverse().slice(0,10);
+  const topSubj=[...SUBJ].sort((a,b)=>b.avg-a.avg)[0]||{};
+  const lowSubj=[...SUBJ].sort((a,b)=>a.avg-b.avg)[0]||{};
+  const bestMgmt=[...M].sort((a,b)=>b.avg-a.avg)[0]||{};
+  const topBkt=[...BKT].sort((a,b)=>b.count-a.count)[0]||{};
+  const hi90=S.filter(s=>s.pass_rate>=90).length;
+  const tbl=(hdr,rows)=>`<table><thead><tr>${hdr.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map((r,i)=>`<tr class="${i%2===0?"":"alt"}">${r.map(c=>`<td>${c??""}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  const ins=(ico,txt)=>`<div class="ins"><span style="font-size:13px">${ico}</span><span>${txt}</span></div>`;
+  // Subject performance grouped by subject
+  const subjSec=(D.teacher_subjects||[]).map(subj=>{
+    const rows=TC.filter(t=>t.subject===subj).sort((a,b)=>a.subj_rank-b.subj_rank);
+    return `<h3>📖 ${subj} — ${rows.length} Schools</h3>`+tbl(
+      ["Rank","School Name","Type","Students","Failures","Avg / 100","Pass %","Highest","Lowest"],
+      rows.map(t=>[t.subj_rank,t.school,t.type,t.students,t.failed>0?`<span class="bf">${t.failed}</span>`:"—",`<strong>${t.avg}</strong>`,t.pass_rate+"%",t.high,t.low])
+    );
+  }).join("");
+  // Score distribution with cumulative
+  let cum=0;
+  const bktRows=BKT.map(b=>{cum+=b.count;return[b.range,b.count.toLocaleString(),+(b.count/sm.appeared*100).toFixed(1)+"%",+(cum/sm.appeared*100).toFixed(1)+"%"]});
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <title>Mayiladuthurai SSLC Report 2026</title>
+  <title>Mayiladuthurai SSLC Comprehensive Report 2026</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Arial,sans-serif;font-size:10px;color:#212121;padding:12px}
-    h1{font-size:15px;font-weight:700;margin-bottom:2px}
-    .sub{font-size:9px;color:#666;margin-bottom:12px}
-    h2{font-size:11px;font-weight:700;background:#1A237E;color:#fff;padding:5px 10px;margin:14px 0 4px;border-radius:3px}
-    table{border-collapse:collapse;width:100%;margin-bottom:8px;font-size:9.5px}
-    th{background:#1A237E;color:#fff;padding:5px 7px;text-align:left;white-space:nowrap}
+    body{font-family:Arial,sans-serif;font-size:10px;color:#212121;padding:14px;background:#fff}
+    .hdr{background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:14px 18px;border-radius:8px;margin-bottom:14px}
+    .hdr h1{font-size:14px;font-weight:700;margin-bottom:3px}
+    .hdr .sub{font-size:8.5px;opacity:.85;margin-bottom:6px}
+    .badge{background:rgba(255,255,255,.18);border-radius:5px;padding:2px 8px;font-size:8px;font-weight:700;display:inline-block;margin-right:5px}
+    h2{font-size:11px;font-weight:700;background:#1A237E;color:#fff;padding:5px 10px;margin:14px 0 5px;border-radius:3px}
+    h3{font-size:9.5px;font-weight:700;color:#1A237E;margin:9px 0 3px;padding:3px 8px;background:#E8EAF6;border-radius:3px;border-left:3px solid #3949AB}
+    table{border-collapse:collapse;width:100%;margin-bottom:6px;font-size:9px}
+    th{background:#1A237E;color:#fff;padding:5px 7px;text-align:left;white-space:nowrap;font-size:8.5px}
     td{padding:4px 7px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-    .kpi{background:#F5F7FA;border-radius:6px;padding:8px 12px;border-left:3px solid #1565C0}
-    .kpi-v{font-size:17px;font-weight:800;color:#1565C0}
-    .kpi-l{font-size:8px;color:#757575;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+    tr.alt td{background:#F5F7FA}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
+    .kpi{background:#F5F7FA;border-radius:6px;padding:8px 10px;border-left:3px solid #1565C0}
+    .kpi.g{border-color:#2E7D32}.kpi.r{border-color:#C62828}.kpi.a{border-color:#E65100}.kpi.u{border-color:#6A1B9A}.kpi.pk{border-color:#AD1457}
+    .kpi-v{font-size:15px;font-weight:800;color:#1565C0}
+    .kpi.g .kpi-v{color:#2E7D32}.kpi.r .kpi-v{color:#C62828}.kpi.a .kpi-v{color:#E65100}.kpi.u .kpi-v{color:#6A1B9A}.kpi.pk .kpi-v{color:#AD1457}
+    .kpi-l{font-size:7.5px;color:#757575;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+    .insg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+    .ins{background:#F8FAFE;border-radius:5px;padding:6px 9px;border-left:3px solid #3F51B5;font-size:9px;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
+    .gen2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:7px}
+    .gb{background:#F5F7FA;border-radius:6px;padding:10px;text-align:center}
+    .gb.f{border-top:3px solid #AD1457}.gb.m{border-top:3px solid #1565C0}
+    .gb .gv{font-size:19px;font-weight:800}.gb.f .gv{color:#AD1457}.gb.m .gv{color:#1565C0}
+    .gb .gl{font-size:7.5px;color:#666;font-weight:700;text-transform:uppercase;margin-top:2px}
+    .g1{color:#B8860B;font-weight:700}.g2c{color:#808080;font-weight:700}.g3{color:#CD7F32;font-weight:700}
+    .bp{background:#E8F5E9;color:#2E7D32;border-radius:3px;padding:1px 5px;font-weight:700}
+    .bf{background:#FFEBEE;color:#C62828;border-radius:3px;padding:1px 5px;font-weight:700}
+    .footer{margin-top:16px;padding-top:8px;border-top:1px solid #DDD;font-size:7.5px;color:#999;text-align:center}
     @page{size:A4;margin:12mm}
-    @media print{body{padding:0}}
+    @media print{body{padding:0}h2{page-break-before:auto}}
   </style></head><body>
-  <h1>&#127979; Mayiladuthurai District — SSLC (Class X) Performance Report</h1>
-  <div class="sub">March 2026 Board Exam &bull; Tamil Nadu &bull; District 234 &bull; Generated: ${new Date().toLocaleDateString("en-IN")}</div>
+
+  <div class="hdr">
+    <h1>🏫 Mayiladuthurai District — SSLC (Class X) Comprehensive Performance Report</h1>
+    <div class="sub">March 2026 Tamil Nadu State Board Exam &bull; District 234 — Mayiladuthurai &bull; ${sm.schools} Schools &bull; ${sm.total.toLocaleString()} Students</div>
+    <span class="badge">Generated: ${new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"long",year:"numeric"})}</span>
+    <span class="badge">SSLC — Class X</span>
+    <span class="badge">Official Result Data</span>
+  </div>
+
   <div class="kpis">
     <div class="kpi"><div class="kpi-v">${sm.total.toLocaleString()}</div><div class="kpi-l">Registered</div></div>
-    <div class="kpi"><div class="kpi-v">${sm.passed.toLocaleString()}</div><div class="kpi-l">Passed</div></div>
-    <div class="kpi"><div class="kpi-v">${pr}%</div><div class="kpi-l">Pass Rate</div></div>
+    <div class="kpi"><div class="kpi-v">${sm.appeared.toLocaleString()}</div><div class="kpi-l">Appeared</div></div>
+    <div class="kpi a"><div class="kpi-v a">${ab.toLocaleString()}</div><div class="kpi-l">Absent</div></div>
+    <div class="kpi g"><div class="kpi-v g">${sm.passed.toLocaleString()}</div><div class="kpi-l">Passed</div></div>
+    <div class="kpi r"><div class="kpi-v r">${fail.toLocaleString()}</div><div class="kpi-l">Failed</div></div>
+    <div class="kpi u"><div class="kpi-v u">${pr}%</div><div class="kpi-l">Pass Rate</div></div>
     <div class="kpi"><div class="kpi-v">${sm.avg}</div><div class="kpi-l">Avg Marks / 500</div></div>
-    <div class="kpi"><div class="kpi-v">${sm.max}</div><div class="kpi-l">Highest Score</div></div>
-    <div class="kpi"><div class="kpi-v">${sm.schools}</div><div class="kpi-l">Schools</div></div>
-    <div class="kpi"><div class="kpi-v">${sm.avg_f}</div><div class="kpi-l">Female Avg</div></div>
+    <div class="kpi g"><div class="kpi-v g">${sm.max}</div><div class="kpi-l">Highest Score</div></div>
+    <div class="kpi pk"><div class="kpi-v pk">${sm.avg_f}</div><div class="kpi-l">Female Avg</div></div>
     <div class="kpi"><div class="kpi-v">${sm.avg_m}</div><div class="kpi-l">Male Avg</div></div>
+    <div class="kpi"><div class="kpi-v">${sm.female.toLocaleString()}</div><div class="kpi-l">Female Students</div></div>
+    <div class="kpi"><div class="kpi-v">${sm.male.toLocaleString()}</div><div class="kpi-l">Male Students</div></div>
   </div>
-  <h2>School-wise Performance (All ${S.length} Schools)</h2>
-  ${tbl(["#","Code","School Name","Type","Students","Appeared","Failed","Avg","Pass %","High","Low"],
+
+  <h2>📋 Key Findings &amp; Insights</h2>
+  <div class="insg">
+    ${ins("🏆",`Best school: <strong>${top10[0]?.name||"—"}</strong> (${top10[0]?.type||""}) — avg <strong>${top10[0]?.avg}/500</strong>, pass rate ${top10[0]?.pass_rate}%`)}
+    ${ins("⚠️",`Lowest performer: <strong>${bot10[0]?.name||"—"}</strong> — avg <strong>${bot10[0]?.avg}/500</strong>, pass rate ${bot10[0]?.pass_rate}%`)}
+    ${ins("📗",`Strongest subject: <strong>${topSubj.name||"—"}</strong> (avg ${topSubj.avg}/100, pass rate ${topSubj.pass_rate}%)`)}
+    ${ins("📕",`Weakest subject: <strong>${lowSubj.name||"—"}</strong> (avg ${lowSubj.avg}/100, pass rate ${lowSubj.pass_rate}%)`)}
+    ${ins("⚧️",`Female avg <strong>${sm.avg_f}</strong> vs Male avg <strong>${sm.avg_m}</strong> — gap: ${Math.abs(sm.avg_f-sm.avg_m).toFixed(1)} marks ${sm.avg_f>sm.avg_m?"(females lead)":"(males lead)"}`)}
+    ${ins("🏛️",`Best management type: <strong>${bestMgmt.name||"—"}</strong> — avg ${bestMgmt.avg}, pass rate ${bestMgmt.pass_rate}%, ${bestMgmt.students?.toLocaleString()||""} students`)}
+    ${ins("📊",`Score peak: most students (${topBkt.count?.toLocaleString()||""}, ${+(topBkt.count/sm.appeared*100).toFixed(1)}%) scored in <strong>${topBkt.range}</strong> range`)}
+    ${ins("🎯",`<strong>${hi90} of ${S.length} schools</strong> (${+(hi90/S.length*100).toFixed(0)}%) achieved 90%+ pass rate`)}
+  </div>
+
+  <h2>📊 Score Distribution (Out of 500)</h2>
+  ${tbl(["Score Range","Students","% of Appeared","Cumulative %"],bktRows)}
+
+  <h2>⚧ Gender Analysis</h2>
+  <div class="gen2">
+    <div class="gb f"><div class="gv">${sm.avg_f}</div><div class="gl">Female Average / 500</div>
+      <div style="margin-top:5px;font-size:9px">${sm.female.toLocaleString()} students &bull; ${gF.passed?+(gF.passed/gF.students*100).toFixed(1)+"% pass rate":""}</div></div>
+    <div class="gb m"><div class="gv">${sm.avg_m}</div><div class="gl">Male Average / 500</div>
+      <div style="margin-top:5px;font-size:9px">${sm.male.toLocaleString()} students &bull; ${gM.passed?+(gM.passed/gM.students*100).toFixed(1)+"% pass rate":""}</div></div>
+  </div>
+  ${tbl(["Gender","Registered","Avg Marks / 500","Passed","Pass Rate (%)"],
+    GEN.map(g=>[g.name,g.students.toLocaleString(),g.avg,g.passed?.toLocaleString()||"—",g.passed?+(g.passed/g.students*100).toFixed(1)+"%":"—"]))}
+
+  <h2>🏆 Top 10 Performing Schools</h2>
+  ${tbl(["Rank","School Name","Type","Registered","Appeared","Failed","Avg / 500","Pass %","Highest","Lowest"],
+    top10.map((s,i)=>[`<span class="${i===0?"g1":i===1?"g2c":i===2?"g3":""}">${s.rank}</span>`,s.name,s.type,s.students,s.appeared,s.failed>0?`<span class="bf">${s.failed}</span>`:"—",`<strong>${s.avg}</strong>`,`<span class="bp">${s.pass_rate}%</span>`,s.high,s.low]))}
+
+  <h2>⚠️ Bottom 10 Schools — Requiring Attention</h2>
+  ${tbl(["Rank","School Name","Type","Registered","Appeared","Failed","Avg / 500","Pass %","Highest","Lowest"],
+    bot10.map(s=>[s.rank,s.name,s.type,s.students,s.appeared,s.failed>0?`<span class="bf">${s.failed}</span>`:"—",s.avg,`<span style="color:#C62828;font-weight:700">${s.pass_rate}%</span>`,s.high,s.low]))}
+
+  <h2>🏫 All Schools — Complete Performance List (${S.length} Schools)</h2>
+  ${tbl(["#","Code","School Name","Type","Registered","Appeared","Failed","Avg/500","Pass %","High","Low"],
     S.map(s=>[s.rank,s.code,s.name,s.type,s.students,s.appeared,s.failed>0?s.failed:"—",s.avg,s.pass_rate+"%",s.high,s.low]))}
-  <h2>Management-wise Analysis</h2>
-  ${tbl(["Management Type","Students","Avg Marks","Pass Rate (%)"],M.map(m=>[m.name,m.students,m.avg,m.pass_rate+"%"]))}
-  <h2>Community-wise Analysis</h2>
-  ${tbl(["Community","Students","Avg Marks","Pass Rate (%)"],COM.map(c=>[c.name,c.students,c.avg,c.pass_rate+"%"]))}
-  <h2>Gender Analysis</h2>
-  ${tbl(["Gender","Students","Avg Marks"],GEN.map(g=>[g.name,g.students,g.avg]))}
-  <h2>Religion-wise Analysis</h2>
-  ${tbl(["Religion","Students","Avg Marks"],REL.map(r=>[r.name,r.students,r.avg]))}
-  <h2>Subject-wise Analysis</h2>
-  ${tbl(["Subject","Students","Avg/100","Highest","Lowest","Pass Rate (%)"],SUBJ.map(s=>[s.name,s.students,s.avg,s.high,s.low,(s.pass_rate||"")+"%"]))}
+
+  <h2>📚 Subject-wise Analysis (Core SSLC Subjects — Out of 100 each)</h2>
+  ${tbl(["Subject","Students","Avg / 100","Highest","Lowest","Pass Rate (%)"],
+    SUBJ.map(s=>[`<strong>${s.name}</strong>`,s.students.toLocaleString(),s.avg,s.high,s.low,(s.pass_rate||"")+"%"]))}
+
+  <h2>📖 Subject Performance — School Rankings by Subject (${TC.length} Records)</h2>
+  ${subjSec}
+
+  <h2>🏛️ Management-wise Analysis</h2>
+  ${tbl(["Management Type","Students","Avg Marks","Pass Rate (%)"],
+    M.map(m=>[m.name,m.students.toLocaleString(),m.avg,m.pass_rate+"%"]))}
+
+  <h2>👥 Community-wise Analysis</h2>
+  ${tbl(["Community","Students","Avg Marks","Pass Rate (%)"],
+    COM.map(c=>[c.name,c.students.toLocaleString(),c.avg,c.pass_rate+"%"]))}
+
+  <h2>🕌 Religion-wise Analysis</h2>
+  ${tbl(["Religion","Students","Avg Marks"],
+    REL.map(r=>[r.name,r.students.toLocaleString(),r.avg]))}
+
+  <div class="footer">
+    Mayiladuthurai District — SSLC (Class X) March 2026 &bull; Tamil Nadu State Board &bull;
+    ${S.length} Schools &bull; ${sm.total.toLocaleString()} Students &bull;
+    Report generated: ${new Date().toLocaleString("en-IN")} &bull;
+    For official use only
+  </div>
   <script>window.onload=()=>{window.print();}<\/script>
   </body></html>`;
-  const w=window.open("","_blank","width=900,height=700");
+  const w=window.open("","_blank","width=1100,height=800");
   w.document.write(html);w.document.close();
 }
 </script>
