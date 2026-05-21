@@ -612,7 +612,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
     <!-- AI Analysis -->
     <div class="card" style="border:2px solid #7C4DFF;background:linear-gradient(135deg,#F3E5F5,#EDE7F6)">
       <div class="ct" style="color:#6A1B9A"><span class="mi material-icons-round" style="color:#7C4DFF;font-size:20px">auto_awesome</span>AI-Powered Failure Analysis <span style="background:#7C4DFF;color:#fff;border-radius:10px;padding:2px 9px;font-size:.67rem;margin-left:6px">Claude AI</span></div>
-      <div style="font-size:.8rem;color:#555;margin-bottom:12px">Enter your Anthropic API key to generate a comprehensive AI analysis of failure patterns, risk factors, and actionable recommendations.</div>
+      <div style="font-size:.8rem;color:#555;margin-bottom:12px">Analysis pre-generated from official result data (May 2026). Optionally regenerate with your own Anthropic API key for a fresh perspective.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
         <input id="fa-key" type="password" placeholder="sk-ant-api03-..." style="flex:1;min-width:280px;padding:9px 13px;border:1px solid #CE93D8;border-radius:8px;font-family:inherit;font-size:.85rem;outline:none;background:#fff;color:#212121"/>
         <button id="fa-btn" onclick="faAI()" style="padding:9px 20px;background:#7C4DFF;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px">
@@ -1200,6 +1200,75 @@ function iRK(){
 setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc-cnt").textContent=`${S.length} of ${S.length} schools`;},200);
 
 // FAILURE ANALYSIS
+const FA_HSC_HTML=`<div style='background:#E8F5E9;border-radius:6px;padding:8px 14px;margin-bottom:16px;font-size:.82rem;color:#1B5E20;border-left:3px solid #2E7D32;display:flex;align-items:center;gap:8px'><span style='font-size:15px'>&#10003;</span><span><strong>Analysis pre-generated from official March 2026 HSC results</strong> &mdash; Mayiladuthurai District (234) &bull; 14,361 students &bull; 95 schools &bull; Data: Tamil Nadu State Board</span></div>
+
+<h3 style='color:#1B5E20;margin:0 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>1. Executive Summary</h3>
+<p style='margin:0 0 10px;line-height:1.7'>Mayiladuthurai District recorded a <strong>4.8% failure rate</strong> in HSC March 2026 &mdash; 680 of 14,202 appeared students did not pass. While the 94.8% pass rate reflects broadly good performance, severe internal inequities persist: government schools fail at 33&times; the rate of SF Matric schools (13.1% vs 0.4%), SC students account for 68.4% of all failures despite being 28.2% of the student body, and female students outperform males by a striking 36-mark average gap. English is the single most persistent failure driver, appearing in 6 of the 10 worst school-subject combinations district-wide.</p>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>2. Subject-wise Risk Analysis</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>English &mdash; District&apos;s #1 failure subject</strong>: Dominates the hotspot list &mdash; TGN MPL (28 failures, 13.2%), MANALMEDU (18, 12.8%), SRINIVASA HSS (16, 4.5%), DBTR NATIONAL (13), LMC (13), GOVT MODEL KUTTALAM (13). Average 62.5/100 with high std deviation (19.6) means many students sit dangerously close to the 35-mark threshold.</li>
+<li><strong>Commerce cluster underperforms</strong>: Economics (62.3), Commerce (61.8), Accountancy (61.0) all below district average. Commerce (General) stream average of 294.6/600 is below the minimum &quot;Average&quot; band &mdash; a systemic concern for the entire commerce track.</li>
+<li><strong>Humanities subjects at risk</strong>: History (55.5), Political Science (56.4) &mdash; low averages suggest inadequate content coverage or examination preparation in these subjects.</li>
+<li><strong>Practical vs theory paradox</strong>: Nursing Practical (100.0), Agricultural Practical (94.6), Typography (94.4) vs Agricultural Theory (50.4), Nursing Theory (52.1) &mdash; a 44-50 point gap between practical and theory scores of the same subject reveals students learn best through application, yet are assessed primarily through theory exams.</li>
+<li><strong>Science streams remain strong</strong>: Physics (67.2), Chemistry (69.1), Biology (75.9), Computer Science (79.9) &mdash; forming the district&apos;s academic backbone.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>3. Stream-wise Risk Analysis</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Commerce (General) &mdash; Critical risk</strong>: avg 294.6/600 &mdash; the only stream below the 300-mark &quot;Average&quot; threshold. 984 students in this stream face systemic underpreparation, particularly in Accountancy and Commerce theory.</li>
+<li><strong>Supplementary stream</strong>: 677 students averaging 309.2/600 &mdash; borderline performance from repeat-attempt students with the highest individual failure risk in the district.</li>
+<li><strong>Commerce (BizMaths)</strong>: Strongest commerce performer at 441.9/600 &mdash; proving that commerce students with strong Maths foundations dramatically outperform General Commerce students. Stream selection counselling needed.</li>
+<li><strong>Science streams lead</strong>: Biology (437.8), Bio-Maths (429.4) &mdash; strong performance driven partly by high practical scores. Science education infrastructure is working.</li>
+<li><strong>Arts/Vocational</strong>: 343.1/600 &mdash; moderate but stable. Vocational stream shows students can achieve adequately through applied learning pathways.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>4. Institutional Risk Factors</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Municipality schools &mdash; Worst failure rate</strong>: 17.7% failure (92 of 519 students). TGN MPL alone contributes 53 failures. Urban-poor students face income pressures and inconsistent school attendance despite geographic access to resources.</li>
+<li><strong>Government schools</strong>: 477 failures, 13.1% failure rate &mdash; <strong>70.1% of all district HSC failures</strong> while serving 25.4% of students. The 33&times; gap vs SF Matric is the most striking inequity statistic in the district.</li>
+<li><strong>SF Matric excellence</strong>: 29 failures from 7,205 students (0.4%) &mdash; demonstrating that high performance at scale is achievable. These schools serve 50.2% of students and anchor the district&apos;s overall pass rate.</li>
+<li>Fully Aided (8.5%) and Partly Aided (6.4%) schools occupy the middle ground &mdash; aided status provides some advantage over government schools but falls well short of SF Matric standards.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>5. Demographic Vulnerability</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>SC community</strong>: 465 failures, <strong>11.6% failure rate</strong> &mdash; 68.4% of all failures from 28.2% of students. This extreme disproportionality demands a dedicated SC equity strategy, not incremental general programs.</li>
+<li><strong>Gender performance gap</strong>: Female avg 418.3 vs Male avg 382.3/600 &mdash; a <strong>36-mark gap</strong>. Male students systematically underperform across management types, communities, and subjects. GOVT BOYS MANALMEDU (37.7% failure) illustrates the extreme end of this pattern.</li>
+<li><strong>Muslim community outperforms</strong>: avg 429.5/600 &mdash; 31.6 marks above district average of 397.9, the highest of any religious group. Christian community (389.0) slightly below average. The Muslim community academic success model warrants study for replication.</li>
+<li>MBC community (4.4% failure) significantly better than SC (11.6%) &mdash; despite similar socioeconomic profiles in some areas, suggesting historical reservation access and generational education impact.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>6. Schools Requiring Urgent Intervention</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>GOVT BOYS HR SEC SCHOOL MANALMEDU</strong> &mdash; <span style='background:#FFEBEE;color:#C62828;border-radius:3px;padding:1px 6px;font-weight:700'>37.7% failure</span> (60 of 159 appeared), avg 260/600. Single-sex school with English (18 failures) and Language (12) as primary drivers. Leadership audit and mandatory English lab installation recommended as first steps.</li>
+<li><strong>GHSS KILIYANUR</strong> &mdash; 32.0% failure (24 of 75), avg 254.8/600 &mdash; extremely low school average for a government institution; suggests inadequate teaching staff coverage.</li>
+<li><strong>THAVASUMUTHU NADAR GOVT AIDED HSS</strong> &mdash; 32.4% failure (36 of 111), avg 307.9/600 &mdash; aided school performing worse than government school averages; governance review required.</li>
+<li><strong>TGN MPL HR SEC SCHOOL MAYILADUTHURAI</strong> &mdash; 23.1% failure (53 of 229), avg 287.6/600. Largest urban failure hotspot. English crisis (28 failures, 13.2% rate) &mdash; deploy English communication specialist immediately.</li>
+<li><strong>LMC AIDED HR SEC SCHOOL SIRKALI</strong> &mdash; 27.6% failure (33 of 120), avg 282.3/600. English failures (13) prominent; Commerce subjects also underperforming.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>7. Actionable Recommendations for District Education Office</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>English Emergency Program</strong>: English is the #1 failure driver. Deploy English LSRW (Listening-Speaking-Reading-Writing) labs in all government and municipal schools. Mandatory weekly English conversation practice. Target: reduce English failures by 60% next year.</li>
+<li><strong>MANALMEDU Special Supervision</strong>: Direct DEO monitoring; teacher competency assessment; explore co-education conversion to address single-sex underperformance. Monthly progress reports to District Collector.</li>
+<li><strong>Commerce General Stream Rescue</strong>: 294.6/600 average requires emergency intervention. Accountancy and Commerce teachers need subject-specific professional development. Consider additional tutorial periods for Commerce General students.</li>
+<li><strong>SC Community Equity Plan</strong>: 68.4% of failures from 28.2% of students demands dedicated response. Coordinate with Social Welfare Department: residential coaching, free study materials, parent engagement, and monthly student counselling.</li>
+<li><strong>Male Academic Engagement Study</strong>: Commission a focused investigation into the 36-mark gender gap. Targeted counselling for male students on career goals, economic support schemes, and structured study habits.</li>
+<li><strong>Supplementary Student Priority</strong>: 677 students averaging 309.2/600 need mandatory pre-exam crash courses. These are the easiest pass-rate wins &mdash; structured intervention can convert most failures to passes.</li>
+<li><strong>Practical Learning Expansion</strong>: The 94%+ practical scores vs 50% theory scores in vocational subjects is a pedagogical signal. Expand lab time and project-based assessments across all streams to leverage student strengths.</li>
+</ul>
+
+<h3 style='color:#1B5E20;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#E8F5E9;border-radius:5px;border-left:3px solid #2E7D32'>8. Positive Indicators</h3>
+<ul style='margin:0 0 6px 20px;line-height:1.8'>
+<li><strong>94.8% pass rate</strong> &mdash; Mayiladuthurai performs well at the district level; HSC outcomes are notably better than SSLC, suggesting students who persist through Class X benefit from stronger Class XII preparation.</li>
+<li><strong>Female academic excellence</strong>: 418.3/600 average and strong pass rates district-wide &mdash; female education is thriving and can serve as a peer mentoring resource for male students.</li>
+<li><strong>SF Matric near-perfect outcomes</strong>: 0.4% failure across 7,205 students proves excellence at scale is possible. Governance and teaching model should be documented and replicated where feasible.</li>
+<li><strong>District highest score 596/600</strong> &mdash; extraordinary achievement, within 4 marks of perfection, demonstrating exceptional potential exists in Mayiladuthurai.</li>
+<li><strong>Science stream dominance</strong>: Biology (437.8) and BizMaths (441.9) streams are nationally competitive. Science education infrastructure is strong and should be protected and expanded.</li>
+<li><strong>Muslim community success</strong>: 429.5/600 average above district mean &mdash; a replicable community-level academic success model worth documenting.</li>
+</ul>`;
+// FAILURE ANALYSIS
 function iFA(){
   const sm=D.summary;
   const totalFail=sm.appeared-sm.passed;
@@ -1284,6 +1353,10 @@ function iFA(){
     <td style="text-align:center;font-weight:700;color:${(100-t.pass_rate)>30?"#C62828":(100-t.pass_rate)>15?"#E65100":"#F57F17"}">${(100-t.pass_rate).toFixed(1)}%</td>
     <td style="text-align:center">${t.avg}</td>
   </tr>`).join("");
+  // Show pre-generated analysis
+  const faOut=document.getElementById("fa-out");
+  faOut.innerHTML=FA_HSC_HTML;
+  faOut.style.display="block";
   // Pre-fill saved API key
   const saved=localStorage.getItem("fa_api_key");
   if(saved)document.getElementById("fa-key").value=saved;

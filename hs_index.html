@@ -570,7 +570,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
     <!-- AI Analysis -->
     <div class="card" style="border:2px solid #7C4DFF;background:linear-gradient(135deg,#F3E5F5,#EDE7F6)">
       <div class="ct" style="color:#6A1B9A"><span class="mi material-icons-round" style="color:#7C4DFF;font-size:20px">auto_awesome</span>AI-Powered Failure Analysis <span style="background:#7C4DFF;color:#fff;border-radius:10px;padding:2px 9px;font-size:.67rem;margin-left:6px">Claude AI</span></div>
-      <div style="font-size:.8rem;color:#555;margin-bottom:12px">Enter your Anthropic API key to generate a comprehensive AI analysis of failure patterns, risk factors, and actionable recommendations.</div>
+      <div style="font-size:.8rem;color:#555;margin-bottom:12px">Analysis pre-generated from official result data (May 2026). Optionally regenerate with your own Anthropic API key for a fresh perspective.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
         <input id="fa-key" type="password" placeholder="sk-ant-api03-..." style="flex:1;min-width:280px;padding:9px 13px;border:1px solid #CE93D8;border-radius:8px;font-family:inherit;font-size:.85rem;outline:none;background:#fff;color:#212121"/>
         <button id="fa-btn" onclick="faAI()" style="padding:9px 20px;background:#7C4DFF;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px">
@@ -1115,6 +1115,75 @@ function iRK(){
 setTimeout(()=>{if(document.getElementById("sc-cnt"))document.getElementById("sc-cnt").textContent=`${S.length} of ${S.length} schools`;},200);
 
 // FAILURE ANALYSIS
+const FA_SSLC_HTML=`<div style='background:#EDE7F6;border-radius:6px;padding:8px 14px;margin-bottom:16px;font-size:.82rem;color:#4527A0;border-left:3px solid #7C4DFF;display:flex;align-items:center;gap:8px'><span style='font-size:15px'>&#10003;</span><span><strong>Analysis pre-generated from official March 2026 SSLC results</strong> &mdash; Mayiladuthurai District (234) &bull; 11,985 students &bull; 167 schools &bull; Data: Tamil Nadu State Board</span></div>
+
+<h3 style='color:#4527A0;margin:0 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>1. Executive Summary</h3>
+<p style='margin:0 0 10px;line-height:1.7'>Mayiladuthurai District recorded a <strong>9.5% failure rate</strong> in SSLC March 2026 &mdash; 1,135 of 11,985 students did not pass. While the 90.5% overall pass rate is broadly acceptable, critical disparities demand urgent action: government schools fail at 7&times; the rate of SF Matric schools (16.1% vs 2.2%), the SC community bears 53.6% of all district failures, and male students fail at nearly twice the rate of females (12.6% vs 6.4%). The district average of 326.4/500 (65.3%) indicates significant headroom for improvement, concentrated in specific schools and communities.</p>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>2. Subject-wise Risk Analysis</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Mathematics &mdash; District&apos;s #1 failure driver</strong>: 563 failures (4.7% failure rate), avg 60.9/100. Maths failures appear in 4 of the top 5 worst school-subject combinations and correlate with the lowest-scoring schools district-wide. This signals a district-wide pedagogy gap, not isolated school failures.</li>
+<li><strong>Language (Tamil)</strong>: 407 failures (3.4%), avg 68.1/100. GOVT HR SEC SCHOOL VAITHEESWARANKOIL has a critical Language average of 34.5/100 (below passing) with 32 failures from a single school &mdash; indicating a severe teacher competency crisis at that institution.</li>
+<li><strong>Social Science</strong>: 395 failures (3.3%), avg 63.2/100 &mdash; an underestimated failure driver that co-occurs with Maths failures in the same schools (Pudupatti: 25 Social Science failures alongside 27 Maths failures).</li>
+<li><strong>English &amp; Science</strong> are relative district strengths (1.4% and 1.5% failure rates respectively) &mdash; areas to celebrate and leverage as peer-support anchors.</li>
+<li><strong>Maths-Language failure cluster</strong>: Schools struggling in both subjects simultaneously (Vaitheeswarankoil, Pudupatti, Thirumangalam) need coordinated multi-subject interventions, not single-subject focus.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>3. Institutional Risk Factors</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Municipality schools &mdash; Highest-risk institution type</strong>: 19.5% failure (39 of 200 students) &mdash; nearly 1 in 5. Urban-poor students face intense resource gaps despite city proximity. The small student count (200) makes this a concentrated, solvable problem.</li>
+<li><strong>Government schools</strong>: 691 failures, 16.1% failure rate &mdash; representing <strong>60.9% of all district failures</strong> while serving only 35.8% of students. The resource and governance gap vs private schools is catastrophically wide.</li>
+<li><strong>7.3&times; institutional gap</strong>: SF Matric (2.2%) to Municipality (19.5%) failure rate difference reflects extreme inequity in teaching quality, infrastructure, and student support.</li>
+<li>Fully Aided schools (9.8%) perform worse than Partly Aided (5.3%), suggesting that formal aided status alone does not guarantee accountability or teaching quality.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>4. Demographic Vulnerability</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>SC community</strong>: 608 failures, <strong>14.8% failure rate</strong> &mdash; 53.6% of all failures from 34.3% of students. This disproportionate burden demands SC-specific equity interventions, not general programs.</li>
+<li><strong>SCA community</strong>: <strong>20.6% failure</strong> (7 of 34 students) &mdash; the highest failure rate of any community. Small group but extremely vulnerable; individual-level tracking warranted.</li>
+<li><strong>ST community</strong>: 12.5% failure (5 of 40 students) &mdash; significantly above district average, with limited sample size masking deeper vulnerability.</li>
+<li><strong>Gender gap</strong>: Male students fail at nearly double the female rate &mdash; 749 male failures (12.6%) vs 386 female failures (6.4%). Male average (306.4/500) is 39.7 marks below female average (346.1). This is not a marginal gap &mdash; it represents a systemic male education crisis in the district.</li>
+<li><strong>Positive outlier</strong>: Muslim students average 342.8/500 (above district mean of 326.4), suggesting effective community-level academic support systems worth studying and replicating.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>5. Schools Requiring Urgent Intervention</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>GOVT HR SEC SCHOOL VAITHEESWARANKOIL</strong> &mdash; <span style='background:#FFEBEE;color:#C62828;border-radius:3px;padding:1px 6px;font-weight:700'>55.3% failure</span> (42 of 76 students), avg 195.9/500. Language avg 34.5 (below pass mark), Maths avg 36.8. Requires immediate leadership audit, teacher reassignment, and infrastructure emergency assessment.</li>
+<li><strong>GOVERNMENT HIGHER SECONDARY SCHOOL PUDUPATTI</strong> &mdash; 41.1% failure (46 of 112), avg 237.4/500. Three subjects in failure hotspot: Maths (27), Social Science (25), Language (24) &mdash; every core subject is failing.</li>
+<li><strong>GOVERNMENT HR SEC SCHOOL SRIKANDAPURAM</strong> &mdash; 29.9% failure (49 of 164), avg 259.9/500. Single school accounts for 37 Maths failures &mdash; highest Maths failure count in the district.</li>
+<li><strong>GOVERNMENT HIGHER SECONDARY SCHOOL THIRUMANGALAM</strong> &mdash; 34.6% failure (37 of 107), avg 251/500. Multi-subject failure pattern indicates school-wide systemic breakdown.</li>
+<li><strong>VENKATESA HR SEC SCHOOL AYANGUDIPALLAM</strong> &mdash; 29.3% failure (48 students), Language 31 failures + English 23 failures &mdash; language skills crisis requiring urgent linguistic support program.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>6. Root Cause Hypotheses</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Mathematics pedagogy crisis</strong>: The district-wide 60.9/100 Maths average and 4.7% failure rate are too widespread to be explained by individual school problems. Structural reforms in Maths teaching methodology, textbook support, and teacher training are needed.</li>
+<li><strong>Socioeconomic barriers</strong>: SC, SCA, and ST communities face economic instability (part-time work, household responsibilities, missing school) that directly reduces academic support and study time.</li>
+<li><strong>Rural infrastructure deficit</strong>: The worst-performing schools cluster in rural areas (Vaitheeswarankoil, Pudupatti, Thirumangalam), likely with high teacher vacancy rates, poor facilities, and limited supervision.</li>
+<li><strong>Male education pressures</strong>: Boys may face greater economic and social pressures (part-time employment, early family responsibilities) that reduce study commitment &mdash; explaining the 2&times; higher failure rate.</li>
+<li><strong>Municipal school paradox</strong>: Urban location does not confer educational advantage when students are from migrant/low-income families &mdash; these students need wraparound support, not just classroom instruction.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>7. Actionable Recommendations for District Education Office</h3>
+<ul style='margin:0 0 10px 20px;line-height:1.8'>
+<li><strong>Maths Rescue Task Force</strong>: Deploy district-level Maths specialists to top-10 failure schools for 6-week intensive teacher mentoring. Provide structured lesson plans for Class IX-X transition.</li>
+<li><strong>Top-5 School Emergency Plan</strong>: Place Vaitheeswarankoil, Pudupatti, Srikandapuram, Thirumangalam, and Venkatesa schools under direct DEO monthly monitoring. Leadership accountability reviews, teacher attendance audits.</li>
+<li><strong>SC/SCA/ST Equity Program</strong>: Free residential exam coaching camps; coordinate with Adi Dravidar Welfare Department for targeted scholarships, meal support, and parent engagement.</li>
+<li><strong>Male Student Re-engagement</strong>: Assign school counsellors to identify economically stressed male students. Connect families to government welfare schemes to reduce dropout and part-time work pressures.</li>
+<li><strong>Municipal School Reform</strong>: Conduct infrastructure and governance audit; evaluate merger of underperforming municipal schools with nearby government schools for resource consolidation.</li>
+<li><strong>Peer Excellence Initiative</strong>: Recruit top-100 SF Matric students as volunteer tutors for government school students &mdash; structured weekend sessions with teacher supervision and certification.</li>
+<li><strong>Early Warning System</strong>: Flag students scoring below 40 in any subject in October unit tests for mandatory pre-board remedial classes. Target: zero students reach board exam below 35.</li>
+</ul>
+
+<h3 style='color:#4527A0;margin:14px 0 7px;font-size:.93rem;padding:5px 10px;background:#EDE7F6;border-radius:5px;border-left:3px solid #7C4DFF'>8. Positive Indicators</h3>
+<ul style='margin:0 0 6px 20px;line-height:1.8'>
+<li><strong>21.8% of students scored above 400/500</strong> (Excellent band) &mdash; a significant high-achiever cohort that reflects strong teaching in top schools.</li>
+<li><strong>SF Matric excellence</strong>: Only 2.2% failure across 3,804 students proves district-level high performance is achievable. Governance model worth studying.</li>
+<li><strong>District highest score 497/500</strong> &mdash; near-perfect achievement demonstrates exceptional potential exists in this district.</li>
+<li><strong>Female academic leadership</strong>: 6.4% female failure rate and 346.1/500 average is a district-wide strength to celebrate and build on through targeted female scholarship programs.</li>
+<li><strong>English &amp; Science as anchors</strong>: 1.4% and 1.5% failure rates &mdash; these subjects provide stable foundations for students struggling in Maths and Language.</li>
+</ul>`;
+// FAILURE ANALYSIS
 function iFA(){
   const sm=D.summary;
   const totalFail=sm.appeared-sm.passed;
@@ -1183,6 +1252,10 @@ function iFA(){
     <td style="text-align:center;font-weight:700;color:${(100-t.pass_rate)>30?"#C62828":(100-t.pass_rate)>15?"#E65100":"#F57F17"}">${(100-t.pass_rate).toFixed(1)}%</td>
     <td style="text-align:center">${t.avg}</td>
   </tr>`).join("");
+  // Show pre-generated analysis
+  const faOut=document.getElementById("fa-out");
+  faOut.innerHTML=FA_SSLC_HTML;
+  faOut.style.display="block";
   // Pre-fill saved API key
   const saved=localStorage.getItem("fa_api_key");
   if(saved)document.getElementById("fa-key").value=saved;
