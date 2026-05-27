@@ -722,6 +722,72 @@ tbody td{padding:9px 13px;vertical-align:middle}
       <div id="fa-out" style="background:#fff;border-radius:8px;padding:14px 18px;border:1px solid #CE93D8;min-height:80px;font-size:.85rem;line-height:1.65;color:#212121;white-space:pre-wrap;display:none"></div>
     </div>
   </sec>
+    <sec id="s-tr">
+      <div id="tr-kpi" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct"><span class="mi material-icons-round" style="color:#1565C0">grade</span>Teacher Rating Distribution</div>
+          <div class="cw md"><canvas id="c-tr-grade"></canvas></div>
+          <div id="tr-grade-legend" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:.75rem"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><span class="mi material-icons-round" style="color:#2E7D32">business</span>Avg Teacher Score &amp; Experience by School Type</div>
+          <div class="cw md"><canvas id="c-tr-mgmt"></canvas></div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct"><span class="mi material-icons-round" style="color:#E65100">work</span>Appointment Type Distribution</div>
+          <div class="cw md"><canvas id="c-tr-appt"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="ct"><span class="mi material-icons-round" style="color:#6A1B9A">bar_chart</span>Qualification &amp; Appointment % by School Type</div>
+          <div class="cw md"><canvas id="c-tr-exp"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round" style="color:#00695C">subject</span>Subject-wise Teacher Profile</div>
+        <div class="tw" style="max-height:38vh;overflow:auto"><table>
+          <thead><tr><th>#</th><th style="min-width:140px">Subject</th><th style="text-align:center">Teachers</th><th style="text-align:center">Avg Score</th><th style="text-align:center">Avg Exp (yrs)</th><th style="text-align:center">Regular %</th><th style="text-align:center">PG+ %</th></tr></thead>
+          <tbody id="tr-subj-tbl"></tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round" style="color:#AD1457">school</span>School-wise Teacher Quality</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+          <select id="tr-sch-mgmt" onchange="renderTrSchTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Types</option><option>Govt School</option><option>SF Matric</option><option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option></select>
+          <input id="tr-sch-search" oninput="renderTrSchTbl()" placeholder="Search school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:180px">
+        </div>
+        <div class="tw" style="max-height:44vh;overflow:auto"><table>
+          <thead><tr><th>#</th><th style="min-width:220px">School Name</th><th>Type</th><th style="text-align:center">Staff</th><th style="text-align:center">HS Teachers</th><th style="text-align:center">Regular</th><th style="text-align:center">PG+</th><th style="text-align:center">B.Ed+</th><th style="text-align:center">Avg Exp</th><th style="text-align:center">Avg Score</th><th style="text-align:center">A+/A</th></tr></thead>
+          <tbody id="tr-sch-tbl"></tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round" style="color:#4527A0">person_search</span>Individual Teacher Directory &amp; Ratings</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+          <select id="tr-f-grade" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Grades</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+          <select id="tr-f-tier" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Designations</option><option>PG Teacher</option><option>BT Teacher</option><option>SGT</option><option>Admin</option><option>Primary</option></select>
+          <select id="tr-f-appt" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Appointment Types</option><option>Regular</option><option>Contract</option><option>Part-Time</option></select>
+          <input id="tr-f-search" oninput="renderTrTbl()" placeholder="Search name / subject / school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:200px">
+          <span id="tr-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
+        </div>
+        <div class="tw" style="max-height:55vh;overflow:auto"><table>
+          <thead><tr><th>#</th><th style="min-width:160px">Name</th><th>Designation</th><th style="min-width:110px">Subject</th><th>Type</th><th>Appt</th><th style="text-align:center">Qualification</th><th style="text-align:center">Exp(yr)</th><th style="text-align:center">Score</th><th style="text-align:center">Grade</th><th style="min-width:180px">School</th></tr></thead>
+          <tbody id="tr-tbl"></tbody>
+        </table></div>
+      </div>
+      <div class="card" style="background:#F8F9FA">
+        <div class="ct" style="font-size:.82rem;color:#666"><span class="mi material-icons-round" style="font-size:16px">info</span>Rating Methodology (100 pts)</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:#555;line-height:1.7">
+          <div><strong>Academic Qual (35):</strong> PhD=35 &bull; M.Phil=30 &bull; PG=25 &bull; Graduate=15 &bull; HS=7</div>
+          <div><strong>Professional Qual (25):</strong> M.Ed=25 &bull; B.Ed=20 &bull; D.T.Ed=12 &bull; B.P.Ed=10</div>
+          <div><strong>Experience (25):</strong> 1pt/year, max 25</div>
+          <div><strong>Appointment (15):</strong> Regular=15 &bull; Contract=8 &bull; Part-Time=4</div>
+          <div><strong>Grades:</strong> A+(85+) A(75-84) B(60-74) C(45-59) D(&lt;45)</div>
+        </div>
+      </div>
+    </sec>
 </div>
 
 <script>
@@ -768,7 +834,7 @@ function go(id,el){
   document.querySelectorAll(".ni").forEach(n=>n.classList.remove("active"));
   document.getElementById("s-"+id).classList.add("active");
   el.classList.add("active");
-  const T={ov:"Overview Dashboard",sc:"School Analysis",co:"Community & Gender",sb:"Subject Analysis",tc:"Subject Performance",rk:"Full Rankings",rp:"Reports & Export",fa:"Failure Analysis"};
+  const T={ov:"Overview Dashboard",sc:"School Analysis",co:"Community & Gender",sb:"Subject Analysis",tc:"Subject Performance",rk:"Full Rankings",rp:"Reports & Export",fa:"Failure Analysis",tr:"Teachers Performance"};
   document.getElementById("tb-t").textContent=T[id]||id;
   if(id==="sc"&&!window._sc){iSC();window._sc=1}
   if(id==="co"&&!window._co){iCO();window._co=1}
