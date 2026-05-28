@@ -2338,15 +2338,23 @@ function renderTrSchTbl(){
       "<td style='text-align:center'>"+s.avg_score+"</td></tr>";
   }).join("");
 }
-// ── Firebase init ────────────────────────────────────────────────────────
+// -- Firebase lazy init (safe - never breaks other tabs) --
 var _fbCfg={apiKey:"AIzaSyAmD9ryYF6X0rbtt5bn0mhE2saNGHs9_-0",
   authDomain:"mydeducation-85a2b.firebaseapp.com",
   projectId:"mydeducation-85a2b",
   storageBucket:"mydeducation-85a2b.firebasestorage.app",
   messagingSenderId:"3293931450",
   appId:"1:3293931450:web:f4cf1e761cd276b5279f83"};
-if(!firebase.apps.length) firebase.initializeApp(_fbCfg);
-var _db=firebase.firestore();
+var _db=null;
+function getDb(){
+  if(_db)return _db;
+  try{
+    if(typeof firebase==='undefined')return null;
+    if(!firebase.apps.length) firebase.initializeApp(_fbCfg);
+    _db=firebase.firestore();
+  }catch(e){console.warn('Firebase init failed:',e);}
+  return _db;
+}
 
 // ── Teacher Edit / Firestore (real-time, all devices) ────────────────────
 var _edits={};
@@ -2376,7 +2384,7 @@ function saveTeacher(id){
   var newName=input.value.trim();
   if(!newName)return;
   var data={name:newName,ts:new Date().toISOString()};
-  _db.collection('teacher_edits').doc(String(id)).set(data).catch(function(e){alert('Save failed: '+e.message);});
+  var db=getDb();if(db)db.collection('teacher_edits').doc(String(id)).set(data).catch(function(e){console.warn('Firestore save failed:',e);});
   _edits[id]=data;
   var t=window._td&&window._td.teachers.find(function(x){return String(x.id)===String(id);});
   if(t) t.name=newName;
@@ -2393,7 +2401,7 @@ function cancelEdit(id,orig){
   if(editBtn) editBtn.innerHTML="<span class='mi material-icons-round' style='font-size:15px;color:#999;cursor:pointer' onclick='editTeacher(""+id+"")'>edit</span>";
 }
 function deleteAdded(id){
-  _db.collection('teacher_added').doc(String(id)).delete().catch(function(e){alert('Delete failed: '+e.message);});
+  var db=getDb();if(db)db.collection('teacher_added').doc(String(id)).delete().catch(function(e){console.warn('Firestore delete failed:',e);});
   _added=_added.filter(function(t){return t.id!==id;});
   if(window._td) window._td.teachers=window._td.teachers.filter(function(t){return t.id!==id;});
   updateEditCount();
@@ -2437,7 +2445,7 @@ function confirmAdd(){
     score:score,grade:score>=85?'A+':score>=75?'A':score>=60?'B':score>=45?'C':'D',
     exp:null,age:null,school_pass:null,subj_pass:null,outcome_score:null,
     mgmt:'Others',tier:'Other',_custom:true,ts:new Date().toISOString()};
-  _db.collection('teacher_added').doc(id).set(newT).catch(function(e){alert('Save failed: '+e.message);});
+  var db=getDb();if(db)db.collection('teacher_added').doc(id).set(newT).catch(function(e){console.warn('Firestore add failed:',e);});
   _added.push(newT);
   if(window._td) window._td.teachers.push(newT);
   updateEditCount();
@@ -2467,8 +2475,10 @@ function exportEdits(){
 }
 function applyStoredEdits(){
   if(!window._td)return;
+  var db=getDb();
+  if(!db){console.warn('Firebase unavailable - edits will not sync');return;}
   // Real-time listener: name edits
-  _db.collection('teacher_edits').onSnapshot(function(snap){
+  db.collection('teacher_edits').onSnapshot(function(snap){
     _edits={};
     snap.forEach(function(doc){_edits[doc.id]=doc.data();});
     if(window._td){
@@ -2481,7 +2491,7 @@ function applyStoredEdits(){
     if(window._td){renderTrSubjTbl();renderTrTbl();}
   },function(err){console.warn('Firestore edits error:',err);});
   // Real-time listener: added teachers
-  _db.collection('teacher_added').onSnapshot(function(snap){
+  db.collection('teacher_added').onSnapshot(function(snap){
     var fresh=snap.docs.map(function(d){return Object.assign({},d.data(),{id:d.id,_custom:true});});
     if(window._td){
       window._td.teachers=window._td.teachers.filter(function(t){return !t._custom;});
