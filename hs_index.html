@@ -768,6 +768,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
       </select>
       <input id="tr-subj-search" oninput="renderTrSubjTbl()" placeholder="Search teacher / school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:160px">
       <span id="tr-subj-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer;white-space:nowrap"><input type="checkbox" id="tr-subj-hide-blank" onchange="renderTrSubjTbl()" style="cursor:pointer"> SSLC data only</label>
     </div>
     <div class="tw" style="max-height:44vh;overflow:auto"><table>
       <thead><tr>
@@ -2290,17 +2291,16 @@ function renderTrSubjTbl(){
   var subj=document.getElementById("tr-subj-sel").value;
   var appt=document.getElementById("tr-subj-appt").value;
   var srch=(document.getElementById("tr-subj-search").value||"").toLowerCase();
-  // Match teachers whose subject maps to the selected SSLC subject
+  var hideBlank=document.getElementById("tr-subj-hide-blank")&&document.getElementById("tr-subj-hide-blank").checked;
   var SUBJ_MAP={
     "MATHEMATICS":"Mathematics","MATHS":"Mathematics","MATH":"Mathematics","ALGEBRA":"Mathematics","ARITHMETIC":"Mathematics",
     "ENGLISH":"English","ENGLISH LITERATURE":"English","ENGLISH LANGUAGE":"English",
-    "TAMIL":"Tamil","TAMIL LITERATURE":"Tamil","TAMIL LANGUAGE":"Tamil","LANGUAGE":"Tamil",
-    "SCIENCE":"Science","PHYSICS":"Physics","CHEMISTRY":"Chemistry","BIOLOGY":"Biology","BOTANY":"Biology","ZOOLOGY":"Biology","NATURAL SCIENCE":"Science",
-    "SOCIAL SCIENCE":"Social Science","HISTORY":"History","GEOGRAPHY":"Geography","CIVICS":"Social Science","ECONOMICS":"Economics","POLITICAL SCIENCE":"Social Science",
-    "COMMERCE":"Commerce"
+    "TAMIL":"Tamil","TAMIL LITERATURE":"Tamil","TAMIL LANGUAGE":"Tamil","LANGUAGE":"Tamil","LANGUAGE (TAMIL)":"Tamil","LANGUAGE TAMIL":"Tamil",
+    "SCIENCE":"Science","PHYSICS":"Physics","CHEMISTRY":"Chemistry","BIOLOGY":"Biology","BOTANY":"Biology","ZOOLOGY":"Biology","NATURAL SCIENCE":"Science","ENVIRONMENTAL SCIENCE":"Science",
+    "SOCIAL SCIENCE":"Social Science","HISTORY":"History","GEOGRAPHY":"Geography","CIVICS":"Social Science","ECONOMICS":"Economics","POLITICAL SCIENCE":"Social Science","SOCIAL":"Social Science",
+    "COMPUTER SCIENCE":"Computer Science","COMMERCE":"Commerce","ACCOUNTANCY":"Accountancy"
   };
   var rows=td.teachers.filter(function(t){
-    // Direct match OR mapped subject match
     var tsubj=t.subj.trim();
     var mapped=SUBJ_MAP[tsubj.toUpperCase()];
     return tsubj===subj||mapped===subj||tsubj.toLowerCase()===subj.toLowerCase();
@@ -2309,24 +2309,27 @@ function renderTrSubjTbl(){
   if(srch)rows=rows.filter(function(t){
     return t.name.toLowerCase().indexOf(srch)!==-1||t.school.toLowerCase().indexOf(srch)!==-1;
   });
-  // Sort: teachers WITH outcome first (by subj_pass desc), then by school_pass, then no data
+  if(hideBlank)rows=rows.filter(function(t){return t.school_pass!=null;});
   rows.sort(function(a,b){
-    var ap=a.subj_pass!=null?a.subj_pass:(a.school_pass!=null?a.school_pass-0.001:-1);
-    var bp=b.subj_pass!=null?b.subj_pass:(b.school_pass!=null?b.school_pass-0.001:-1);
+    var ap=a.subj_pass!=null?a.subj_pass+1000:(a.school_pass!=null?a.school_pass+500:-1);
+    var bp=b.subj_pass!=null?b.subj_pass+1000:(b.school_pass!=null?b.school_pass+500:-1);
     return bp-ap;
   });
-  document.getElementById("tr-subj-count").textContent=rows.length+" teachers";
-  var show=rows.slice(0,300);
+  var withData=rows.filter(function(t){return t.school_pass!=null;}).length;
+  document.getElementById("tr-subj-count").textContent=
+    rows.length+" teachers ("+withData+" with SSLC outcome data)";
+  var show=rows.slice(0,400);
   document.getElementById("tr-subj-tbl").innerHTML=show.map(function(t,i){
     var effPass=t.subj_pass!=null?t.subj_pass:t.school_pass;
     var g=outGrade(effPass);
-    var gradeCell=g?"<span style='font-weight:700;color:"+outClr(g)+";background:"+outBg(g)+";padding:2px 7px;border-radius:4px'>"+g+"</span>":"<span style='color:#bbb;font-size:.75rem'>N/A</span>";
+    var gradeCell=g?"<span style='font-weight:700;color:"+outClr(g)+";background:"+outBg(g)+";padding:2px 7px;border-radius:4px'>"+g+"</span>":
+      "<span style='color:#bbb;font-size:.72rem;font-style:italic'>No SSLC<br>data</span>";
     var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
     var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
-    var rank=i+1;
-    var rankStyle=rank===1?"color:#F57F17;font-weight:700":rank===2?"color:#757575;font-weight:600":rank===3?"color:#8D6E63;font-weight:600":"color:#aaa";
-    return "<tr>"+
-      "<td style='"+rankStyle+"'>"+rank+"</td>"+
+    var rankStyle=i===0?"color:#F57F17;font-weight:700":i===1?"color:#757575;font-weight:600":i===2?"color:#8D6E63;font-weight:600":"color:#aaa";
+    var rowStyle=t.school_pass==null?"background:#FAFAFA;":"";
+    return "<tr style='"+rowStyle+"'>"+
+      "<td style='"+rankStyle+"'>"+(i+1)+"</td>"+
       "<td style='font-weight:600;color:#212121'>"+t.name+"</td>"+
       "<td style='font-size:.78rem;color:#555'>"+t.desg+"</td>"+
       "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
@@ -2339,6 +2342,7 @@ function renderTrSubjTbl(){
       "<td style='font-size:.78rem;color:#777'>"+t.block+"</td></tr>";
   }).join("");
 }
+
 function renderTrSchTbl(){
   var td=window._td;
   if(!td)return;
