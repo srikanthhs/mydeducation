@@ -709,6 +709,28 @@ tbody td{padding:5px 10px;vertical-align:middle}
         <strong>Pass criteria:</strong> Theory (M04A) &ge; 16/75 <em>AND</em> Practical (M04B) &ge; 20/25 &mdash; A student fails Science if either component is below minimum, even if combined score &ge; 35.
       </div>
     </div>
+    
+    <!-- NEW: Score Distribution + Hidden Failures + Religion -->
+    <div class="g2">
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round" style="color:#1565C0">bar_chart</span>Score Band Distribution &mdash; How 11,985 Students Spread</div>
+        <div class="cw md"><canvas id="c-fa-bkt"></canvas></div>
+        <div style="font-size:.72rem;color:#555;margin-top:8px;padding:6px 10px;background:#E3F2FD;border-radius:5px;border-left:3px solid #1565C0"><strong>Key insight:</strong> SSLC pass is per-subject, not total score. Students can fail while scoring 250+ overall if they fall below the minimum in any single subject.</div>
+      </div>
+      <div class="card">
+        <div class="ct"><span class="mi material-icons-round" style="color:#6A1B9A">visibility_off</span>Hidden &amp; At-Risk Students</div>
+        <div id="fa-hidden-kpi" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+        <div style="font-size:.75rem;font-weight:600;color:#555;margin-bottom:6px">Religion-wise Average Score / 500</div>
+        <div class="cw md"><canvas id="c-fa-rel"></canvas></div>
+      </div>
+    </div>
+    <!-- NEW: Score Spread in High-Failure Schools -->
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round" style="color:#6A1B9A">compare_arrows</span>Score Inequality in High-Failure Schools &mdash; Lowest to Highest Score Range (Top 20 by Failures)</div>
+      <div class="cw" style="height:420px"><canvas id="c-fa-spread"></canvas></div>
+      <div style="font-size:.72rem;color:#666;margin-top:8px">Bars show the full score range within each school (lowest scorer &rarr; highest scorer). Wider bars = greater inequality. <span style="color:#C62828;font-weight:700">&bull;</span> &gt;20% fail &nbsp;<span style="color:#E65100;font-weight:700">&bull;</span> 10-20% &nbsp;<span style="color:#F57F17;font-weight:700">&bull;</span> &lt;10%</div>
+    </div>
+
     <!-- AI Analysis -->
     <div class="card" style="border:2px solid #7C4DFF;background:linear-gradient(135deg,#F3E5F5,#EDE7F6)">
       <div class="ct" style="color:#6A1B9A"><span class="mi material-icons-round" style="color:#7C4DFF;font-size:20px">auto_awesome</span>AI-Powered Failure Analysis <span style="background:#7C4DFF;color:#fff;border-radius:10px;padding:2px 9px;font-size:.67rem;margin-left:6px">Claude AI</span></div>
@@ -1791,6 +1813,67 @@ function iFA(){
   // Pre-fill saved API key
   const saved=localStorage.getItem("fa_api_key");
   if(saved)document.getElementById("fa-key").value=saved;
+
+  // NEW: Score Band Distribution
+  var bktClr=["#EF5350","#FF8A65","#FFD54F","#66BB6A","#2E7D32"];
+  var bktBdr=["#C62828","#BF360C","#F57F17","#2E7D32","#1B5E20"];
+  new Chart(document.getElementById("c-fa-bkt"),{type:"bar",data:{
+    labels:BKT.map(function(b){return b.range;}),
+    datasets:[{label:"Students",data:BKT.map(function(b){return b.count;}),
+      backgroundColor:bktClr,borderColor:bktBdr,borderWidth:1.5,borderRadius:5}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:function(ctx){return ctx.parsed.y.toLocaleString()+" students ("+
+      (ctx.parsed.y/sm.appeared*100).toFixed(1)+"%)";}}}},
+    scales:{y:{title:{display:true,text:"Students"},beginAtZero:true},
+            x:{title:{display:true,text:"Total Score / 500"}}}}});
+  // NEW: Hidden Failures KPI
+  var faLowBand=(BKT[0]?BKT[0].count:0)+(BKT[1]?BKT[1].count:0);
+  var faHiddenFails=Math.max(0,totalFail-faLowBand);
+  document.getElementById("fa-hidden-kpi").innerHTML=
+    "<div style='flex:1;min-width:110px;background:#FFF3E0;border-radius:8px;padding:8px 12px;border-left:3px solid #E65100;text-align:center'>"+
+    "<div style='font-size:.67rem;font-weight:700;color:#E65100'>HIDDEN FAILURES</div>"+
+    "<div style='font-size:1.5rem;font-weight:800;color:#E65100'>"+faHiddenFails+"</div>"+
+    "<div style='font-size:.67rem;color:#666'>scored 200+ yet failed a subject</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#FCE4EC;border-radius:8px;padding:8px 12px;border-left:3px solid #AD1457;text-align:center'>"+
+    "<div style='font-size:.67rem;font-weight:700;color:#AD1457'>GIRLS AVG / 500</div>"+
+    "<div style='font-size:1.5rem;font-weight:800;color:#AD1457'>"+sm.avg_f+"</div>"+
+    "<div style='font-size:.67rem;color:#666'>"+((sm.avg_f-sm.avg_m).toFixed(1))+" pts above boys</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#E3F2FD;border-radius:8px;padding:8px 12px;border-left:3px solid #1565C0;text-align:center'>"+
+    "<div style='font-size:.67rem;font-weight:700;color:#1565C0'>BOYS AVG / 500</div>"+
+    "<div style='font-size:1.5rem;font-weight:800;color:#1565C0'>"+sm.avg_m+"</div>"+
+    "<div style='font-size:.67rem;color:#666'>district avg: "+sm.avg+"</div></div>";
+  // NEW: Religion Chart
+  var faRelData=REL.filter(function(r){return r.students>=10;});
+  new Chart(document.getElementById("c-fa-rel"),{type:"bar",data:{
+    labels:faRelData.map(function(r){return r.name+" ("+r.students.toLocaleString()+")"}),
+    datasets:[{label:"Avg Score",data:faRelData.map(function(r){return r.avg;}),
+      backgroundColor:["#CE93D8","#80DEEA","#A5D6A7","#FFCC80"].slice(0,faRelData.length),
+      borderColor:["#6A1B9A","#00695C","#2E7D32","#E65100"].slice(0,faRelData.length),
+      borderWidth:1.5,borderRadius:5}]
+  },options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return "Avg: "+ctx.parsed.x+" / 500";}}}},
+    scales:{x:{title:{display:true,text:"Average Score / 500"},min:290,max:360}}}});
+  // NEW: Score Spread Floating Bar
+  var faSpread=[].concat(S).filter(function(s){return s.failed>=5&&s.high&&s.low;})
+    .sort(function(a,b){return b.failed-a.failed;}).slice(0,20);
+  var faSpreadClr=faSpread.map(function(s){var r=100-s.pass_rate;
+    return r>20?"rgba(198,40,40,.65)":r>10?"rgba(230,81,0,.6)":"rgba(255,160,0,.6)";});
+  var faSpreadBdr=faSpread.map(function(s){var r=100-s.pass_rate;
+    return r>20?"#C62828":r>10?"#E65100":"#F57F17";});
+  new Chart(document.getElementById("c-fa-spread"),{type:"bar",data:{
+    labels:faSpread.map(function(s){return s.name.length>34?s.name.slice(0,32)+String.fromCharCode(8230):s.name;}),
+    datasets:[{label:"Score Range",data:faSpread.map(function(s){return [s.low,s.high];}),
+      backgroundColor:faSpreadClr,borderColor:faSpreadBdr,borderWidth:1.5,borderRadius:4}]
+  },options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){
+      var s=faSpread[ctx.dataIndex];
+      return["Range: "+s.low+" - "+s.high+" (spread: "+(s.high-s.low)+")",
+             "Avg: "+s.avg+" | Fail rate: "+(100-s.pass_rate).toFixed(1)+"%",
+             s.failed+" students failed of "+s.appeared];
+    }}}},
+    scales:{x:{min:0,max:500,title:{display:true,text:"Score / 500"}},
+            y:{ticks:{font:{size:10}}}}}});
+
 }
 
 async function faAI(){
