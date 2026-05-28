@@ -689,9 +689,12 @@ tbody td{padding:9px 13px;vertical-align:middle}
         <input type="checkbox" id="tr-subj-hide-blank" onchange="renderTrSubjTbl()"> SSLC data only
       </label>
       <span id="tr-subj-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
+            <button onclick="addTeacher()" style="padding:6px 12px;border:none;border-radius:6px;background:#1565C0;color:#fff;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:4px"><span class="mi material-icons-round" style="font-size:16px">person_add</span>Add Teacher</button>
+      <button onclick="exportEdits()" style="padding:6px 12px;border:1px solid #ddd;border-radius:6px;background:#fff;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:4px"><span class="mi material-icons-round" style="font-size:16px">download</span>Export Edits</button>
+      <span id="edit-count" style="font-size:.76rem;color:#1565C0;font-weight:600"></span>
     </div>
     <div class="tw" style="max-height:44vh;overflow:auto"><table>
-      <thead><tr><th>#</th><th style="min-width:160px">Teacher Name</th><th>Designation</th><th>Appointment</th><th style="text-align:center">Subj Pass%</th><th style="text-align:center">School Pass%</th><th style="text-align:center">Outcome</th><th style="text-align:center">Qual Score</th><th style="text-align:center">Exp(yr)</th><th style="min-width:180px">School</th><th>Block</th></tr></thead>
+      <thead><tr><th>#</th><th style="min-width:160px">Teacher Name</th><th>Designation</th><th>Appointment</th><th style="text-align:center;width:50px">Edit</th><th style="text-align:center">Subj Pass%</th><th style="text-align:center">School Pass%</th><th style="text-align:center">Outcome</th><th style="text-align:center">Qual Score</th><th style="text-align:center">Exp(yr)</th><th style="min-width:180px">School</th><th>Block</th></tr></thead>
       <tbody id="tr-subj-tbl"></tbody>
     </table></div>
   </div>
@@ -708,7 +711,7 @@ tbody td{padding:9px 13px;vertical-align:middle}
       <span id="tr-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
     </div>
     <div class="tw" style="max-height:52vh;overflow:auto"><table>
-      <thead><tr><th>#</th><th style="min-width:150px">Name</th><th>Designation</th><th>Subject</th><th>Appt</th><th style="text-align:center">Subj Pass%</th><th style="text-align:center">School Pass%</th><th style="text-align:center">Outcome</th><th style="text-align:center">Qual Score</th><th style="text-align:center">Exp(yr)</th><th style="min-width:170px">School</th><th>Block</th></tr></thead>
+      <thead><tr><th>#</th><th style="min-width:150px">Name</th><th>Designation</th><th>Subject</th><th>Appt</th><th style="text-align:center;width:50px">Edit</th><th style="text-align:center">Subj Pass%</th><th style="text-align:center">School Pass%</th><th style="text-align:center">Outcome</th><th style="text-align:center">Qual Score</th><th style="text-align:center">Exp(yr)</th><th style="min-width:170px">School</th><th>Block</th></tr></thead>
       <tbody id="tr-tbl"></tbody>
     </table></div>
   </div>
@@ -1952,6 +1955,7 @@ function renderTR(){
     "<div style='flex:1;min-width:110px;background:#FCE4EC;border-radius:8px;padding:10px 14px;border-left:3px solid #AD1457'><div style='font-size:1.5rem;font-weight:700;color:#AD1457'>"+sm.avg_score+"</div><div style='font-size:.75rem;color:#555'>Avg Qual Score (/100)</div></div>"+
     "<div style='flex:1;min-width:110px;background:#E0F2F1;border-radius:8px;padding:10px 14px;border-left:3px solid #00695C'><div style='font-size:1.5rem;font-weight:700;color:#00695C'>"+sm.avg_exp+"yr</div><div style='font-size:.75rem;color:#555'>Avg Experience</div></div>";
   document.getElementById("f-total").textContent=td.teachers.length.toLocaleString()+" teachers";
+  applyStoredEdits();
   renderTrSchTbl();
   renderTrSubjTbl();
   renderTrTbl();
@@ -2016,6 +2020,141 @@ function renderTrSchTbl(){
       "<td style='text-align:center'>"+s.avg_score+"</td></tr>";
   }).join("");
 }
+// ── Teacher Edit / LocalStorage ──────────────────────────────────────────
+var _edits = JSON.parse(localStorage.getItem('teacher_edits')||'{}');
+var _added = JSON.parse(localStorage.getItem('teacher_added')||'[]');
+
+function saveEdits(){
+  localStorage.setItem('teacher_edits', JSON.stringify(_edits));
+  localStorage.setItem('teacher_added', JSON.stringify(_added));
+  updateEditCount();
+}
+function updateEditCount(){
+  var n=Object.keys(_edits).length+_added.length;
+  var el=document.getElementById('edit-count');
+  if(el) el.textContent=n>0?n+' edit'+(n>1?'s':'')+'  (saved in browser)':'';
+}
+function editTeacher(id){
+  var row=document.querySelector('tr[data-tid="'+id+'"]');
+  if(!row)return;
+  var nameCell=row.querySelector('.editable-name');
+  if(!nameCell)return;
+  var cur=nameCell.textContent;
+  nameCell.innerHTML="<input value='"+cur.replace(/'/g,"&#39;")+"' style='width:100%;padding:3px 6px;border:1px solid #1565C0;border-radius:4px;font-size:.85rem' onkeydown='if(event.key==="Enter")saveTeacher(""+id+"");if(event.key==="Escape")cancelEdit(""+id+"",""+cur.replace(/"/g,'&quot;')+"")' />";
+  nameCell.querySelector('input').focus();
+  var editBtn=row.querySelector('.edit-btn');
+  if(editBtn) editBtn.innerHTML="<span class='mi material-icons-round' style='font-size:15px;color:#2E7D32;cursor:pointer' onclick='saveTeacher(""+id+"")'>check_circle</span> <span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' onclick='cancelEdit(""+id+"",""+cur.replace(/"/g,'&quot;')+"")'>cancel</span>";
+}
+function saveTeacher(id){
+  var row=document.querySelector('tr[data-tid="'+id+'"]');
+  if(!row)return;
+  var input=row.querySelector('.editable-name input');
+  if(!input)return;
+  var newName=input.value.trim();
+  if(!newName)return;
+  _edits[id]={name:newName,ts:new Date().toISOString()};
+  // Update in-memory teacher data too
+  var t=window._td&&window._td.teachers.find(function(t){return t.id===id;});
+  if(t) t.name=newName;
+  saveEdits();
+  renderTrSubjTbl();
+  renderTrTbl();
+}
+function cancelEdit(id, orig){
+  var row=document.querySelector('tr[data-tid="'+id+'"]');
+  if(!row)return;
+  var nameCell=row.querySelector('.editable-name');
+  if(nameCell) nameCell.textContent=orig;
+  var editBtn=row.querySelector('.edit-btn');
+  if(editBtn) editBtn.innerHTML="<span class='mi material-icons-round' style='font-size:15px;color:#999;cursor:pointer' onclick='editTeacher(""+id+"")'>edit</span>";
+}
+function deleteAdded(id){
+  _added=_added.filter(function(t){return t.id!==id;});
+  saveEdits();
+  renderTrSubjTbl();
+  renderTrTbl();
+}
+function addTeacher(){
+  var subj=document.getElementById('tr-subj-sel')?document.getElementById('tr-subj-sel').value:'';
+  var modal=document.createElement('div');
+  modal.id='add-teacher-modal';
+  modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center';
+  modal.innerHTML="<div style='background:#fff;border-radius:12px;padding:24px;min-width:340px;max-width:500px;width:90%'>"
+    +"<div style='font-size:1rem;font-weight:600;margin-bottom:16px;color:#1565C0'>Add Teacher</div>"
+    +"<div style='display:grid;gap:10px'>"
+    +"<input id='at-name' placeholder='Teacher Name *' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"<input id='at-desg' placeholder='Designation' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"<input id='at-subj' placeholder='Subject' value='"+subj+"' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"<input id='at-school' placeholder='School Name *' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"<input id='at-block' placeholder='Block' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"<select id='at-appt' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'><option>Regular</option><option>Contract</option><option>Part-Time</option></select>"
+    +"<input id='at-score' placeholder='Qual Score (0-100)' type='number' min='0' max='100' style='padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem'>"
+    +"</div>"
+    +"<div style='display:flex;gap:10px;margin-top:16px;justify-content:flex-end'>"
+    +"<button onclick='document.getElementById("add-teacher-modal").remove()' style='padding:8px 16px;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:#f5f5f5'>Cancel</button>"
+    +"<button onclick='confirmAdd()' style='padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#1565C0;color:#fff'>Add</button>"
+    +"</div></div>";
+  document.body.appendChild(modal);
+  document.getElementById('at-name').focus();
+}
+function confirmAdd(){
+  var name=document.getElementById('at-name').value.trim();
+  var school=document.getElementById('at-school').value.trim();
+  if(!name||!school){alert('Name and School are required');return;}
+  var id='custom_'+Date.now();
+  var score=parseInt(document.getElementById('at-score').value)||0;
+  var newT={
+    id:id, name:name,
+    desg:document.getElementById('at-desg').value.trim()||'Teacher',
+    subj:document.getElementById('at-subj').value.trim()||'General',
+    school:school, block:document.getElementById('at-block').value.trim()||'',
+    appt:document.getElementById('at-appt').value,
+    score:score, grade:score>=85?'A+':score>=75?'A':score>=60?'B':score>=45?'C':'D',
+    exp:null, age:null, school_pass:null, subj_pass:null, outcome_score:null,
+    mgmt:'Others', tier:'Other', _custom:true, ts:new Date().toISOString()
+  };
+  _added.push(newT);
+  if(window._td) window._td.teachers.push(newT);
+  saveEdits();
+  document.getElementById('add-teacher-modal').remove();
+  renderTrSubjTbl();
+  renderTrTbl();
+}
+function exportEdits(){
+  var td=window._td; if(!td)return;
+  var rows=[['ID','Name','Designation','Subject','School','Block','Appointment','Subj Pass%','School Pass%','Outcome','Qual Score','Exp','Custom/Edited']];
+  var edited=Object.keys(_edits);
+  var customIds=_added.map(function(t){return t.id;});
+  td.teachers.forEach(function(t){
+    if(!edited.includes(t.id)&&!customIds.includes(t.id))return;
+    var effPass=t.subj_pass!=null?t.subj_pass:t.school_pass;
+    rows.push([t.id,t.name,t.desg,t.subj,t.school,t.block,t.appt,
+      t.subj_pass!=null?t.subj_pass:'',
+      t.school_pass!=null?t.school_pass:'',
+      effPass!=null?outGrade(effPass):'N/A',
+      t.score,t.exp!=null?t.exp:'',
+      t._custom?'Added':'Edited']);
+  });
+  var csv=rows.map(function(r){return r.map(function(v){return '"'+(v+'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='teacher_edits_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+// Apply saved edits to in-memory data on load
+function applyStoredEdits(){
+  if(!window._td)return;
+  Object.keys(_edits).forEach(function(id){
+    var t=window._td.teachers.find(function(t){return t.id===id;});
+    if(t) t.name=_edits[id].name;
+  });
+  _added.forEach(function(t){
+    if(!window._td.teachers.find(function(x){return x.id===t.id;}))
+      window._td.teachers.push(t);
+  });
+  updateEditCount();
+}
 function renderTrSubjTbl(){
   var td=window._td; if(!td)return;
   var f=getFilters();
@@ -2047,11 +2186,15 @@ function renderTrSubjTbl(){
     var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
     var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
     var rs=i===0?"color:#F57F17;font-weight:700":i===1?"color:#757575;font-weight:600":i===2?"color:#8D6E63;font-weight:600":"color:#aaa";
-    return "<tr style='"+(t.school_pass==null?"background:#FAFAFA;":"")+"'>"+
+    return "<tr data-tid='"+t.id+"' style='"+(t.school_pass==null?"background:#FAFAFA;":"")+"'>"+
+      var editedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
+      var customMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+new</span>":"";
+      var editBtn=t._custom?"<span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' title='Remove' onclick='deleteAdded(""+t.id+"")'>delete</span>":"<span class='mi material-icons-round' style='font-size:15px;color:#90A4AE;cursor:pointer' title='Edit name' onclick='editTeacher(""+t.id+"")'>edit</span>";
       "<td style='"+rs+"'>"+(i+1)+"</td>"+
-      "<td style='font-weight:600'>"+t.name+"</td>"+
+      "<td class='editable-name' style='font-weight:600'>"+t.name+editedMark+customMark+"</td>"+
       "<td style='font-size:.78rem;color:#555'>"+t.desg+"</td>"+
       "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
+      "<td class='edit-btn' style='text-align:center'>"+editBtn+"</td>"+
       "<td style='text-align:center'>"+pBar(t.subj_pass)+"</td>"+
       "<td style='text-align:center'>"+pBar(t.school_pass)+"</td>"+
       "<td style='text-align:center'>"+gradeCell+"</td>"+
@@ -2079,9 +2222,12 @@ function renderTrTbl(){
     var gradeCell=g?"<span style='font-weight:700;color:"+outClr(g)+";background:"+outBg(g)+";padding:2px 8px;border-radius:4px'>"+g+"</span>":"<span style='color:#bbb;font-size:.75rem'>N/A</span>";
     var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
     var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
-    return "<tr>"+
+    var dEditedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
+    var dCustomMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+</span>":"";
+    var dEditBtn=t._custom?"<span class='mi material-icons-round' style='font-size:14px;color:#C62828;cursor:pointer' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:14px;color:#90A4AE;cursor:pointer' title='Edit' onclick='editTeacher(\""+t.id+"\")'>edit</span>";
+    return "<tr data-tid='"+t.id+"'>"+
       "<td style='color:#888'>"+(i+1)+"</td>"+
-      "<td style='font-weight:500'>"+t.name+"</td>"+
+      "<td style='font-weight:500'>"+t.name+dEditedMark+dCustomMark+"</td>"+
       "<td style='font-size:.78rem'>"+t.desg+"</td>"+
       "<td>"+t.subj+"</td>"+
       "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
@@ -2091,7 +2237,8 @@ function renderTrTbl(){
       "<td style='text-align:center'>"+t.score+"</td>"+
       "<td style='text-align:center'>"+(t.exp!=null?t.exp:"&#8212;")+"</td>"+
       "<td style='font-size:.8rem'>"+t.school+"</td>"+
-      "<td style='font-size:.78rem;color:#777'>"+t.block+"</td></tr>";
+      "<td style='font-size:.78rem;color:#777'>"+t.block+"</td>"+
+      "<td class='edit-btn' style='text-align:center'>"+dEditBtn+"</td></tr>";
   }).join("");
 }
 
