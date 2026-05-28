@@ -2217,10 +2217,10 @@ function renderTrSubjTbl(){
     var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
     var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
     var rs=i===0?"color:#F57F17;font-weight:700":i===1?"color:#757575;font-weight:600":i===2?"color:#8D6E63;font-weight:600":"color:#aaa";
+    var editedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
+    var customMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+new</span>":"";
+    var editBtn=t._custom?"<span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' title='Remove' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:15px;color:#90A4AE;cursor:pointer' title='Edit name' onclick='editTeacher(\""+t.id+"\")'>edit</span>";
     return "<tr data-tid='"+t.id+"' style='"+(t.school_pass==null?"background:#FAFAFA;":"")+"'>"+
-      var editedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
-      var customMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+new</span>":"";
-      var editBtn=t._custom?"<span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' title='Remove' onclick='deleteAdded(""+t.id+"")'>delete</span>":"<span class='mi material-icons-round' style='font-size:15px;color:#90A4AE;cursor:pointer' title='Edit name' onclick='editTeacher(""+t.id+"")'>edit</span>";
       "<td style='"+rs+"'>"+(i+1)+"</td>"+
       "<td class='editable-name' style='font-weight:600'>"+t.name+editedMark+customMark+"</td>"+
       "<td style='font-size:.78rem;color:#555'>"+t.desg+"</td>"+
