@@ -655,25 +655,22 @@ tbody td{padding:9px 13px;vertical-align:middle}
       <input id="f-search" oninput="applyFilters()" placeholder="&#128269; Search teacher / school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.82rem;flex:1;min-width:200px;background:#FAFAFA">
       <button onclick="clearFilters()" style="padding:6px 12px;border:1px solid #ddd;border-radius:6px;font-size:.82rem;background:#F5F5F5;cursor:pointer;color:#555">Clear</button>
       <span id="f-total" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
-    </div>
   </div>
-  <div class="g2" style="margin-bottom:16px">
-    <div class="card">
+  <div class="card" style="margin-bottom:16px">
       <div class="ct"><span class="mi material-icons-round" style="color:#1565C0">bar_chart</span>School SSLC Outcome &mdash; Subject-wise Pass Rates</div>
       <div style="font-size:.76rem;color:#888;margin-bottom:8px">HS schools matched to SSLC 2026 &mdash; sorted by overall pass rate</div>
       <div class="tw" style="max-height:42vh;overflow:auto"><table>
         <thead><tr><th>#</th><th style="min-width:200px">School</th><th>Type</th><th style="text-align:center">Students</th><th style="text-align:center">Overall%</th><th style="text-align:center">Lang%</th><th style="text-align:center">Eng%</th><th style="text-align:center">Maths%</th><th style="text-align:center">Sci%</th><th style="text-align:center">SS%</th><th style="text-align:center">Teachers</th><th style="text-align:center">Avg Qual</th></tr></thead>
         <tbody id="tr-sch-tbl"></tbody>
       </table></div>
-    </div>
-    <div class="card">
+  </div>
+  <div class="card" style="margin-bottom:16px">
       <div class="ct"><span class="mi material-icons-round" style="color:#2E7D32">insights</span>Subject Pass Rate vs Teacher Qualification</div>
       <div class="cw" style="height:230px"><canvas id="c-tr-subj"></canvas></div>
       <div style="margin-top:14px">
         <div class="ct" style="font-size:.82rem"><span class="mi material-icons-round" style="font-size:16px;color:#E65100">pie_chart</span>Appointment Type Distribution</div>
         <div class="cw" style="height:150px"><canvas id="c-tr-appt"></canvas></div>
       </div>
-    </div>
   </div>
   <div class="card" style="margin-bottom:16px">
     <div class="ct"><span class="mi material-icons-round" style="color:#00695C">format_list_numbered</span>Subject-wise Teacher Ranking &mdash; by Subject Pass Rate</div>
@@ -2049,8 +2046,8 @@ function updateEditCount(){
   var el=document.getElementById('edit-count');
   if(el) el.textContent=n>0?n+' edit'+(n>1?'s':'')+' ✔ synced':'';
 }
-function editTeacher(id){
-  var row=document.querySelector('tr[data-tid="'+id+'"]');
+function editTeacher(id,el){
+  var row=el?el.closest('tr'):document.querySelector('tr[data-tid="'+id+'"]');
   if(!row)return;
   var nameCell=row.querySelector('.editable-name');
   if(!nameCell)return;
@@ -2266,7 +2263,7 @@ function renderTrSubjTbl(){
     var rs=i===0?"color:#F57F17;font-weight:700":i===1?"color:#757575;font-weight:600":i===2?"color:#8D6E63;font-weight:600":"color:#aaa";
     var editedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
     var customMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+new</span>":"";
-    var editBtn=t._custom?"<span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' title='Remove' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:15px;color:#90A4AE;cursor:pointer' title='Edit name' onclick='editTeacher(\""+t.id+"\")'>edit</span>";
+    var editBtn=t._custom?"<span class='mi material-icons-round' style='font-size:15px;color:#C62828;cursor:pointer' title='Remove' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:15px;color:#90A4AE;cursor:pointer' title='Edit name' onclick='editTeacher(\""+t.id+"\",this)'>edit</span>";
     return "<tr data-tid='"+t.id+"' style='"+(t.school_pass==null?"background:#FAFAFA;":"")+"'>"+
       "<td style='"+rs+"'>"+(i+1)+"</td>"+
       "<td class='editable-name' style='font-weight:600'>"+t.name+editedMark+customMark+"</td>"+
@@ -2302,7 +2299,7 @@ function renderTrTbl(){
     var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
     var dEditedMark=_edits[t.id]?"<span style='font-size:.65rem;color:#1565C0'>&#9998;</span>":"";
     var dCustomMark=t._custom?"<span style='font-size:.65rem;background:#E3F2FD;color:#1565C0;border-radius:3px;padding:1px 3px;margin-left:2px'>+</span>":"";
-    var dEditBtn=t._custom?"<span class='mi material-icons-round' style='font-size:14px;color:#C62828;cursor:pointer' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:14px;color:#90A4AE;cursor:pointer' title='Edit' onclick='editTeacher(\""+t.id+"\")'>edit</span>";
+    var dEditBtn=t._custom?"<span class='mi material-icons-round' style='font-size:14px;color:#C62828;cursor:pointer' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:14px;color:#90A4AE;cursor:pointer' title='Edit' onclick='editTeacher(\""+t.id+"\",this)'>edit</span>";
     return "<tr data-tid='"+t.id+"'>"+
       "<td style='color:#888'>"+(i+1)+"</td>"+
       "<td style='font-weight:500'>"+t.name+dEditedMark+dCustomMark+"</td>"+
