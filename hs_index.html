@@ -2618,18 +2618,18 @@ function renderTrTbl(){
     var dEditBtn=t._custom?"<span class='mi material-icons-round' style='font-size:14px;color:#C62828;cursor:pointer' onclick='deleteAdded(\""+t.id+"\")'>delete</span>":"<span class='mi material-icons-round' style='font-size:14px;color:#90A4AE;cursor:pointer' title='Edit' onclick='editTeacher(\""+t.id+"\",this)'>edit</span>";
     return "<tr data-tid='"+t.id+"'>"+
       "<td style='color:#888'>"+(i+1)+"</td>"+
-      "<td style='font-weight:500'>"+t.name+dEditedMark+dCustomMark+"</td>"+
+      "<td class='editable-name' style='font-weight:500'>"+t.name+dEditedMark+dCustomMark+"</td>"+
       "<td style='font-size:.78rem'>"+t.desg+"</td>"+
       "<td>"+t.subj+"</td>"+
       "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
+      "<td class='edit-btn' style='text-align:center'>"+dEditBtn+"</td>"+
       "<td style='text-align:center'>"+pBar(t.subj_pass)+"</td>"+
       "<td style='text-align:center'>"+pBar(t.school_pass)+"</td>"+
       "<td style='text-align:center'>"+gradeCell+"</td>"+
       "<td style='text-align:center'>"+t.score+"</td>"+
       "<td style='text-align:center'>"+(t.exp!=null?t.exp:"&#8212;")+"</td>"+
       "<td style='font-size:.8rem'>"+t.school+"</td>"+
-      "<td style='font-size:.78rem;color:#777'>"+t.block+"</td>"+
-      "<td class='edit-btn' style='text-align:center'>"+dEditBtn+"</td></tr>";
+      "<td style='font-size:.78rem;color:#777'>"+t.block+"</td></tr>";
   }).join("");
 }
 
