@@ -723,71 +723,66 @@ tbody td{padding:9px 13px;vertical-align:middle}
     </div>
   </sec>
     <sec id="s-tr">
-      <div id="tr-kpi" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
-      <div class="g2">
-        <div class="card">
-          <div class="ct"><span class="mi material-icons-round" style="color:#1565C0">grade</span>Teacher Rating Distribution</div>
-          <div class="cw md"><canvas id="c-tr-grade"></canvas></div>
-          <div id="tr-grade-legend" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:.75rem"></div>
-        </div>
-        <div class="card">
-          <div class="ct"><span class="mi material-icons-round" style="color:#2E7D32">business</span>Avg Teacher Score &amp; Experience by School Type</div>
-          <div class="cw md"><canvas id="c-tr-mgmt"></canvas></div>
-        </div>
+  <div id="tr-kpi" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round" style="color:#1565C0">bar_chart</span>School SSLC Outcome — Subject-wise Pass Rates</div>
+      <div style="margin-bottom:8px;font-size:.78rem;color:#666">Higher Secondary schools matched to SSLC 2026 results &mdash; sorted by overall pass rate</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+        <select id="tr-sch-mgmt" onchange="renderTrSchTbl()" style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem"><option value="">All Types</option><option>Govt School</option><option>SF Matric</option><option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option></select>
+        <input id="tr-sch-search" oninput="renderTrSchTbl()" placeholder="Search school..." style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem;flex:1;min-width:160px">
       </div>
-      <div class="g2">
-        <div class="card">
-          <div class="ct"><span class="mi material-icons-round" style="color:#E65100">work</span>Appointment Type Distribution</div>
-          <div class="cw md"><canvas id="c-tr-appt"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="ct"><span class="mi material-icons-round" style="color:#6A1B9A">bar_chart</span>Qualification &amp; Appointment % by School Type</div>
-          <div class="cw md"><canvas id="c-tr-exp"></canvas></div>
-        </div>
+      <div class="tw" style="max-height:42vh;overflow:auto"><table>
+        <thead><tr><th>#</th><th style="min-width:200px">School</th><th>Type</th><th style="text-align:center">Students</th><th style="text-align:center">Overall%</th><th style="text-align:center">Lang%</th><th style="text-align:center">Eng%</th><th style="text-align:center">Maths%</th><th style="text-align:center">Sci%</th><th style="text-align:center">SS%</th><th style="text-align:center">Teachers</th><th style="text-align:center">Avg Qual</th></tr></thead>
+        <tbody id="tr-sch-tbl"></tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="ct"><span class="mi material-icons-round" style="color:#2E7D32">insights</span>Subject Pass Rate vs Teacher Qualification Score</div>
+      <div class="cw" style="height:230px"><canvas id="c-tr-subj"></canvas></div>
+      <div style="margin-top:14px">
+        <div class="ct" style="font-size:.82rem"><span class="mi material-icons-round" style="font-size:16px;color:#E65100">pie_chart</span>Appointment Type (Outcome Schools)</div>
+        <div class="cw" style="height:150px"><canvas id="c-tr-appt"></canvas></div>
       </div>
-      <div class="card">
-        <div class="ct"><span class="mi material-icons-round" style="color:#00695C">subject</span>Subject-wise Teacher Profile</div>
-        <div class="tw" style="max-height:38vh;overflow:auto"><table>
-          <thead><tr><th>#</th><th style="min-width:140px">Subject</th><th style="text-align:center">Teachers</th><th style="text-align:center">Avg Score</th><th style="text-align:center">Avg Exp (yrs)</th><th style="text-align:center">Regular %</th><th style="text-align:center">PG+ %</th></tr></thead>
-          <tbody id="tr-subj-tbl"></tbody>
-        </table></div>
-      </div>
-      <div class="card">
-        <div class="ct"><span class="mi material-icons-round" style="color:#AD1457">school</span>School-wise Teacher Quality</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-          <select id="tr-sch-mgmt" onchange="renderTrSchTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Types</option><option>Govt School</option><option>SF Matric</option><option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option></select>
-          <input id="tr-sch-search" oninput="renderTrSchTbl()" placeholder="Search school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:180px">
-        </div>
-        <div class="tw" style="max-height:44vh;overflow:auto"><table>
-          <thead><tr><th>#</th><th style="min-width:220px">School Name</th><th>Type</th><th style="text-align:center">Staff</th><th style="text-align:center">HS Teachers</th><th style="text-align:center">Regular</th><th style="text-align:center">PG+</th><th style="text-align:center">B.Ed+</th><th style="text-align:center">Avg Exp</th><th style="text-align:center">Avg Score</th><th style="text-align:center">A+/A</th></tr></thead>
-          <tbody id="tr-sch-tbl"></tbody>
-        </table></div>
-      </div>
-      <div class="card">
-        <div class="ct"><span class="mi material-icons-round" style="color:#4527A0">person_search</span>Individual Teacher Directory &amp; Ratings</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-          <select id="tr-f-grade" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Grades</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
-          <select id="tr-f-tier" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Designations</option><option>PG Teacher</option><option>BT Teacher</option><option>SGT</option><option>Admin</option><option>Primary</option></select>
-          <select id="tr-f-appt" onchange="renderTrTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem"><option value="">All Appointment Types</option><option>Regular</option><option>Contract</option><option>Part-Time</option></select>
-          <input id="tr-f-search" oninput="renderTrTbl()" placeholder="Search name / subject / school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:200px">
-          <span id="tr-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
-        </div>
-        <div class="tw" style="max-height:55vh;overflow:auto"><table>
-          <thead><tr><th>#</th><th style="min-width:160px">Name</th><th>Designation</th><th style="min-width:110px">Subject</th><th>Type</th><th>Appt</th><th style="text-align:center">Qualification</th><th style="text-align:center">Exp(yr)</th><th style="text-align:center">Score</th><th style="text-align:center">Grade</th><th style="min-width:180px">School</th></tr></thead>
-          <tbody id="tr-tbl"></tbody>
-        </table></div>
-      </div>
-      <div class="card" style="background:#F8F9FA">
-        <div class="ct" style="font-size:.82rem;color:#666"><span class="mi material-icons-round" style="font-size:16px">info</span>Rating Methodology (100 pts)</div>
-        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:#555;line-height:1.7">
-          <div><strong>Academic Qual (35):</strong> PhD=35 &bull; M.Phil=30 &bull; PG=25 &bull; Graduate=15 &bull; HS=7</div>
-          <div><strong>Professional Qual (25):</strong> M.Ed=25 &bull; B.Ed=20 &bull; D.T.Ed=12 &bull; B.P.Ed=10</div>
-          <div><strong>Experience (25):</strong> 1pt/year, max 25</div>
-          <div><strong>Appointment (15):</strong> Regular=15 &bull; Contract=8 &bull; Part-Time=4</div>
-          <div><strong>Grades:</strong> A+(85+) A(75-84) B(60-74) C(45-59) D(&lt;45)</div>
-        </div>
-      </div>
-    </sec>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct"><span class="mi material-icons-round" style="color:#4527A0">person_search</span>Teacher Outcome Rating &mdash; by Subject Pass Rate at Their School (SSLC 2026)</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+      <select id="tr-f-outcome" onchange="renderTrTbl()" style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem">
+        <option value="">All Outcome Grades</option>
+        <option value="A+">A+ (&ge;95% pass)</option>
+        <option value="A">A (&ge;85%)</option>
+        <option value="B">B (&ge;75%)</option>
+        <option value="C">C (&ge;65%)</option>
+        <option value="D">D (&lt;65%)</option>
+        <option value="none">No SSLC Data</option>
+      </select>
+      <select id="tr-f-subj" onchange="renderTrTbl()" style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem">
+        <option value="">All Subjects</option>
+        <option>Mathematics</option><option>English</option><option>Tamil</option>
+        <option>Science</option><option>Social Science</option>
+        <option>Physics</option><option>Chemistry</option><option>Biology</option>
+        <option>History</option><option>Geography</option>
+      </select>
+      <select id="tr-f-appt" onchange="renderTrTbl()" style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem"><option value="">All Appointment</option><option>Regular</option><option>Contract</option><option>Part-Time</option></select>
+      <input id="tr-f-search" oninput="renderTrTbl()" placeholder="Name / school / block..." style="padding:5px 9px;border:1px solid #ddd;border-radius:6px;font-size:.82rem;flex:1;min-width:180px">
+      <span id="tr-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
+    </div>
+    <div class="tw" style="max-height:52vh;overflow:auto"><table>
+      <thead><tr><th>#</th><th style="min-width:150px">Name</th><th>Designation</th><th>Subject</th><th>Appt</th><th style="text-align:center">Subj Pass%</th><th style="text-align:center">School Pass%</th><th style="text-align:center">Outcome</th><th style="text-align:center">Qual Score</th><th style="text-align:center">Exp(yr)</th><th style="min-width:170px">School</th></tr></thead>
+      <tbody id="tr-tbl"></tbody>
+    </table></div>
+  </div>
+  <div class="card" style="background:#F8F9FA;margin-top:12px">
+    <div class="ct" style="font-size:.82rem;color:#666"><span class="mi material-icons-round" style="font-size:16px">info</span>Rating Methodology</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:.78rem;color:#555;line-height:1.75">
+      <div><strong>Outcome Grade (primary):</strong> A+(&ge;95%) &bull; A(&ge;85%) &bull; B(&ge;75%) &bull; C(&ge;65%) &bull; D(&lt;65%) &mdash; subject pass rate at teacher school from SSLC 2026</div>
+      <div><strong>Qual Score (/100):</strong> Academic(35) + Professional(25) + Experience(25) + Appointment(15)</div>
+      <div><strong>Note:</strong> Outcome data covers Higher Secondary school teachers linked to SSLC results. Primary/Middle school teachers show qualification score only.</div>
+    </div>
+  </div>
+</sec>
 </div>
 
 <script>
@@ -2158,47 +2153,169 @@ function dlRPT(){
 
 function iTR(){
   if(window._td){renderTR();return;}
-  document.getElementById("tr-kpi").innerHTML="<div style='color:#888;padding:20px'>Loading teacher data…</div>";
+  document.getElementById("tr-kpi").innerHTML="<div style='color:#888;padding:20px'>Loading teacher data...</div>";
   fetch("teacher_data.json").then(r=>r.json()).then(td=>{window._td=td;renderTR();})
     .catch(e=>{document.getElementById("tr-kpi").innerHTML="<div style='color:#C62828;padding:20px'>Could not load: "+e+"</div>";});
 }
+function outGrade(p){
+  if(p==null)return null;
+  if(p>=95)return "A+";if(p>=85)return "A";if(p>=75)return "B";if(p>=65)return "C";return "D";
+}
+function outClr(g){
+  const m={"A+":"#1B5E20","A":"#2E7D32","B":"#F57F17","C":"#E65100","D":"#C62828"};
+  return m[g]||"#555";
+}
+function outBg(g){
+  const m={"A+":"#E8F5E9","A":"#F1F8E9","B":"#FFF8E1","C":"#FFF3E0","D":"#FFEBEE"};
+  return m[g]||"#F5F5F5";
+}
+function pBar(v){
+  if(v==null)return "<span style='color:#bbb;font-size:.75rem'>&#8212;</span>";
+  const c=v>=95?"#2E7D32":v>=85?"#43A047":v>=75?"#FFA000":v>=65?"#E65100":"#C62828";
+  return "<div style='display:flex;align-items:center;gap:4px'><div style='width:48px;height:8px;background:#eee;border-radius:4px;overflow:hidden'><div style='width:"+v+"%;height:100%;background:"+c+";border-radius:4px'></div></div><span style='font-size:.78rem;font-weight:600;color:"+c+"'>"+v.toFixed(1)+"%</span></div>";
+}
 function renderTR(){
   const td=window._td,sm=td.summary;
-  const gradeClr={"A+":"#1B5E20","A":"#2E7D32","B":"#F57F17","C":"#E65100","D":"#C62828"};
-  const gradeBg={"A+":"#E8F5E9","A":"#F1F8E9","B":"#FFF8E1","C":"#FFF3E0","D":"#FFEBEE"};
-  document.getElementById("tr-kpi").innerHTML=`
-    <div style="flex:1;min-width:120px;background:#E3F2FD;border-radius:8px;padding:10px 14px;border-left:3px solid #1565C0"><div style="font-size:.7rem;font-weight:600;color:#1565C0">TOTAL TEACHING STAFF</div><div style="font-size:1.5rem;font-weight:800;color:#1565C0">${sm.total_teaching.toLocaleString()}</div><div style="font-size:.68rem;color:#666">${sm.schools} schools</div></div>
-    <div style="flex:1;min-width:120px;background:#E8F5E9;border-radius:8px;padding:10px 14px;border-left:3px solid #2E7D32"><div style="font-size:.7rem;font-weight:600;color:#2E7D32">REGULAR STAFF</div><div style="font-size:1.5rem;font-weight:800;color:#2E7D32">${sm.regular.toLocaleString()}</div><div style="font-size:.68rem;color:#666">${(sm.regular/sm.total_teaching*100).toFixed(1)}% of total</div></div>
-    <div style="flex:1;min-width:120px;background:#FFF3E0;border-radius:8px;padding:10px 14px;border-left:3px solid #E65100"><div style="font-size:.7rem;font-weight:600;color:#E65100">CONTRACT STAFF</div><div style="font-size:1.5rem;font-weight:800;color:#E65100">${sm.contract.toLocaleString()}</div><div style="font-size:.68rem;color:#666">${(sm.contract/sm.total_teaching*100).toFixed(1)}% of total</div></div>
-    <div style="flex:1;min-width:120px;background:#F3E5F5;border-radius:8px;padding:10px 14px;border-left:3px solid #6A1B9A"><div style="font-size:.7rem;font-weight:600;color:#6A1B9A">PG+ QUALIFIED</div><div style="font-size:1.5rem;font-weight:800;color:#6A1B9A">${sm.pg_qualified.toLocaleString()}</div><div style="font-size:.68rem;color:#666">${(sm.pg_qualified/sm.total_teaching*100).toFixed(1)}% have PG/MPhil/PhD</div></div>
-    <div style="flex:1;min-width:120px;background:#E0F7FA;border-radius:8px;padding:10px 14px;border-left:3px solid #00695C"><div style="font-size:.7rem;font-weight:600;color:#00695C">B.Ed+ TRAINED</div><div style="font-size:1.5rem;font-weight:800;color:#00695C">${sm.bed_qualified.toLocaleString()}</div><div style="font-size:.68rem;color:#666">${(sm.bed_qualified/sm.total_teaching*100).toFixed(1)}% professionally trained</div></div>
-    <div style="flex:1;min-width:120px;background:#FCE4EC;border-radius:8px;padding:10px 14px;border-left:3px solid #AD1457"><div style="font-size:.7rem;font-weight:600;color:#AD1457">AVG EXPERIENCE</div><div style="font-size:1.5rem;font-weight:800;color:#AD1457">${sm.avg_exp} yrs</div><div style="font-size:.68rem;color:#666">Avg rating: ${sm.avg_score}/100</div></div>`;
-  const gd=td.grade_dist,gdK=["A+","A","B","C","D"];
-  new Chart(document.getElementById("c-tr-grade"),{type:"doughnut",data:{labels:gdK.map(k=>k+" ("+gd[k]+")"),datasets:[{data:gdK.map(k=>gd[k]||0),backgroundColor:["#1B5E20","#4CAF50","#FFC107","#FF5722","#B71C1C"],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:"60%",plugins:{legend:{position:"right"},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed} (${(c.parsed/sm.total_teaching*100).toFixed(1)}%)`}}}}});
-  document.getElementById("tr-grade-legend").innerHTML=gdK.map(k=>`<span style="background:${gradeBg[k]};color:${gradeClr[k]};padding:3px 10px;border-radius:12px;font-weight:700;border:1px solid ${gradeClr[k]}">${k}: ${gd[k]||0}</span>`).join("");
-  const ma=td.mgmt_agg;
-  new Chart(document.getElementById("c-tr-mgmt"),{type:"bar",data:{labels:ma.map(m=>m.mgmt),datasets:[{label:"Avg Score",data:ma.map(m=>m.avg_score),backgroundColor:"rgba(21,101,192,.7)",borderColor:"#1565C0",borderWidth:1.5,borderRadius:5,yAxisID:"y"},{label:"Avg Exp (yrs)",data:ma.map(m=>m.avg_exp),backgroundColor:"rgba(0,105,92,.5)",borderColor:"#00695C",borderWidth:1.5,borderRadius:5,yAxisID:"y2"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{title:{display:true,text:"Avg Score (/100)"},beginAtZero:true},y2:{position:"right",title:{display:true,text:"Avg Exp (yrs)"},grid:{display:false},beginAtZero:true},x:{grid:{display:false}}}}});
-  new Chart(document.getElementById("c-tr-appt"),{type:"doughnut",data:{labels:["Regular","Contract","Part-Time"],datasets:[{data:[sm.regular,sm.contract,sm.part_time],backgroundColor:["#1565C0","#E65100","#9E9E9E"],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:"55%",plugins:{legend:{position:"right"},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed} (${(c.parsed/sm.total_teaching*100).toFixed(1)}%)`}}}}});
-  new Chart(document.getElementById("c-tr-exp"),{type:"bar",data:{labels:ma.map(m=>m.mgmt),datasets:[{label:"Regular %",data:ma.map(m=>m.regular_pct),backgroundColor:"rgba(21,101,192,.65)",borderRadius:4},{label:"PG+ %",data:ma.map(m=>m.pg_pct),backgroundColor:"rgba(106,27,154,.65)",borderRadius:4},{label:"B.Ed+ %",data:ma.map(m=>m.bed_pct),backgroundColor:"rgba(0,105,92,.65)",borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{title:{display:true,text:"%"},beginAtZero:true,max:100},x:{grid:{display:false}}}}});
-  document.getElementById("tr-subj-tbl").innerHTML=(td.subj_agg||[]).map((s,i)=>`<tr><td style="text-align:center;color:#00695C;font-weight:700">${i+1}</td><td style="font-weight:600">${s.subj}</td><td style="text-align:center">${s.total}</td><td style="text-align:center;font-weight:700;color:${s.avg_score>=75?"#1B5E20":s.avg_score>=60?"#F57F17":"#C62828"}">${s.avg_score}</td><td style="text-align:center">${s.avg_exp}</td><td style="text-align:center">${s.regular_pct}%</td><td style="text-align:center">${s.pg_pct}%</td></tr>`).join("");
-  renderTrSchTbl();renderTrTbl();
+  const withSubj=td.teachers.filter(t=>t.subj_pass!=null);
+  const hsSch=td.school_summary.filter(s=>s.school_pass!=null);
+  const avgSubjPass=withSubj.length>0?(withSubj.reduce((a,t)=>a+t.subj_pass,0)/withSubj.length).toFixed(1):"--";
+  document.getElementById("tr-kpi").innerHTML=
+    "<div style='flex:1;min-width:110px;background:#E3F2FD;border-radius:8px;padding:10px 14px;border-left:3px solid #1565C0'><div style='font-size:1.5rem;font-weight:700;color:#1565C0'>"+sm.total_teaching.toLocaleString()+"</div><div style='font-size:.75rem;color:#555'>Total Teachers</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#E8F5E9;border-radius:8px;padding:10px 14px;border-left:3px solid #2E7D32'><div style='font-size:1.5rem;font-weight:700;color:#2E7D32'>"+hsSch.length+"</div><div style='font-size:.75rem;color:#555'>HS Schools with SSLC Data</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#FFF8E1;border-radius:8px;padding:10px 14px;border-left:3px solid #F57F17'><div style='font-size:1.5rem;font-weight:700;color:#F57F17'>"+withSubj.length.toLocaleString()+"</div><div style='font-size:.75rem;color:#555'>Teachers with Outcome Data</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#F3E5F5;border-radius:8px;padding:10px 14px;border-left:3px solid #7B1FA2'><div style='font-size:1.5rem;font-weight:700;color:#7B1FA2'>"+avgSubjPass+"%</div><div style='font-size:.75rem;color:#555'>Avg Subject Pass Rate</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#FCE4EC;border-radius:8px;padding:10px 14px;border-left:3px solid #AD1457'><div style='font-size:1.5rem;font-weight:700;color:#AD1457'>"+sm.avg_score+"</div><div style='font-size:.75rem;color:#555'>Avg Qual Score (/100)</div></div>"+
+    "<div style='flex:1;min-width:110px;background:#E0F2F1;border-radius:8px;padding:10px 14px;border-left:3px solid #00695C'><div style='font-size:1.5rem;font-weight:700;color:#00695C'>"+sm.avg_exp+"yr</div><div style='font-size:.75rem;color:#555'>Avg Experience</div></div>";
+  renderTrSchTbl();
+  renderTrTbl();
+  // Subject outcome chart
+  const SSLC_SUBJ=["Mathematics","English","Tamil","Science","Social Science"];
+  const SUBJ_MAP={
+    "MATHEMATICS":"Mathematics","MATHS":"Mathematics","MATH":"Mathematics",
+    "ENGLISH":"English","ENGLISH LITERATURE":"English","ENGLISH LANGUAGE":"English",
+    "TAMIL":"Tamil","TAMIL LITERATURE":"Tamil","TAMIL LANGUAGE":"Tamil","LANGUAGE":"Tamil",
+    "SCIENCE":"Science","PHYSICS":"Science","CHEMISTRY":"Science","BIOLOGY":"Science","BOTANY":"Science","ZOOLOGY":"Science","NATURAL SCIENCE":"Science",
+    "SOCIAL SCIENCE":"Social Science","HISTORY":"Social Science","GEOGRAPHY":"Social Science","CIVICS":"Social Science","ECONOMICS":"Social Science","POLITICAL SCIENCE":"Social Science"
+  };
+  const subjBuckets={};
+  td.teachers.forEach(function(t){
+    if(t.subj_pass==null)return;
+    var s=SUBJ_MAP[t.subj.toUpperCase()];
+    if(!s)return;
+    if(!subjBuckets[s])subjBuckets[s]={passes:[],scores:[]};
+    subjBuckets[s].passes.push(t.subj_pass);
+    subjBuckets[s].scores.push(t.score);
+  });
+  var labels=SSLC_SUBJ.filter(function(s){return subjBuckets[s];});
+  var passRates=labels.map(function(s){
+    var arr=subjBuckets[s].passes;
+    return parseFloat((arr.reduce(function(a,b){return a+b;},0)/arr.length).toFixed(1));
+  });
+  var qualScores=labels.map(function(s){
+    var arr=subjBuckets[s].scores;
+    return parseFloat((arr.reduce(function(a,b){return a+b;},0)/arr.length).toFixed(1));
+  });
+  var counts=labels.map(function(s){return subjBuckets[s].passes.length;});
+  if(window._cTrSubj)window._cTrSubj.destroy();
+  window._cTrSubj=new Chart(document.getElementById("c-tr-subj"),{
+    type:"bar",
+    data:{labels:labels,datasets:[
+      {label:"Avg Subject Pass Rate (%)",data:passRates,backgroundColor:"rgba(25,118,210,0.75)",yAxisID:"y"},
+      {label:"Avg Qual Score (/100)",data:qualScores,backgroundColor:"rgba(230,81,0,0.6)",yAxisID:"y2"}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{font:{size:11}}},
+        tooltip:{callbacks:{afterBody:function(items){var i=items[0].dataIndex;return ["Teachers: "+counts[i]];}}}},
+      scales:{
+        y:{title:{display:true,text:"Pass Rate (%)"},min:80,max:100},
+        y2:{position:"right",title:{display:true,text:"Qual Score"},min:50,max:90,grid:{drawOnChartArea:false}}
+      }
+    }
+  });
+  // Appointment type donut for HS teachers
+  var apptCounts={};
+  td.teachers.filter(function(t){return t.school_pass!=null;}).forEach(function(t){
+    apptCounts[t.appt]=(apptCounts[t.appt]||0)+1;
+  });
+  if(window._cTrAppt)window._cTrAppt.destroy();
+  window._cTrAppt=new Chart(document.getElementById("c-tr-appt"),{
+    type:"doughnut",
+    data:{labels:Object.keys(apptCounts),datasets:[{data:Object.values(apptCounts),backgroundColor:["#1976D2","#F57F17","#C62828"]}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{font:{size:11}}}}}
+  });
 }
 function renderTrSchTbl(){
-  if(!window._td)return;
-  const mf=document.getElementById("tr-sch-mgmt").value,sf=(document.getElementById("tr-sch-search").value||"").toLowerCase();
-  let data=(window._td.school_summary||[]).filter(s=>(!mf||s.mgmt===mf)&&(!sf||s.school.toLowerCase().includes(sf)));
-  document.getElementById("tr-sch-tbl").innerHTML=data.map((s,i)=>`<tr><td style="text-align:center;color:#AD1457;font-weight:700">${i+1}</td><td style="font-size:.81rem">${s.school}</td><td>${tc(s.mgmt)}</td><td style="text-align:center">${s.total}</td><td style="text-align:center">${s.hs_count}</td><td style="text-align:center;color:#1565C0">${s.regular}</td><td style="text-align:center;color:#6A1B9A">${s.pg_count}</td><td style="text-align:center;color:#00695C">${s.bed_count}</td><td style="text-align:center">${s.avg_exp}</td><td style="text-align:center;font-weight:800;color:${s.avg_score>=75?"#1B5E20":s.avg_score>=60?"#F57F17":"#C62828"}">${s.avg_score}</td><td style="text-align:center"><span style="font-weight:700;color:#1B5E20">${s.a_plus}</span>/<span style="color:#2E7D32">${s.a_grade}</span></td></tr>`).join("");
+  var td=window._td;
+  if(!td)return;
+  var mgmt=document.getElementById("tr-sch-mgmt").value;
+  var srch=(document.getElementById("tr-sch-search").value||"").toLowerCase();
+  var rows=td.school_summary.filter(function(s){return s.school_pass!=null;});
+  if(mgmt)rows=rows.filter(function(s){return s.mgmt===mgmt;});
+  if(srch)rows=rows.filter(function(s){return s.school.toLowerCase().indexOf(srch)!==-1;});
+  rows.sort(function(a,b){return b.school_pass-a.school_pass;});
+  document.getElementById("tr-sch-tbl").innerHTML=rows.map(function(s,i){
+    var og=outGrade(s.school_pass);
+    var p=s.subj_pass||{};
+    var clr=outClr(og);
+    return "<tr><td style='color:#888'>"+(i+1)+"</td>"+
+      "<td style='font-weight:500'>"+s.school+"</td>"+
+      "<td>"+tc(s.mgmt)+"</td>"+
+      "<td style='text-align:center'>"+(s.sslc_n||"&#8212;")+"</td>"+
+      "<td style='text-align:center'><span style='font-weight:700;color:"+clr+"'>"+s.school_pass.toFixed(1)+"%</span></td>"+
+      "<td style='text-align:center'>"+(p.Language!=null?p.Language.toFixed(1)+"%":"&#8212;")+"</td>"+
+      "<td style='text-align:center'>"+(p.English!=null?p.English.toFixed(1)+"%":"&#8212;")+"</td>"+
+      "<td style='text-align:center'>"+(p.Maths!=null?p.Maths.toFixed(1)+"%":"&#8212;")+"</td>"+
+      "<td style='text-align:center'>"+(p.Science!=null?p.Science.toFixed(1)+"%":"&#8212;")+"</td>"+
+      "<td style='text-align:center'>"+(p["Social Science"]!=null?p["Social Science"].toFixed(1)+"%":"&#8212;")+"</td>"+
+      "<td style='text-align:center'>"+s.total+"</td>"+
+      "<td style='text-align:center'>"+s.avg_score+"</td></tr>";
+  }).join("");
 }
 function renderTrTbl(){
-  if(!window._td)return;
-  const gf=document.getElementById("tr-f-grade").value,tf=document.getElementById("tr-f-tier").value,af=document.getElementById("tr-f-appt").value,sf=(document.getElementById("tr-f-search").value||"").toLowerCase();
-  const gradeClr={"A+":"#1B5E20","A":"#2E7D32","B":"#F57F17","C":"#E65100","D":"#C62828"};
-  const gradeBg={"A+":"#E8F5E9","A":"#F1F8E9","B":"#FFF8E1","C":"#FFF3E0","D":"#FFEBEE"};
-  const apptB={"Regular":"background:#E8F5E9;color:#1B5E20","Contract":"background:#FFF3E0;color:#E65100","Part-Time":"background:#F5F5F5;color:#616161"};
-  let data=(window._td.teachers||[]).filter(t=>(!gf||t.grade===gf)&&(!tf||t.tier===tf)&&(!af||t.appt===af)&&(!sf||t.name.toLowerCase().includes(sf)||t.subj.toLowerCase().includes(sf)||t.school.toLowerCase().includes(sf)));
-  document.getElementById("tr-count").textContent=`Showing ${Math.min(200,data.length).toLocaleString()} of ${data.length.toLocaleString()} teachers`;
-  document.getElementById("tr-tbl").innerHTML=data.slice(0,200).map((t,i)=>`<tr><td style="text-align:center;color:#4527A0;font-weight:700">${i+1}</td><td style="font-size:.82rem;font-weight:600">${t.name}</td><td style="font-size:.75rem;color:#555">${t.desg}</td><td style="font-size:.81rem;font-weight:600;color:#00695C">${t.subj}</td><td>${tc(t.mgmt)}</td><td><span style="font-size:.72rem;padding:2px 8px;border-radius:10px;font-weight:600;${apptB[t.appt]||""}">${t.appt}</span></td><td style="font-size:.73rem;text-align:center">${t.acad}</td><td style="text-align:center">${t.exp!=null?t.exp:"—"}</td><td style="text-align:center;font-weight:700;color:${t.score>=75?"#1B5E20":t.score>=60?"#F57F17":"#C62828"}">${t.score}</td><td style="text-align:center"><span style="font-weight:800;padding:3px 9px;border-radius:12px;font-size:.8rem;background:${gradeBg[t.grade]};color:${gradeClr[t.grade]}">${t.grade}</span></td><td style="font-size:.78rem">${t.school}</td></tr>`).join("");
+  var td=window._td;
+  if(!td)return;
+  var og=document.getElementById("tr-f-outcome").value;
+  var fsubj=(document.getElementById("tr-f-subj").value||"").toLowerCase();
+  var appt=document.getElementById("tr-f-appt").value;
+  var srch=(document.getElementById("tr-f-search").value||"").toLowerCase();
+  var rows=td.teachers;
+  if(og==="none")rows=rows.filter(function(t){return t.school_pass==null;});
+  else if(og)rows=rows.filter(function(t){return outGrade(t.subj_pass!=null?t.subj_pass:t.school_pass)===og;});
+  if(fsubj)rows=rows.filter(function(t){return t.subj.toLowerCase().indexOf(fsubj)!==-1;});
+  if(appt)rows=rows.filter(function(t){return t.appt===appt;});
+  if(srch)rows=rows.filter(function(t){
+    return t.name.toLowerCase().indexOf(srch)!==-1||
+           t.school.toLowerCase().indexOf(srch)!==-1||
+           t.block.toLowerCase().indexOf(srch)!==-1;
+  });
+  rows.sort(function(a,b){
+    var ap=a.subj_pass!=null?a.subj_pass:(a.school_pass!=null?a.school_pass:-1);
+    var bp=b.subj_pass!=null?b.subj_pass:(b.school_pass!=null?b.school_pass:-1);
+    return bp-ap;
+  });
+  document.getElementById("tr-count").textContent=rows.length.toLocaleString()+" teachers";
+  var show=rows.slice(0,500);
+  document.getElementById("tr-tbl").innerHTML=show.map(function(t,i){
+    var effPass=t.subj_pass!=null?t.subj_pass:t.school_pass;
+    var g=outGrade(effPass);
+    var gradeCell=g?"<span style='font-weight:700;color:"+outClr(g)+";background:"+outBg(g)+";padding:2px 8px;border-radius:4px'>"+g+"</span>":"<span style='color:#bbb;font-size:.75rem'>N/A</span>";
+    var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
+    var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
+    return "<tr>"+
+      "<td style='color:#888'>"+(i+1)+"</td>"+
+      "<td style='font-weight:500'>"+t.name+"</td>"+
+      "<td style='font-size:.78rem'>"+t.desg+"</td>"+
+      "<td>"+t.subj+"</td>"+
+      "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
+      "<td style='text-align:center'>"+pBar(t.subj_pass)+"</td>"+
+      "<td style='text-align:center'>"+pBar(t.school_pass)+"</td>"+
+      "<td style='text-align:center'>"+gradeCell+"</td>"+
+      "<td style='text-align:center'>"+t.score+"</td>"+
+      "<td style='text-align:center'>"+(t.exp!=null?t.exp:"&#8212;")+"</td>"+
+      "<td style='font-size:.8rem'>"+t.school+"</td></tr>";
+  }).join("");
 }
+
 
 </script>
 </body>
