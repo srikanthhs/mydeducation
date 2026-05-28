@@ -649,6 +649,46 @@ tbody td{padding:9px 13px;vertical-align:middle}
       </div>
     </div>
   </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct"><span class="mi material-icons-round" style="color:#00695C">format_list_numbered</span>Subject-wise Teacher Ranking &mdash; Ranked by Subject Pass Rate</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+      <select id="tr-subj-sel" onchange="renderTrSubjTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;min-width:180px">
+        <option value="Mathematics">Mathematics</option>
+        <option value="English">English</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Science">Science</option>
+        <option value="Social Science">Social Science</option>
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Biology">Biology</option>
+        <option value="History">History</option>
+        <option value="Geography">Geography</option>
+        <option value="Economics">Economics</option>
+        <option value="Commerce">Commerce</option>
+      </select>
+      <select id="tr-subj-appt" onchange="renderTrSubjTbl()" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem">
+        <option value="">All Appointment</option><option>Regular</option><option>Contract</option><option>Part-Time</option>
+      </select>
+      <input id="tr-subj-search" oninput="renderTrSubjTbl()" placeholder="Search teacher / school..." style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;flex:1;min-width:160px">
+      <span id="tr-subj-count" style="font-size:.78rem;color:#888;white-space:nowrap"></span>
+    </div>
+    <div class="tw" style="max-height:44vh;overflow:auto"><table>
+      <thead><tr>
+        <th>#</th>
+        <th style="min-width:160px">Teacher Name</th>
+        <th>Designation</th>
+        <th>Appointment</th>
+        <th style="text-align:center">Subj Pass%</th>
+        <th style="text-align:center">School Pass%</th>
+        <th style="text-align:center">Outcome</th>
+        <th style="text-align:center">Qual Score</th>
+        <th style="text-align:center">Exp(yr)</th>
+        <th style="min-width:180px">School</th>
+        <th>Block</th>
+      </tr></thead>
+      <tbody id="tr-subj-tbl"></tbody>
+    </table></div>
+  </div>
   <div class="card">
     <div class="ct"><span class="mi material-icons-round" style="color:#4527A0">person_search</span>Teacher Outcome Rating &mdash; by Subject Pass Rate at Their School (SSLC 2026)</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
@@ -1927,6 +1967,61 @@ function renderTR(){
     data:{labels:Object.keys(apptCounts),datasets:[{data:Object.values(apptCounts),backgroundColor:["#1976D2","#F57F17","#C62828"]}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{font:{size:11}}}}}
   });
+}
+function renderTrSubjTbl(){
+  var td=window._td;
+  if(!td)return;
+  var subj=document.getElementById("tr-subj-sel").value;
+  var appt=document.getElementById("tr-subj-appt").value;
+  var srch=(document.getElementById("tr-subj-search").value||"").toLowerCase();
+  // Match teachers whose subject maps to the selected SSLC subject
+  var SUBJ_MAP={
+    "MATHEMATICS":"Mathematics","MATHS":"Mathematics","MATH":"Mathematics","ALGEBRA":"Mathematics","ARITHMETIC":"Mathematics",
+    "ENGLISH":"English","ENGLISH LITERATURE":"English","ENGLISH LANGUAGE":"English",
+    "TAMIL":"Tamil","TAMIL LITERATURE":"Tamil","TAMIL LANGUAGE":"Tamil","LANGUAGE":"Tamil",
+    "SCIENCE":"Science","PHYSICS":"Physics","CHEMISTRY":"Chemistry","BIOLOGY":"Biology","BOTANY":"Biology","ZOOLOGY":"Biology","NATURAL SCIENCE":"Science",
+    "SOCIAL SCIENCE":"Social Science","HISTORY":"History","GEOGRAPHY":"Geography","CIVICS":"Social Science","ECONOMICS":"Economics","POLITICAL SCIENCE":"Social Science",
+    "COMMERCE":"Commerce"
+  };
+  var rows=td.teachers.filter(function(t){
+    // Direct match OR mapped subject match
+    var tsubj=t.subj.trim();
+    var mapped=SUBJ_MAP[tsubj.toUpperCase()];
+    return tsubj===subj||mapped===subj||tsubj.toLowerCase()===subj.toLowerCase();
+  });
+  if(appt)rows=rows.filter(function(t){return t.appt===appt;});
+  if(srch)rows=rows.filter(function(t){
+    return t.name.toLowerCase().indexOf(srch)!==-1||t.school.toLowerCase().indexOf(srch)!==-1;
+  });
+  // Sort: teachers WITH outcome first (by subj_pass desc), then by school_pass, then no data
+  rows.sort(function(a,b){
+    var ap=a.subj_pass!=null?a.subj_pass:(a.school_pass!=null?a.school_pass-0.001:-1);
+    var bp=b.subj_pass!=null?b.subj_pass:(b.school_pass!=null?b.school_pass-0.001:-1);
+    return bp-ap;
+  });
+  document.getElementById("tr-subj-count").textContent=rows.length+" teachers";
+  var show=rows.slice(0,300);
+  document.getElementById("tr-subj-tbl").innerHTML=show.map(function(t,i){
+    var effPass=t.subj_pass!=null?t.subj_pass:t.school_pass;
+    var g=outGrade(effPass);
+    var gradeCell=g?"<span style='font-weight:700;color:"+outClr(g)+";background:"+outBg(g)+";padding:2px 7px;border-radius:4px'>"+g+"</span>":"<span style='color:#bbb;font-size:.75rem'>N/A</span>";
+    var apptClr=t.appt==="Regular"?"#2E7D32":t.appt==="Contract"?"#E65100":"#C62828";
+    var apptBg=t.appt==="Regular"?"#E8F5E9":t.appt==="Contract"?"#FFF8E1":"#FFEBEE";
+    var rank=i+1;
+    var rankStyle=rank===1?"color:#F57F17;font-weight:700":rank===2?"color:#757575;font-weight:600":rank===3?"color:#8D6E63;font-weight:600":"color:#aaa";
+    return "<tr>"+
+      "<td style='"+rankStyle+"'>"+rank+"</td>"+
+      "<td style='font-weight:600;color:#212121'>"+t.name+"</td>"+
+      "<td style='font-size:.78rem;color:#555'>"+t.desg+"</td>"+
+      "<td><span style='font-size:.75rem;padding:2px 6px;background:"+apptBg+";border-radius:3px;color:"+apptClr+"'>"+t.appt+"</span></td>"+
+      "<td style='text-align:center'>"+pBar(t.subj_pass)+"</td>"+
+      "<td style='text-align:center'>"+pBar(t.school_pass)+"</td>"+
+      "<td style='text-align:center'>"+gradeCell+"</td>"+
+      "<td style='text-align:center'><span style='font-weight:600'>"+t.score+"</span></td>"+
+      "<td style='text-align:center'>"+(t.exp!=null?t.exp:"&#8212;")+"</td>"+
+      "<td style='font-size:.8rem'>"+t.school+"</td>"+
+      "<td style='font-size:.78rem;color:#777'>"+t.block+"</td></tr>";
+  }).join("");
 }
 function renderTrSchTbl(){
   var td=window._td;
