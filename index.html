@@ -230,13 +230,118 @@ tbody td{padding:5px 10px;vertical-align:middle}
   .tc-tbl tbody tr.top3 td{background:#FFFDE7!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .print-hdr{display:block!important}
 }
-@media(max-width:900px){
-  .sb{transform:translateX(-100%);width:var(--sw)!important}
-  .sb.sb-open{transform:translateX(0)}
-  .main{margin-left:0!important}
-  .g2{grid-template-columns:1fr}
-  .sb-tog{display:none}
+/* ── HIDE SIDEBAR — replaced by bottom nav ─────────────── */
+.sb{display:none!important}
+.main{margin-left:0!important}
+/* Keep hamburger visible to toggle sidebar on demand */
+#ham-btn{display:flex!important}
+
+/* ── BOTTOM NAVIGATION BAR (WhatsApp style) ─────────────── */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--pd);
+  display:flex;align-items:stretch;
+  height:58px;z-index:300;
+  box-shadow:0 -2px 12px rgba(0,0,0,.22);
 }
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;cursor:pointer;
+  color:rgba(255,255,255,.6);
+  padding:6px 4px 10px;
+  border-top:2px solid transparent;
+  transition:color .18s,border-color .18s,background .18s;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.bnav-item:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.07)}
+.bnav-item.active{color:#fff;border-top-color:#64B5F6}
+.bnav-item.active .bni{color:#64B5F6}
+.bni{font-size:22px;transition:transform .15s}
+.bnav-item:active .bni{transform:scale(.87)}
+.bnl{font-size:.62rem;font-weight:600;letter-spacing:.2px;white-space:nowrap}
+/* Badge on "More" showing count of extra sections */
+.bnav-badge{
+  position:absolute;top:5px;right:calc(50% - 20px);
+  background:#FF5252;color:#fff;font-size:.58rem;font-weight:800;
+  border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;
+  line-height:1.4;
+}
+/* ── MORE DRAWER ─────────────────────────────────────────── */
+.more-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;
+}
+.more-overlay.open{display:block}
+.more-drawer{
+  position:fixed;left:0;right:0;bottom:-100%;
+  background:#fff;border-radius:18px 18px 0 0;z-index:500;
+  padding:0 0 env(safe-area-inset-bottom);
+  box-shadow:0 -4px 24px rgba(0,0,0,.18);
+  transition:bottom .28s cubic-bezier(.4,0,.2,1);
+  max-height:85vh;overflow-y:auto;
+}
+.more-drawer.open{bottom:0}
+.more-handle{width:40px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 4px}
+.more-title{font-size:.75rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;padding:4px 20px 12px}
+.more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 12px 20px}
+.more-item{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;border-radius:12px;cursor:pointer;
+  transition:background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.more-item:hover{background:#F0F4FF}
+.more-item.active{background:#E3F2FD}
+.more-icon{
+  width:48px;height:48px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+}
+.more-icon .mi{font-size:22px}
+.more-lbl{font-size:.7rem;font-weight:600;color:var(--tx);text-align:center;line-height:1.3}
+/* ── MAIN CONTENT BOTTOM PADDING ─────────────────────────── */
+.main{padding-bottom:68px}
+/* ── TOPBAR ADJUSTMENT ──────────────────────────────────── */
+.topbar{padding:10px 14px;flex-wrap:wrap;gap:8px}
+.tb-chips{flex-wrap:wrap;gap:6px}
+.chip{font-size:.67rem;padding:3px 8px}
+sec{padding:14px 14px}
+.kg{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+@media(max-width:600px){
+  .kg{grid-template-columns:repeat(2,1fr)}
+  .g2{grid-template-columns:1fr}
+  .gs-wrap{min-width:140px;max-width:180px}
+  .more-grid{grid-template-columns:repeat(3,1fr)}
+}
+/* BREADCRUMB */
+.breadcrumb-bar{background:#fff;padding:7px 26px;font-size:.78rem;color:var(--t2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:4px}
+.bc-home{color:var(--p);cursor:pointer;font-weight:600;display:flex;align-items:center;gap:3px}
+.bc-home:hover{text-decoration:underline}
+.bc-sep{color:var(--t3);font-size:.9rem}
+.bc-cur{font-weight:600;color:var(--tx)}
+/* GLOBAL SEARCH */
+.gs-wrap{display:flex;align-items:center;gap:7px;background:#F5F7FA;border:1px solid var(--bd);border-radius:8px;padding:6px 11px;min-width:220px;max-width:300px;position:relative}
+.gs-wrap input{border:none;background:none;outline:none;font-family:inherit;font-size:.82rem;width:100%;color:var(--tx)}
+.gs-wrap .mi{font-size:16px;color:var(--t3);flex-shrink:0}
+/* SECTION EXPORT TOOLBAR */
+.sec-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:8px 12px;background:#F8FAFE;border:1px solid #E3E8F5;border-radius:10px}
+.sec-toolbar-label{font-size:.72rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;flex:1}
+.btn-xls{background:#1B5E20;color:#fff}.btn-xls:hover{background:#2E7D32}
+.btn-csv2{background:#0277BD;color:#fff}.btn-csv2:hover{background:#0288D1}
+.btn-pdf2{background:#B71C1C;color:#fff}.btn-pdf2:hover{background:#C62828}
+/* LAST UPDATED BADGE */
+.lu-badge{display:inline-flex;align-items:center;gap:5px;font-size:.69rem;color:var(--t3);background:#F5F7FA;border:1px solid var(--bd);border-radius:6px;padding:3px 8px;margin-top:6px}
+.lu-badge .mi{font-size:13px}
+/* HAMBURGER */
+#ham-btn{display:none;align-items:center;justify-content:center;background:var(--pd);border:none;border-radius:8px;width:36px;height:36px;cursor:pointer;color:#fff;flex-shrink:0}
+/* SECTION FILTER ROW STANDARD */
+.std-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding:8px 12px;background:#F8FAFE;border:1px solid #E3E8F5;border-radius:10px}
+.std-filter input,.std-filter select{border:1.5px solid #CFD8DC;border-radius:8px;padding:7px 11px;font-family:Roboto,sans-serif;font-size:.82rem;outline:none;background:#fff;transition:.15s}
+.std-filter input:focus,.std-filter select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
+.std-filter input{flex:1;min-width:180px}
+.std-filter .btn-reset{padding:7px 14px;border:1px solid var(--bd);border-radius:8px;background:#fff;font-family:Roboto,sans-serif;font-size:.82rem;cursor:pointer;color:var(--t2);display:flex;align-items:center;gap:5px;transition:.15s}
+.std-filter .btn-reset:hover{background:#FFEBEE;border-color:#EF9A9A;color:#C62828}
+.std-cnt{font-size:.78rem;color:var(--t2);font-weight:600;white-space:nowrap}
 </style>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -274,18 +379,38 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
 <div class="main" id="main">
   <div class="topbar">
-    <div><div class="tb-title" id="tb-t">Overview Dashboard</div><div class="tb-sub">Mayiladuthurai District &bull; March 2026 &bull; Tamil Nadu Board</div></div>
-    <div class="tb-chips">
-      <span class="chip">14,361 Registered &bull; 14,202 Appeared</span>
-      <span class="chip">95 Schools</span>
-      <a href="hs_index.html" style="display:inline-flex;align-items:center;gap:5px;background:#1B5E20;color:#fff;border-radius:20px;padding:4px 13px;font-size:.73rem;font-weight:700;text-decoration:none;transition:background .15s" onmouseover="this.style.background='#2E7D32'" onmouseout="this.style.background='#1B5E20'">
-        <span class="mi material-icons-round" style="font-size:14px">swap_horiz</span>Switch to SSLC (Class X)
-      </a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="ham-btn" title="Open menu"><span class="mi material-icons-round">menu</span></button>
+      <div><div class="tb-title" id="tb-t">Overview Dashboard</div><div class="tb-sub">Mayiladuthurai District &bull; March 2026 &bull; Tamil Nadu Board</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div id="gs-wrap" class="gs-wrap">
+        <span class="mi material-icons-round">search</span>
+        <input id="gs-inp" type="text" placeholder="Global search…" oninput="globalSearch(this.value)" autocomplete="off"/>
+      </div>
+      <div class="tb-chips">
+        <span class="chip">14,361 Registered &bull; 14,202 Appeared</span>
+        <span class="chip">95 Schools</span>
+        <a href="hs_index.html" style="display:inline-flex;align-items:center;gap:5px;background:#1B5E20;color:#fff;border-radius:20px;padding:4px 13px;font-size:.73rem;font-weight:700;text-decoration:none;transition:background .15s" onmouseover="this.style.background='#2E7D32'" onmouseout="this.style.background='#1B5E20'">
+          <span class="mi material-icons-round" style="font-size:14px">swap_horiz</span>Switch to SSLC (Class X)
+        </a>
+      </div>
     </div>
   </div>
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar"><nav id="breadcrumb"><span class="bc-home"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-3px">home</span> Home</span></nav></div>
 
   <!-- OVERVIEW -->
   <sec id="s-ov" class="active">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">dashboard</span> Overview</span>
+      <div id="exp-bar-ov" style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('sct','HSC_Overview')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('sct','HSC_Overview')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('ov')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-ov">Loading…</span></span>
+    </div>
     <div class="kg" style="margin-top:4px">
       <div class="kc b"><div class="ki"><span class="mi material-icons-round">people</span></div><div class="kl">Registered</div><div class="kv">14,361</div><div class="ks">14,202 appeared &bull; 159 absent</div><div class="kb"></div></div>
       <div class="kc g"><div class="ki"><span class="mi material-icons-round">check_circle</span></div><div class="kl">Passed</div><div class="kv">13,522</div><div class="ks">94.2% pass rate</div><div class="kb"></div></div>
@@ -314,6 +439,15 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- SCHOOL ANALYSIS -->
   <sec id="s-sc">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">school</span> School Analysis</span>
+      <div id="exp-bar-sc" style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('sct','HSC_Schools')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('sct','HSC_Schools')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('sc')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-sc">Loading…</span></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">school</span><div><h2>School-wise Analysis</h2><div class="ss">All 95 schools &bull; Sortable &bull; Searchable &bull; Filterable</div></div></div>
     <div class="g2">
       <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Top 20 Schools by Avg Marks</div><div class="cw md"><canvas id="c-t20"></canvas></div></div>
@@ -347,6 +481,21 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- COMMUNITY & GENDER -->
   <sec id="s-co">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">groups</span> Community &amp; Gender</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('com-tb','HSC_Community')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('com-tb','HSC_Community')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('co')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-co">Loading…</span></span>
+    </div>
+    <div class="std-filter">
+      <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
+      <input id="co-search" type="text" placeholder="Search community…" oninput="filterCommunity()"/>
+      <button class="btn-reset" onclick="document.getElementById('co-search').value='';filterCommunity()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <span id="co-cnt" class="std-cnt"></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">groups</span><div><h2>Community &amp; Gender Analysis</h2><div class="ss">Detailed breakdown by community, gender and religion</div></div></div>
     <div class="g2">
       <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Community</div><div class="cw md"><canvas id="c-com"></canvas></div></div>
@@ -368,6 +517,21 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- STREAMS -->
   <sec id="s-st">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">menu_book</span> Subject Streams</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('str-tb','HSC_Streams')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('str-tb','HSC_Streams')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('st')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-st">Loading…</span></span>
+    </div>
+    <div class="std-filter">
+      <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
+      <input id="st-search" type="text" placeholder="Search stream…" oninput="filterTable('str-tb',['st-search'],[-1]);document.getElementById('st-cnt').textContent=document.querySelectorAll('#str-tb tr:not([style*=none])').length+' streams'"/>
+      <button class="btn-reset" onclick="document.getElementById('st-search').value='';filterTable('str-tb',['st-search'],[-1]);document.getElementById('st-cnt').textContent=''"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <span id="st-cnt" class="std-cnt"></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">menu_book</span><div><h2>Subject Stream Analysis</h2><div class="ss">Performance by subject group / stream</div></div></div>
     <div class="g2">
       <div class="card"><div class="ct"><span class="mi material-icons-round">bar_chart</span>Average Marks by Stream</div><div class="cw md"><canvas id="c-str"></canvas></div></div>
@@ -381,6 +545,15 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- SUBJECT ANALYSIS -->
   <sec id="s-sb">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">science</span> Subject Analysis</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('subj-tb','HSC_Subjects')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('subj-tb','HSC_Subjects')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('sb')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-sb">Loading…</span></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">science</span><div><h2>Subject-wise Analysis</h2><div class="ss">Subject performance overview and school-wise subject marks matrix</div></div></div>
 
     <div class="stabs">
@@ -438,6 +611,10 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- TEACHER ANALYSIS -->
   <sec id="s-tc">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">person</span> Teacher Analysis</span>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-tc">Loading…</span></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">person</span><div><h2>Teacher-wise Performance Analysis</h2><div class="ss">Each row = one teacher (School &times; Subject). Ranked by average marks. Export as CSV or PDF.</div></div></div>
 
     <div style="display:none" class="print-hdr">
@@ -524,6 +701,24 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- RANKINGS -->
   <sec id="s-rk">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">leaderboard</span> Full Rankings</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('t-all','HSC_Rankings')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('t-all','HSC_Rankings')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('rk')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-rk">Loading…</span></span>
+    </div>
+    <div class="std-filter">
+      <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
+      <input id="rk-search" type="text" placeholder="Search school name…" oninput="filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])"/>
+      <select id="rk-type" onchange="filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])">
+        <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
+        <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option>
+      </select>
+      <button class="btn-reset" onclick="document.getElementById('rk-search').value='';document.getElementById('rk-type').value='';filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+    </div>
     <div class="sh"><span class="mi material-icons-round">leaderboard</span><div><h2>Full School Rankings</h2><div class="ss">All 95 schools &bull; Top performers (left) &bull; Bottom performers (right)</div></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
       <div class="card" style="padding:0;overflow:hidden">
@@ -546,6 +741,10 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- REPORTS -->
   <sec id="s-rp">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">summarize</span> Reports</span>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-rp">Loading…</span></span>
+    </div>
     <div class="sh"><span class="mi material-icons-round">summarize</span><div><h2>Export Reports</h2><div class="ss">Download full data as Excel workbook or formatted PDF report</div></div></div>
     <div class="g2" style="margin-bottom:18px">
       <div class="card" style="border:2px solid #1B5E20;text-align:center;padding:30px 22px">
@@ -584,6 +783,24 @@ tbody td{padding:5px 10px;vertical-align:middle}
 
   <!-- FAILURE ANALYSIS -->
   <sec id="s-fa">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px;color:#C62828">warning</span> Failure Analysis</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('fa-tbl','HSC_Failure_Schools')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('fa-tbl','HSC_Failure_Schools')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('fa')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-fa">Loading…</span></span>
+    </div>
+    <div class="std-filter">
+      <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
+      <input id="fa-search" type="text" placeholder="Search school…" oninput="filterTable('fa-tbl',['fa-search','fa-type'],[1,2])"/>
+      <select id="fa-type" onchange="filterTable('fa-tbl',['fa-search','fa-type'],[1,2])">
+        <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
+        <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option>
+      </select>
+      <button class="btn-reset" onclick="document.getElementById('fa-search').value='';document.getElementById('fa-type').value='';filterTable('fa-tbl',['fa-search','fa-type'],[1,2])"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+    </div>
     <div class="sh"><span class="mi material-icons-round" style="color:#C62828">warning</span><div><h2>Failure Analysis</h2><div class="ss">Deep-dive into failure patterns by subject, stream, school, community &amp; gender — with AI-powered insights</div></div></div>
     <div class="kg" id="fa-kpi" style="margin-top:4px"></div>
     <div class="g2">
@@ -650,6 +867,15 @@ tbody td{padding:5px 10px;vertical-align:middle}
     </div>
   </sec>
     <sec id="s-tr">
+    <div class="sec-toolbar">
+      <span class="sec-toolbar-label"><span class="mi material-icons-round" style="font-size:14px;vertical-align:-2px">person_pin</span> Teachers</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-exp btn-xls" onclick="exportTableXLSX('tr-tbl','HSC_Teachers')"><span class="mi material-icons-round" style="font-size:15px">table_chart</span>Excel</button>
+        <button class="btn-exp btn-csv2" onclick="exportTableCSV('tr-tbl','HSC_Teachers')"><span class="mi material-icons-round" style="font-size:15px">download</span>CSV</button>
+        <button class="btn-exp btn-pdf2" onclick="exportSectionPDF('tr')"><span class="mi material-icons-round" style="font-size:15px">picture_as_pdf</span>PDF</button>
+      </div>
+      <span class="lu-badge"><span class="mi material-icons-round">schedule</span><span id="lu-tr">Loading…</span></span>
+    </div>
   <div id="tr-kpi" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
     <div style="background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:14px;border:1px solid #E3F2FD;box-shadow:0 1px 4px rgba(0,0,0,.06)">
     <div style="font-size:.75rem;font-weight:600;color:#1565C0;margin-bottom:8px;letter-spacing:.04em">FILTERS</div>
@@ -2403,5 +2629,119 @@ function renderTrTbl(){
 
 
 </script>
+<!-- ── MORE OVERLAY ─────────────────────────────────────── -->
+<div class="more-overlay" id="more-overlay" onclick="closeMore()"></div>
+
+<!-- ── MORE DRAWER ──────────────────────────────────────── -->
+<div class="more-drawer" id="more-drawer">
+  <div class="more-handle"></div>
+  <div class="more-title">All Sections</div>
+  <div class="more-grid">
+    <div class="more-item" id="mi-co" onclick="goMore('co')">
+      <div class="more-icon" style="background:#E3F2FD"><span class="mi material-icons-round" style="color:#1565C0">groups</span></div>
+      <span class="more-lbl">Community &amp; Gender</span>
+    </div>
+    <div class="more-item" id="mi-st" onclick="goMore('st')">
+      <div class="more-icon" style="background:#E8F5E9"><span class="mi material-icons-round" style="color:#2E7D32">menu_book</span></div>
+      <span class="more-lbl">Subject Streams</span>
+    </div>
+    <div class="more-item" id="mi-tc" onclick="goMore('tc')">
+      <div class="more-icon" style="background:#FFF3E0"><span class="mi material-icons-round" style="color:#E65100">person</span></div>
+      <span class="more-lbl">Teacher Analysis</span>
+    </div>
+    <div class="more-item" id="mi-rp" onclick="goMore('rp')">
+      <div class="more-icon" style="background:#F3E5F5"><span class="mi material-icons-round" style="color:#6A1B9A">summarize</span></div>
+      <span class="more-lbl">Export Reports</span>
+    </div>
+    <div class="more-item" id="mi-fa" onclick="goMore('fa')">
+      <div class="more-icon" style="background:#FFEBEE"><span class="mi material-icons-round" style="color:#C62828">warning</span></div>
+      <span class="more-lbl">Failure Analysis</span>
+    </div>
+    <div class="more-item" id="mi-tr" onclick="goMore('tr')">
+      <div class="more-icon" style="background:#E0F2F1"><span class="mi material-icons-round" style="color:#00695C">person_pin</span></div>
+      <span class="more-lbl">Teachers</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── BOTTOM NAV BAR ────────────────────────────────────── -->
+<nav class="bnav" id="bnav">
+  <div class="bnav-item active" id="bn-ov" onclick="goNav('ov')">
+    <span class="mi material-icons-round bni">dashboard</span>
+    <span class="bnl">Overview</span>
+  </div>
+  <div class="bnav-item" id="bn-sc" onclick="goNav('sc')">
+    <span class="mi material-icons-round bni">school</span>
+    <span class="bnl">Schools</span>
+  </div>
+  <div class="bnav-item" id="bn-sb" onclick="goNav('sb')">
+    <span class="mi material-icons-round bni">science</span>
+    <span class="bnl">Subjects</span>
+  </div>
+  <div class="bnav-item" id="bn-rk" onclick="goNav('rk')">
+    <span class="mi material-icons-round bni">leaderboard</span>
+    <span class="bnl">Rankings</span>
+  </div>
+  <div class="bnav-item" id="bn-more" onclick="openMore()">
+    <span class="mi material-icons-round bni">more_horiz</span>
+    <span class="bnl">More</span>
+    <span class="bnav-badge">6</span>
+  </div>
+</nav>
+
+<script>
+var _moreIds = ['co','st','tc','rp','fa','tr'];
+var _navIds  = ['ov','sc','sb','rk'];
+
+function goNav(id){
+  closeMore();
+  go(id, null);
+  setBottomActive(id);
+}
+function goMore(id){
+  closeMore();
+  go(id, null);
+  setBottomActive(id);
+}
+function openMore(){
+  document.getElementById('more-overlay').classList.add('open');
+  document.getElementById('more-drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMore(){
+  document.getElementById('more-overlay').classList.remove('open');
+  document.getElementById('more-drawer').classList.remove('open');
+  document.body.style.overflow='';
+}
+function setBottomActive(id){
+  // Bottom nav primary items
+  _navIds.forEach(function(n){
+    var el = document.getElementById('bn-'+n);
+    if(el) el.classList.toggle('active', n===id);
+  });
+  // "More" tab active when a drawer section is shown
+  var moreEl = document.getElementById('bn-more');
+  if(moreEl) moreEl.classList.toggle('active', _moreIds.indexOf(id)!==-1);
+  // More drawer items highlight
+  _moreIds.forEach(function(m){
+    var el = document.getElementById('mi-'+m);
+    if(el) el.classList.toggle('active', m===id);
+  });
+}
+// Patch existing go() to sync bottom nav
+(function(){
+  function patch(){
+    if(typeof go==='undefined'){setTimeout(patch,80);return;}
+    var _orig=go;
+    go=function(id,el){
+      _orig(id,el);
+      setBottomActive(id);
+    };
+  }
+  patch();
+})();
+</script>
+
+<script src="enhancements.js"></script>
 </body>
 </html>
