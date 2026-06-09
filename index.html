@@ -301,17 +301,108 @@ tbody td{padding:5px 10px;vertical-align:middle}
 .more-lbl{font-size:.7rem;font-weight:600;color:var(--tx);text-align:center;line-height:1.3}
 /* ── MAIN CONTENT BOTTOM PADDING ─────────────────────────── */
 .main{padding-bottom:68px}
-/* ── TOPBAR ADJUSTMENT ──────────────────────────────────── */
-.topbar{padding:10px 14px;flex-wrap:wrap;gap:8px}
-.tb-chips{flex-wrap:wrap;gap:6px}
-.chip{font-size:.67rem;padding:3px 8px}
-sec{padding:14px 14px}
-.kg{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
-@media(max-width:600px){
-  .kg{grid-template-columns:repeat(2,1fr)}
-  .g2{grid-template-columns:1fr}
-  .gs-wrap{min-width:140px;max-width:180px}
-  .more-grid{grid-template-columns:repeat(3,1fr)}
+/* ══════════════════════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE STYLES
+   ══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  /* Prevent horizontal overflow */
+  body{overflow-x:hidden}
+  .main{overflow-x:hidden}
+
+  /* ── TOPBAR ── */
+  .topbar{padding:8px 12px;flex-wrap:wrap;gap:6px;align-items:flex-start}
+  .tb-title{font-size:.9rem}
+  .tb-sub{font-size:.68rem}
+  .tb-chips{flex-wrap:wrap;gap:5px;order:3;width:100%}
+  .chip{font-size:.64rem;padding:2px 7px}
+  .gs-wrap{order:2;min-width:0;flex:1;max-width:100%}
+  .gs-wrap input::placeholder{font-size:.75rem}
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb-bar{padding:5px 12px;font-size:.72rem}
+
+  /* ── SECTION CONTENT ── */
+  sec{padding:10px 10px 80px}
+
+  /* ── SEC TOOLBAR (export bar) ── */
+  .sec-toolbar{padding:7px 8px;gap:5px;flex-wrap:wrap}
+  .sec-toolbar-label{width:100%;margin-bottom:2px;font-size:.68rem}
+  .btn-exp{padding:6px 10px;font-size:.74rem;gap:4px}
+  .btn-exp .mi{font-size:13px}
+  .lu-badge{font-size:.64rem;padding:2px 6px}
+
+  /* ── KPI GRID ── */
+  .kg{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+  .kv{font-size:1.5rem}
+  .kl{font-size:.63rem}
+  .ki{width:34px;height:34px;margin-bottom:7px}
+
+  /* ── CHART GRID ── */
+  .g2{grid-template-columns:1fr;gap:8px}
+  .cw{height:190px}.cw.md{height:220px}.cw.lg{height:240px}
+
+  /* ── INSIGHTS ── */
+  .ir{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+  .it{font-size:.78rem}
+
+  /* ── SECTION HEADINGS ── */
+  .sh h2{font-size:.92rem}
+
+  /* ── TABLES ── */
+  .tw{border-radius:6px}
+  table{font-size:.75rem}
+  thead th{padding:5px 7px;font-size:.63rem}
+  tbody td{padding:4px 7px;font-size:.75rem}
+  .tb{gap:7px}
+  .sb2{min-width:0;flex:1}
+  .sb2 input{font-size:.8rem}
+  .fsel{font-size:.8rem;padding:6px 8px}
+
+  /* ── COMPARE GENDER ── */
+  .cmp{grid-template-columns:1fr 1fr;gap:8px}
+  .cmv{font-size:1.4rem}
+
+  /* ── FILTER ROWS ── */
+  .filter-row{gap:6px}
+  .filter-row input,.filter-row select{font-size:.78rem;padding:6px 10px;width:100%}
+
+  /* ── SUBJECT TABS ── */
+  .stabs{overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;flex-wrap:nowrap;gap:0;padding-bottom:1px}
+  .stab{padding:9px 14px;font-size:.78rem;flex-shrink:0}
+
+  /* ── TEACHER / MATRIX FILTER ── */
+  .tc-bar{gap:6px;padding:7px 8px}
+  .tc-bar input{min-width:0;flex:1;font-size:.78rem;padding:6px 8px}
+  .tc-bar select{min-width:0;flex:1;font-size:.78rem;padding:6px 8px}
+  .tc-acts{margin-left:0;width:100%;justify-content:flex-end}
+  .btn-exp{padding:6px 10px;font-size:.75rem}
+  .tc-meta{gap:6px}
+  .tc-kpi{min-width:80px;padding:5px 8px}
+  .tc-kpi-v{font-size:1.1rem}
+  .tc-kpi-l{font-size:.63rem}
+  .tc-wrap{max-height:52vh}
+
+  /* ── MATRIX ── */
+  .mx-filter{gap:6px;padding:6px 8px}
+  .mx-filter input{min-width:0;flex:1;font-size:.78rem;padding:5px 8px}
+  .mx-filter select{font-size:.78rem;padding:5px 8px}
+  .mx-legend{margin-left:0;width:100%}
+  .mx-wrap{max-height:55vh}
+
+  /* ── PAGINATION ── */
+  .tc-pg-bar{padding:7px 10px;gap:6px}
+  .pg-btn{padding:4px 9px;font-size:.72rem}
+  .pg-sel{padding:4px 6px;font-size:.72rem}
+
+  /* ── MORE DRAWER ── */
+  .more-grid{grid-template-columns:repeat(3,1fr);gap:2px;padding:0 8px 16px}
+  .more-icon{width:42px;height:42px}
+  .more-lbl{font-size:.65rem}
+
+  /* ── BOTTOM NAV ── */
+  .bnav{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .bnl{font-size:.58rem}
+  .bni{font-size:20px}
 }
 /* BREADCRUMB */
 .breadcrumb-bar{background:#fff;padding:7px 26px;font-size:.78rem;color:var(--t2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:4px}
