@@ -557,6 +557,13 @@ tbody td{padding:5px 10px;vertical-align:middle}
           <option value="">All Bands</option><option value="ex">Excellent (450+)</option>
           <option value="gd">Good (350-449)</option><option value="lw">Below 350</option>
         </select>
+        <select class="fsel" id="spr" onchange="ft()">
+          <option value="">All Pass Rates</option>
+          <option value="hi">≥90% Pass</option>
+          <option value="md">70–89% Pass</option>
+          <option value="lo">&lt;70% Pass</option>
+        </select>
+        <button class="fsel" style="cursor:pointer;background:#FFEBEE;color:#C62828;border-color:#EF9A9A" onclick="document.getElementById('ss').value='';document.getElementById('sty').value='';document.getElementById('sbd').value='';document.getElementById('spr').value='';ft()">&#10006; Reset</button>
         <span id="sc-cnt" style="font-size:.8rem;color:var(--t2);white-space:nowrap"></span>
       </div>
       <div class="tw"><table id="sct">
@@ -584,7 +591,16 @@ tbody td{padding:5px 10px;vertical-align:middle}
     <div class="std-filter">
       <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
       <input id="co-search" type="text" placeholder="Search community…" oninput="filterCommunity()"/>
-      <button class="btn-reset" onclick="document.getElementById('co-search').value='';filterCommunity()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <select id="co-band" onchange="filterCommunity()">
+        <option value="">All Bands</option><option value="Excellent">Excellent (≥450)</option>
+        <option value="Good">Good (350–449)</option><option value="Average">Average (300–349)</option>
+        <option value="Needs Help">Needs Help (&lt;300)</option>
+      </select>
+      <select id="co-pr" onchange="filterCommunity()">
+        <option value="">All Pass Rates</option>
+        <option value="hi">≥95% Pass</option><option value="md">85–94% Pass</option><option value="lo">&lt;85% Pass</option>
+      </select>
+      <button class="btn-reset" onclick="['co-search','co-band','co-pr'].forEach(function(id){document.getElementById(id).value='';});filterCommunity()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
       <span id="co-cnt" class="std-cnt"></span>
     </div>
     <div class="sh"><span class="mi material-icons-round">groups</span><div><h2>Community &amp; Gender Analysis</h2><div class="ss">Detailed breakdown by community, gender and religion</div></div></div>
@@ -619,8 +635,19 @@ tbody td{padding:5px 10px;vertical-align:middle}
     </div>
     <div class="std-filter">
       <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
-      <input id="st-search" type="text" placeholder="Search stream…" oninput="filterTable('str-tb',['st-search'],[-1]);document.getElementById('st-cnt').textContent=document.querySelectorAll('#str-tb tr:not([style*=none])').length+' streams'"/>
-      <button class="btn-reset" onclick="document.getElementById('st-search').value='';filterTable('str-tb',['st-search'],[-1]);document.getElementById('st-cnt').textContent=''"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <input id="st-search" type="text" placeholder="Search stream…" oninput="filterST()"/>
+      <select id="st-band" onchange="filterST()">
+        <option value="">All Bands</option><option value="Excellent">Excellent (≥450)</option>
+        <option value="Good">Good (350–449)</option><option value="Average">Average (300–349)</option>
+        <option value="Needs Help">Needs Help (&lt;300)</option>
+      </select>
+      <select id="st-size" onchange="filterST()">
+        <option value="">All Sizes</option>
+        <option value="lg">Large (≥1000 students)</option>
+        <option value="md">Medium (200–999)</option>
+        <option value="sm">Small (&lt;200)</option>
+      </select>
+      <button class="btn-reset" onclick="['st-search','st-band','st-size'].forEach(function(id){document.getElementById(id).value='';});filterST()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
       <span id="st-cnt" class="std-cnt"></span>
     </div>
     <div class="sh"><span class="mi material-icons-round">menu_book</span><div><h2>Subject Stream Analysis</h2><div class="ss">Performance by subject group / stream</div></div></div>
@@ -803,12 +830,24 @@ tbody td{padding:5px 10px;vertical-align:middle}
     </div>
     <div class="std-filter">
       <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
-      <input id="rk-search" type="text" placeholder="Search school name…" oninput="filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])"/>
-      <select id="rk-type" onchange="filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])">
+      <input id="rk-search" type="text" placeholder="Search school name…" oninput="filterRK()"/>
+      <select id="rk-type" onchange="filterRK()">
         <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
         <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option>
       </select>
-      <button class="btn-reset" onclick="document.getElementById('rk-search').value='';document.getElementById('rk-type').value='';filterTable('t-all',['rk-search','rk-type'],[-1,2]);filterTable('b-all',['rk-search','rk-type'],[-1,2])"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <select id="rk-pr" onchange="filterRK()">
+        <option value="">All Pass Rates</option>
+        <option value="hi">≥90% Pass</option>
+        <option value="md">70–89% Pass</option>
+        <option value="lo">&lt;70% Pass</option>
+      </select>
+      <select id="rk-band" onchange="filterRK()">
+        <option value="">All Bands</option><option value="Excellent">Excellent (≥450)</option>
+        <option value="Good">Good (350–449)</option><option value="Average">Average (300–349)</option>
+        <option value="Needs Help">Needs Help (&lt;300)</option>
+      </select>
+      <button class="btn-reset" onclick="['rk-search','rk-type','rk-pr','rk-band'].forEach(function(id){document.getElementById(id).value='';});filterRK()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <span id="rk-cnt" class="std-cnt"></span>
     </div>
     <div class="sh"><span class="mi material-icons-round">leaderboard</span><div><h2>Full School Rankings</h2><div class="ss">All 95 schools &bull; Top performers (left) &bull; Bottom performers (right)</div></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
@@ -865,6 +904,24 @@ tbody td{padding:5px 10px;vertical-align:middle}
     </div>
     <div class="card">
       <div class="ct"><span class="mi material-icons-round">preview</span>Data Preview &mdash; All Schools</div>
+      <div class="std-filter" style="margin-bottom:10px">
+        <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
+        <input id="rp-search" type="text" placeholder="Search school…" oninput="filterRP()"/>
+        <select id="rp-type" onchange="filterRP()">
+          <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
+          <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option>
+        </select>
+        <select id="rp-band" onchange="filterRP()">
+          <option value="">All Bands</option><option value="ex">Excellent (≥450)</option>
+          <option value="gd">Good (350–449)</option><option value="lw">Below 350</option>
+        </select>
+        <select id="rp-pr" onchange="filterRP()">
+          <option value="">All Pass Rates</option>
+          <option value="hi">≥90% Pass</option><option value="md">70–89%</option><option value="lo">&lt;70%</option>
+        </select>
+        <button class="btn-reset" onclick="['rp-search','rp-type','rp-band','rp-pr'].forEach(function(id){document.getElementById(id).value='';});filterRP()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+        <span id="rp-cnt" class="std-cnt"></span>
+      </div>
       <div class="tw" style="max-height:52vh;overflow:auto"><table>
         <thead><tr><th>#</th><th style="min-width:280px">School Name</th><th>Type</th><th style="text-align:center">Students</th><th style="text-align:center">Appeared</th><th style="text-align:center">Failed</th><th style="text-align:center">Avg</th><th>Pass %</th><th style="text-align:center">High</th><th style="text-align:center">Low</th></tr></thead>
         <tbody id="rp-tb"></tbody>
@@ -885,12 +942,26 @@ tbody td{padding:5px 10px;vertical-align:middle}
     </div>
     <div class="std-filter">
       <span class="mi material-icons-round" style="color:var(--t3);font-size:18px">filter_list</span>
-      <input id="fa-search" type="text" placeholder="Search school…" oninput="filterTable('fa-tbl',['fa-search','fa-type'],[1,2])"/>
-      <select id="fa-type" onchange="filterTable('fa-tbl',['fa-search','fa-type'],[1,2])">
+      <input id="fa-search" type="text" placeholder="Search school…" oninput="filterFA()"/>
+      <select id="fa-type" onchange="filterFA()">
         <option value="">All Types</option><option>SF Matric</option><option>Govt School</option>
         <option>Fully Aided</option><option>Partly Aided</option><option>Municipality</option><option>Adi Dravidar</option>
       </select>
-      <button class="btn-reset" onclick="document.getElementById('fa-search').value='';document.getElementById('fa-type').value='';filterTable('fa-tbl',['fa-search','fa-type'],[1,2])"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <select id="fa-rate" onchange="filterFA()">
+        <option value="">All Failure Rates</option>
+        <option value="cr">Critical (&gt;25% failure)</option>
+        <option value="hi">High (15–25%)</option>
+        <option value="md">Moderate (5–15%)</option>
+        <option value="lo">Low (&lt;5%)</option>
+      </select>
+      <select id="fa-min" onchange="filterFA()">
+        <option value="">Any Failures</option>
+        <option value="10">≥10 failures</option>
+        <option value="20">≥20 failures</option>
+        <option value="50">≥50 failures</option>
+      </select>
+      <button class="btn-reset" onclick="['fa-search','fa-type','fa-rate','fa-min'].forEach(function(id){document.getElementById(id).value='';});filterFA()"><span class="mi material-icons-round" style="font-size:15px">refresh</span>Reset</button>
+      <span id="fa-cnt" class="std-cnt"></span>
     </div>
     <div class="sh"><span class="mi material-icons-round" style="color:#C62828">warning</span><div><h2>Failure Analysis</h2><div class="ss">Deep-dive into failure patterns by subject, stream, school, community &amp; gender — with AI-powered insights</div></div></div>
     <div class="kg" id="fa-kpi" style="margin-top:4px"></div>
@@ -2856,6 +2927,191 @@ window.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('click',function(e){if(e.target.id!=='gs-inp')closeGS();});
   stampAll();
 });
+// ── ADDITIONAL FILTER FUNCTIONS ─────────────────────────────
+// School Analysis: pass-rate filter added to existing ft()
+var _ft_orig = null;
+(function(){
+  var timer = setInterval(function(){
+    if(typeof ft !== 'undefined'){
+      clearInterval(timer);
+      var _orig = ft;
+      ft = function(){
+        var pr = (document.getElementById('spr')||{}).value||'';
+        _orig();
+        if(!pr) return;
+        var tbody = document.getElementById('sc-tb');
+        if(!tbody) return;
+        Array.from(tbody.querySelectorAll('tr')).forEach(function(tr){
+          if(tr.style.display==='none') return;
+          var pt = tr.querySelector('td:nth-child(7) .pt');
+          if(!pt) return;
+          var v = parseFloat(pt.textContent);
+          var pass = (pr==='hi'&&v>=90)||(pr==='md'&&v>=70&&v<90)||(pr==='lo'&&v<70);
+          if(!pass) tr.style.display='none';
+        });
+        var vis = Array.from(tbody.querySelectorAll('tr')).filter(function(r){return r.style.display!=='none';}).length;
+        var cnt = document.getElementById('sc-cnt');
+        if(cnt) cnt.textContent = vis+' of '+S.length+' schools';
+      };
+    }
+  },100);
+})();
+
+// Community: band + pass-rate filters
+function filterCommunity(){
+  var q=(document.getElementById('co-search')||{}).value||'';
+  var band=(document.getElementById('co-band')||{}).value||'';
+  var pr=(document.getElementById('co-pr')||{}).value||'';
+  var tbl=document.getElementById('com-tb');
+  if(!tbl) return;
+  var shown=0;
+  Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){
+    var cells=tr.querySelectorAll('td');
+    if(!cells.length){tr.style.display='';return;}
+    var txt=tr.innerText.toLowerCase();
+    var pass=!q||txt.indexOf(q.toLowerCase())!==-1;
+    if(band){var bandCell=cells[5];pass=pass&&bandCell&&bandCell.innerText.trim()===band;}
+    if(pr){
+      var ptEl=cells[4]?cells[4].querySelector('.pt'):null;
+      var v=ptEl?parseFloat(ptEl.textContent):0;
+      if(pr==='hi') pass=pass&&v>=95;
+      else if(pr==='md') pass=pass&&v>=85&&v<95;
+      else if(pr==='lo') pass=pass&&v<85;
+    }
+    tr.style.display=pass?'':'none';
+    if(pass) shown++;
+  });
+  var cnt=document.getElementById('co-cnt');
+  if(cnt) cnt.textContent=shown?shown+' communities':'';
+}
+
+// Streams: band + size filters
+function filterST(){
+  var q=(document.getElementById('st-search')||{}).value||'';
+  var band=(document.getElementById('st-band')||{}).value||'';
+  var size=(document.getElementById('st-size')||{}).value||'';
+  var tbl=document.getElementById('str-tb');
+  if(!tbl) return;
+  var shown=0;
+  Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){
+    var cells=tr.querySelectorAll('td');
+    if(!cells.length){tr.style.display='';return;}
+    var txt=tr.innerText.toLowerCase();
+    var pass=!q||txt.indexOf(q.toLowerCase())!==-1;
+    if(band){var bc=cells[5];pass=pass&&bc&&bc.innerText.trim()===band;}
+    if(size){
+      var sc=cells[2]?parseInt(cells[2].innerText.replace(/,/g,'')):0;
+      if(size==='lg') pass=pass&&sc>=1000;
+      else if(size==='md') pass=pass&&sc>=200&&sc<1000;
+      else if(size==='sm') pass=pass&&sc<200;
+    }
+    tr.style.display=pass?'':'none';
+    if(pass) shown++;
+  });
+  var cnt=document.getElementById('st-cnt');
+  if(cnt) cnt.textContent=shown?shown+' streams':'';
+}
+
+// Rankings: type + pass-rate + band filters on both tables
+function filterRK(){
+  var q=(document.getElementById('rk-search')||{}).value||'';
+  var ty=(document.getElementById('rk-type')||{}).value||'';
+  var pr=(document.getElementById('rk-pr')||{}).value||'';
+  var band=(document.getElementById('rk-band')||{}).value||'';
+  var total=0,shown=0;
+  ['t-all','b-all'].forEach(function(tid){
+    var tbl=document.getElementById(tid);
+    if(!tbl) return;
+    Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){
+      total++;
+      var cells=tr.querySelectorAll('td');
+      if(!cells.length){tr.style.display='';return;}
+      var txt=tr.innerText.toLowerCase();
+      var pass=!q||txt.indexOf(q.toLowerCase())!==-1;
+      if(ty){var tyc=cells[2];pass=pass&&tyc&&tyc.innerText.trim()===ty;}
+      if(pr){
+        var ptEl=cells[4]?cells[4].querySelector('.pt'):null;
+        var v=ptEl?parseFloat(ptEl.textContent):0;
+        if(pr==='hi') pass=pass&&v>=90;
+        else if(pr==='md') pass=pass&&v>=70&&v<90;
+        else if(pr==='lo') pass=pass&&v<70;
+      }
+      if(band){var bc=cells[5];pass=pass&&bc&&bc.innerText.trim()===band;}
+      tr.style.display=pass?'':'none';
+      if(pass) shown++;
+    });
+  });
+  var cnt=document.getElementById('rk-cnt');
+  if(cnt) cnt.textContent=shown?shown+' schools':'';
+}
+
+// Failure Analysis: type + rate severity + min failures
+function filterFA(){
+  var q=(document.getElementById('fa-search')||{}).value||'';
+  var ty=(document.getElementById('fa-type')||{}).value||'';
+  var rate=(document.getElementById('fa-rate')||{}).value||'';
+  var minF=parseInt((document.getElementById('fa-min')||{}).value||'0')||0;
+  var tbl=document.getElementById('fa-tbl');
+  if(!tbl) return;
+  var shown=0;
+  Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){
+    var cells=tr.querySelectorAll('td');
+    if(!cells.length){tr.style.display='';return;}
+    var txt=tr.innerText.toLowerCase();
+    var pass=!q||txt.indexOf(q.toLowerCase())!==-1;
+    if(ty){var tyc=cells[2];pass=pass&&tyc&&tyc.innerText.trim()===ty;}
+    if(rate){
+      var rc=cells[5];
+      var rv=rc?parseFloat(rc.innerText):0;
+      if(rate==='cr') pass=pass&&rv>25;
+      else if(rate==='hi') pass=pass&&rv>=15&&rv<=25;
+      else if(rate==='md') pass=pass&&rv>=5&&rv<15;
+      else if(rate==='lo') pass=pass&&rv<5;
+    }
+    if(minF){var fc=cells[4];var fv=fc?parseInt(fc.innerText)||0:0;pass=pass&&fv>=minF;}
+    tr.style.display=pass?'':'none';
+    if(pass) shown++;
+  });
+  var cnt=document.getElementById('fa-cnt');
+  if(cnt) cnt.textContent=shown?shown+' schools':'';
+}
+
+// Reports Preview: search + type + band + pass-rate
+function filterRP(){
+  var q=(document.getElementById('rp-search')||{}).value||'';
+  var ty=(document.getElementById('rp-type')||{}).value||'';
+  var band=(document.getElementById('rp-band')||{}).value||'';
+  var pr=(document.getElementById('rp-pr')||{}).value||'';
+  var tbl=document.getElementById('rp-tb');
+  if(!tbl) return;
+  var shown=0;
+  Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){
+    var cells=tr.querySelectorAll('td');
+    if(!cells.length){tr.style.display='';return;}
+    var txt=tr.innerText.toLowerCase();
+    var pass=!q||txt.indexOf(q.toLowerCase())!==-1;
+    if(ty){var tyc=cells[2];pass=pass&&tyc&&tyc.innerText.trim()===ty;}
+    if(band){
+      var avgEl=cells[6]?cells[6].querySelector('.ap'):null;
+      var av=avgEl?parseFloat(avgEl.textContent):0;
+      if(band==='ex') pass=pass&&av>=450;
+      else if(band==='gd') pass=pass&&av>=350&&av<450;
+      else if(band==='lw') pass=pass&&av<350;
+    }
+    if(pr){
+      var ptEl=cells[7]?cells[7].querySelector('.pt'):null;
+      var pv=ptEl?parseFloat(ptEl.textContent):0;
+      if(pr==='hi') pass=pass&&pv>=90;
+      else if(pr==='md') pass=pass&&pv>=70&&pv<90;
+      else if(pr==='lo') pass=pass&&pv<70;
+    }
+    tr.style.display=pass?'':'none';
+    if(pass) shown++;
+  });
+  var cnt=document.getElementById('rp-cnt');
+  if(cnt) cnt.textContent=shown?shown+' schools':'';
+}
+
 (function(){function patch(){if(typeof go==='undefined'){setTimeout(patch,80);return;}var _orig=go;go=function(id,el){_orig(id,el);updateBreadcrumb(id);stampSection(id);};}patch();})();
 // Move fixed UI elements to body so they aren't hidden inside display:none sec
 (function(){['more-overlay','more-drawer','bnav'].forEach(function(id){var el=document.getElementById(id);if(el&&el.parentElement!==document.body)document.body.appendChild(el);});})();
